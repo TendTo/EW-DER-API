@@ -25,6 +25,12 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   networks: {
+    ganache: {
+      chainId: 1337,
+      url: "http://192.168.1.29:8545",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:
@@ -39,10 +45,10 @@ const config: HardhatUserConfig = {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
   paths: {
-    artifacts: "app/artifacts",
+    artifacts: "app/src/artifacts",
   },
   typechain: {
-    outDir: "app/typechain",
+    outDir: "app/src/typechain",
   },
 };
 

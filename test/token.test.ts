@@ -27,7 +27,7 @@ describe("Token", function () {
     expect(await token.balanceOf(address)).to.equal(initialAmount);
   });
 
-  it("transfer function", async function () {
+  it("transfer function: success", async function () {
     const transferAmount = 10;
     const transferTx = await token.transfer(address2, transferAmount);
     await transferTx.wait();
@@ -36,5 +36,16 @@ describe("Token", function () {
     expect(await token.balanceOf(address)).to.equal(
       initialAmount - transferAmount
     );
+  });
+
+  it("transfer function: insufficient amount", async function () {
+    const transferAmount = initialAmount + 1;
+
+    await expect(token.transfer(address2, transferAmount)).to.be.revertedWith(
+      "Not enough tokens"
+    );
+
+    expect(await token.balanceOf(address2)).to.equal(0);
+    expect(await token.balanceOf(address)).to.equal(initialAmount);
   });
 });
