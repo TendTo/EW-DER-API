@@ -1,0 +1,69 @@
+diff --git a/node_modules/@ethersproject/networks/lib.esm/index.js b/node_modules/@ethersproject/networks/lib.esm/index.js
+index f7d142e..64c3b1e 100644
+--- a/node_modules/@ethersproject/networks/lib.esm/index.js
++++ b/node_modules/@ethersproject/networks/lib.esm/index.js
+@@ -123,6 +123,18 @@ const networks = {
+         name: "goerli",
+         _defaultProvider: ethDefaultProvider("goerli")
+     },
++    ewc: {
++        chainId: 246,
++        ensAddress: "0x0A6d64413c07E10E890220BBE1c49170080C6Ca0",
++        name: "ewc",
++        _defaultProvider: etcDefaultProvider("https://rpc.energyweb.org", "ewc"),
++    },
++    volta: {
++        chainId: 73799,
++        ensAddress: "0xd7CeF70Ba7efc2035256d828d5287e2D285CD1ac",
++        name: "volta",
++        _defaultProvider: etcDefaultProvider("https://volta-rpc.energyweb.org", "volta"),
++    },
+     // ETC (See: #351)
+     classic: {
+         chainId: 61,
+diff --git a/node_modules/@ethersproject/networks/lib/index.js b/node_modules/@ethersproject/networks/lib/index.js
+index 17a4176..016357d 100644
+--- a/node_modules/@ethersproject/networks/lib/index.js
++++ b/node_modules/@ethersproject/networks/lib/index.js
+@@ -125,6 +125,18 @@ var networks = {
+         name: "goerli",
+         _defaultProvider: ethDefaultProvider("goerli")
+     },
++    ewc: {
++        chainId: 246,
++        ensAddress: "0x0A6d64413c07E10E890220BBE1c49170080C6Ca0",
++        name: "ewc",
++        _defaultProvider: etcDefaultProvider("https://rpc.energyweb.org", "ewc"),
++    },
++    volta: {
++        chainId: 73799,
++        ensAddress: "0xd7CeF70Ba7efc2035256d828d5287e2D285CD1ac",
++        name: "volta",
++        _defaultProvider: etcDefaultProvider("https://volta-rpc.energyweb.org", "volta"),
++    },
+     // ETC (See: #351)
+     classic: {
+         chainId: 61,
+diff --git a/node_modules/@ethersproject/networks/src.ts/index.ts b/node_modules/@ethersproject/networks/src.ts/index.ts
+index 1680051..1e619ab 100644
+--- a/node_modules/@ethersproject/networks/src.ts/index.ts
++++ b/node_modules/@ethersproject/networks/src.ts/index.ts
+@@ -153,6 +153,18 @@ const networks: { [name: string]: Network } = {
+         _defaultProvider: ethDefaultProvider("goerli")
+      },
+ 
++     ewc: {
++        chainId: 246,
++        ensAddress: "0x0A6d64413c07E10E890220BBE1c49170080C6Ca0",
++        name: "ewc",
++        _defaultProvider: etcDefaultProvider("https://rpc.energyweb.org", "ewc"),
++    },
++    volta: {
++        chainId: 73799,
++        ensAddress: "0xd7CeF70Ba7efc2035256d828d5287e2D285CD1ac",
++        name: "volta",
++        _defaultProvider: etcDefaultProvider("https://volta-rpc.energyweb.org", "volta"),
++    },
+ 
+     // ETC (See: #351)
+     classic: {
