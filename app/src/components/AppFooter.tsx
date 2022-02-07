@@ -1,6 +1,5 @@
-import { Box, Stack } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
-import i18n from "i18next";
+import { Box } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import gb from "../asset/icon/gb.svg";
@@ -9,7 +8,7 @@ import ew_logo from "../asset/img/ew-logo-small.png";
 import "./AppFooter.css";
 
 function AppFooter() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const onChangeLanguage = () => {
     if (i18n.language.startsWith("en")) i18n.changeLanguage("it");

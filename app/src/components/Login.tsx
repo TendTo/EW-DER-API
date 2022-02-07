@@ -3,9 +3,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import metamaskLogo from "../asset/icon/metamask.svg";
 
-function EmptyLogin() {
-  const { t, i18n } = useTranslation();
-  console.log(i18n);
+function Login() {
+  const { t } = useTranslation();
 
   return (
     <Container maxWidth="sm">
@@ -66,4 +65,4 @@ function EmptyLogin() {
   );
 }
 
-export default EmptyLogin;
+export default Login;
