@@ -24,7 +24,7 @@
   },
   "LOGIN": {
     "TITLE": "EW showcase login",
-    "TEXT": "Login using the MetaMask browser extension",
+    "TEXT": "Login using the MetaMask browser extension.\nMake sure you have some Volta on your account.",
     "BUTTON_METAMASK": "Login with Metamask",
     "ERROR_UNSUPPORTED_CHAIN": "{{chain}} net is not supported.\nConnect to the volta testnet",
     "NO_METAMASK": "Don't have MetaMask?",
@@ -44,7 +44,8 @@
     "REQUEST_UNAUTHORIZED": "Unauthorized login response.\nPlease ensure that you have the necessary role claim.",
     "MAX_LENGTH": "The field cannot be more than {{max}} characters long",
     "NOT_POSITIVE": "The value must be a positive number",
-    "ONLY_INT": "Only integers are allowed"
+    "ONLY_INT": "Only integers are allowed",
+    "IAM_CONNECTION": "Error connecting to IAM server"
   },
   "ENS": {
     "TITLE": "Energy web Name Service (EWNS)",
@@ -144,7 +145,9 @@
     "ACCEPTED": "Accepted",
     "PENDING": "Pending",
     "NO_UNDO_ACTION": "This action cannot be undone",
-    "CONTRACTS_USED": "Contracts used:"
+    "CONTRACTS_USED": "Contracts used:",
+    "LOGOUT": "Logout",
+    "LOGIN": "Login"
   },
   "REFERENCES": {
     "TITLE": "References",
@@ -174,7 +177,9 @@
     "SECTION_2_TEXT": "<p>To implement a truly decentralized IAM system, some properties must be guaranteed.</p>\n\n<h5>The IAM must be censorship resistant.</h5>\n<p>It means that there is no actor in the system that has the power to selectively limit the information others have access to.\nThis aspect is important because information such as whether a permission or a key has been revoked or invalidated, or whether a permission has, instead, been granted must be publicly available.\nA blockchain fulfills these requirements by design. Additionally, the cryptographic proofs contained in the transactions allow the offline verification of the data.\nThis is why all the permissions are anchored on-chain and the description of roles are held in an ENS smart-contract.</p>\n\n<h5>Information about users and roles must be confidential.</h5>\n<p>In the Energy Web solution, no third party has the full list of users of an application. \nThis is guaranteed by the permission-granting process, for is the user who stores the claim and anchors it on chain, allowing them to prove they have been granted a certain privilege.\nAlso, because it is a private claim, the contents are provable but not disclosed.\nThe only information an observer can garner is that the user has added a claim to their DID document but not the content, origin, or nature of the claim.</p>\n<fig></fig>\n\n<h5>Finally, it must leverage a decentralized infrastructure.</h5>\n<p>This is achieved by using a combination of the Energy Web blockchain and <a>IPFS</a>, which are both peer networks.\nAn additional layer will make the IAM management even easier: a messaging service that will be provided by the service nodes of the EW-DOS.\nEach message will be signed by the sender, to avoid any malicious alteration.</p>",
     "SECTION_2_IMG": "IAM's permission-granting process",
     "SECTION_3_TITLE": "IAM in action",
-    "SECTION_3_TEXT": "To show what the IAM can be used for, here is a little demo.\n\nThe structure is as follows:\nthe main \"unict\" organization, is composed of a \"test\" sub-organizationi.\n\nTwo roles belong to it: \"testrole\" and \"student\". You can enroll with your DID to both roles.\nApplications to the former need approval from a specific DID, while for the latter anyone with a \"testrole\" role can approve the request.\nRoles can have optional fields containing an arbitrary amount of data of different types.\n\nThere is also an app called \"TESTAPP\" associated with the organization, and it contains has a role, namely the \"juniordev\" role.\n\nThis kind of hierarchy ensures a fine control and flexibility over permissions within an organization."
+    "SECTION_3_TEXT": "To show what the IAM can be used for, here is a little demo.\n\nThe structure is as follows:\nthe main \"unict\" organization, is composed of a \"test\" sub-organizationi.\n\nTwo roles belong to it: \"testrole\" and \"student\". You can enroll with your DID to both roles.\nApplications to the former need approval from a specific DID, while for the latter anyone with a \"testrole\" role can approve the request.\nRoles can have optional fields containing an arbitrary amount of data of different types.\n\nThere is also an app called \"TESTAPP\" associated with the organization, and it contains has a role, namely the \"juniordev\" role.\n\nThis kind of hierarchy ensures a fine control and flexibility over permissions within an organization.",
+    "CONNECTION_SUCCESS": "Connected to IAM server!",
+    "CONNECTION_PROGRESS": "Connecting to IAM server..."
   },
   "MARKETPLACE": {
     "TITLE": "Marketplace",

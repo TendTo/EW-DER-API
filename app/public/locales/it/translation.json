@@ -24,7 +24,7 @@
   },
   "LOGIN": {
     "TITLE": "EW showcase login",
-    "TEXT": "Effettua il login con l'estensione browser MetaMask",
+    "TEXT": "Effettua il login con l'estensione browser MetaMask.\nAssicurati di avere qualche Volta sul tuo account",
     "BUTTON_METAMASK": "Login con Metamask",
     "ERROR_UNSUPPORTED_CHAIN": "La rete {{chain}} non è supportata.\nConnettiti alla rete di test volta",
     "NO_METAMASK": "Non hai MetaMask?",
@@ -44,7 +44,8 @@
     "REQUEST_UNAUTHORIZED": "La richiesta non è autorizzata.\nAssicurati di avere i ruoli necessari.",
     "MAX_LENGTH": "Il campo non può essere più lungo di {{max}} caratteri",
     "NOT_POSITIVE": "Il valore deve essere un numero positivo",
-    "ONLY_INT": "Sono consentiti solo numeri interi"
+    "ONLY_INT": "Sono consentiti solo numeri interi",
+    "IAM_CONNECTION": "Si è verificato un errore nella connessione con il server IAM"
   },
   "ENS": {
     "TITLE": "Energy Web Name Service (EWNS)",
@@ -144,7 +145,9 @@
     "PENDING": "In sospeso",
     "MATCHES": "Abbinamenti",
     "NO_UNDO_ACTION": "Questa azione non può essere annullata",
-    "CONTRACTS_USED": "Contratti utilizzati:"
+    "CONTRACTS_USED": "Contratti utilizzati:",
+    "LOGIN": "Login",
+    "LOGOUT": "Logout"
   },
   "REFERENCES": {
     "TITLE": "Bibliografia",
@@ -174,7 +177,9 @@
     "SECTION_3_TEXT": "Per avere un esempio più concreto di utilizzo dell'IAM, è stata preparata una piccola demo.\n\nLa struttura è la seguente:\nl'organizzazione principale \"unict\" ha una sotto-organizzazione \"test\".\n\nAd quest'ultima appartengono due ruoli: \"testrole\" e \"student\". Puoi usare il tuo DID per provare a registrarti per entrambi i ruoli.\nLe domande al primo necessita dell'approvazione di un DID specifico, mentre per il secondo chiunque abbia un ruolo di \"testrole\" può approvare la domanda.\nI ruoli possono avere dei campi opzionali contenenti una quantità arbitraria di dati di diversi tipi.\n\nEsiste anche un'app chiamata \"TESTAPP\" associata all'organizzazione che presenta il ruolo \"juniordev\".\n\nQuesto tipo di gerarchia garantisce un controllo preciso e flessibile sui permessi all'interno di un'organizzazione.",
     "SECTION_1_TITLE": "Cos'è IAM?",
     "SECTION_2_TITLE": "Proprietà di un IAM decentralizzato",
-    "TITLE": "Identity and Access Management (IAM)"
+    "TITLE": "Identity and Access Management (IAM)",
+    "CONNECTION_SUCCESS": "Connesso con il server IAM!",
+    "CONNECTION_PROGRESS": "Connessione al server IAM..."
   },
   "MARKETPLACE": {
     "TITLE": "Marketplace",

@@ -7,7 +7,7 @@ import it from "../asset/icon/it.svg";
 import ew_logo from "../asset/img/ew-logo-small.png";
 import "./AppFooter.css";
 
-function AppFooter() {
+export function AppFooter() {
   const { t, i18n } = useTranslation();
 
   const onChangeLanguage = () => {
@@ -48,5 +48,3 @@ function AppFooter() {
     </footer>
   );
 }
-
-export default AppFooter;

@@ -1,0 +1,16 @@
+{
+    "name": "unict",
+    "namespace": "unict.iam.ewc",
+    "roles": {
+        "tso": {
+            "name": "tso",
+            "namespace": "tso.roles.test.unict.iam.ewc",
+            "issuer": "did:ethr:0xef131ed1460626e97F34243DAc544B42eb52a472"
+        },
+        "dfo": {
+            "name": "dfo",
+            "namespace": "dfo.roles.test.unict.iam.ewc",
+            "issuer": "did:ethr:0xef131ed1460626e97F34243DAc544B42eb52a472"
+        }
+    }
+}

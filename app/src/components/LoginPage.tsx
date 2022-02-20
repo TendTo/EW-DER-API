@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import metamaskLogo from "../asset/icon/metamask.svg";
 
-function Login() {
+export function LoginPage() {
   const { t } = useTranslation();
 
   return (
@@ -64,5 +64,3 @@ function Login() {
     </Container>
   );
 }
-
-export default Login;

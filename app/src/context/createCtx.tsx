@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-export default function createCtx<A>(defaultValue: A) {
+export default function createCtx<A>(defaultValue?: A) {
     type UpdateType = React.Dispatch<
         React.SetStateAction<typeof defaultValue>
     >;

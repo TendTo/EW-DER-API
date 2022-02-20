@@ -20,18 +20,26 @@ import {
 import { useEtherBalance, useEthers, useLookupAddress } from "@usedapp/core";
 import { formatEther } from "ethers/lib/utils";
 import React, { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { IAMContext } from "../context";
 import { ColorModeContext } from "../context/colorModeContext";
+import { useLogin } from "../hooks";
 
 const pages = ["Products", "Pricing", "Blog"];
 
-function AppTopBar() {
+export function AppTopBar() {
+  const { t } = useTranslation();
   const theme = useTheme();
-  const { activateBrowserWallet, account, deactivate } = useEthers();
+  const { account, deactivate, library } = useEthers();
+  const { login } = useLogin();
   const name = useLookupAddress();
   const balance = useEtherBalance(account);
   const { toggleColorMode } = useContext(ColorModeContext);
+  const { state } = useContext(IAMContext);
   const [anchorElNav, setAnchorElNav] = useState<HTMLElement>();
   const [anchorElUser, setAnchorElUser] = useState<HTMLElement>();
+
+  const loggedIn = state && state.connected && account;
 
   const getBalance = () => {
     if (!balance) return "0 VT";
@@ -55,9 +63,9 @@ function AppTopBar() {
     setAnchorElUser(undefined);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setAnchorElUser(undefined);
-    activateBrowserWallet();
+    await login();
   };
 
   const handleLogout = () => {
@@ -144,7 +152,7 @@ function AppTopBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar />
               </IconButton>
             </Tooltip>
             <Menu
@@ -163,7 +171,7 @@ function AppTopBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {account ? (
+              {loggedIn ? (
                 [
                   <MenuItem key="bar-account" onClick={onClickAccount}>
                     <Typography textAlign="center">
@@ -174,12 +182,16 @@ function AppTopBar() {
                     <Typography textAlign="center">{getBalance()}</Typography>
                   </MenuItem>,
                   <MenuItem key="bar-logout" onClick={handleLogout}>
-                    <Typography textAlign="center">Logout</Typography>
+                    <Typography textAlign="center">
+                      {t("GENERAL.LOGOUT")}
+                    </Typography>
                   </MenuItem>,
                 ]
               ) : (
                 <MenuItem key="bar-login" onClick={handleLogin}>
-                  <Typography textAlign="center">Login</Typography>
+                  <Typography textAlign="center">
+                    {t("GENERAL.LOGIN")}
+                  </Typography>
                 </MenuItem>
               )}
             </Menu>
@@ -192,4 +204,3 @@ function AppTopBar() {
     </AppBar>
   );
 }
-export default AppTopBar;
