@@ -12,18 +12,9 @@ import {
   Validate,
 } from "class-validator";
 import { DEFAULT_LIMIT, DEFAULT_OFFSET, Order } from "../constants";
-import { IsBeforeConstraint } from "../validators/isBeforeContraint";
+import { RangeFilterDTO } from "./rangeFilter.dto";
 
-export class FilterDTO {
-  @IsDateString()
-  @Validate(IsBeforeConstraint, ["end"])
-  @ApiProperty({ format: "date-time", example: "2020-01-01T00:00:00Z" })
-  start: string;
-
-  @IsDateString()
-  @ApiProperty({ format: "date-time", example: "2020-01-02T00:00:00Z" })
-  end: string;
-
+export class ReadingsFilterDTO extends RangeFilterDTO {
   @IsOptional()
   @Transform(({ value }) => parseInt(value), { toClassOnly: true })
   @IsInt()

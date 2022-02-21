@@ -1,7 +1,6 @@
-import { IsDate, IsEnum, IsNumber } from "class-validator";
-import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
-import { Unit } from "../constants";
+import { Type } from "class-transformer";
+import { IsDate, IsNumber } from "class-validator";
 
 export class ReadingDTO {
   @IsDate()
@@ -18,11 +17,7 @@ export class ReadingDTO {
   @ApiProperty({
     type: "integer",
     example: 10000000,
-    description: "Measurement value in unit",
+    description: "Measurement value in Wh",
   })
   value: number;
-
-  @IsEnum(Unit)
-  @ApiProperty({ enum: Unit, enumName: "Unit" })
-  unit: Unit;
 }

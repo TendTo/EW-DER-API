@@ -21,7 +21,7 @@ export class AggregatedReadDTO {
     example: "2020-01-02T00:00:00Z",
     description: "Measurements end timestamp",
   })
-  end: Date;
+  stop: Date;
 
   @IsNumber()
   @IsPositive()
