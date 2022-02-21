@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
-import { ReadingsService } from "./readings.service";
+import { ConfigService } from "@nestjs/config";
 import { ReadingsController } from "./readings.controller";
+import { ReadingsService } from "./readings.service";
 
 @Module({
   controllers: [ReadingsController],
-  providers: [ReadingsService],
+  providers: [ReadingsService, ConfigService],
 })
 export class ReadingsModule {}

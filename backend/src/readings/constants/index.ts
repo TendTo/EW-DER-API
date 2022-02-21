@@ -13,6 +13,11 @@ export enum Unit {
   GWh = "GWh",
 }
 
+export enum Aggregate {
+  Sum = "sum",
+  Mean = "mean",
+}
+
 export type AllowedDurationType =
   | "1y"
   | "1mo"

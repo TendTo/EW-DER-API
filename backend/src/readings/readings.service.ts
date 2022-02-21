@@ -5,20 +5,19 @@ import {
   OnModuleInit,
 } from "@nestjs/common";
 import {
-  MeasurementDTO,
   ReadingDTO,
-  FilterDTO,
-  AggregateFilterDTO,
+  ReadingsFilterDTO,
   AggregatedReadDTO,
+  MeasurementDTO,
+  AggregateFilterDTO,
 } from "./dto";
 import { ConfigService } from "@nestjs/config";
 import { ClientOptions, InfluxDB, Point } from "@influxdata/influxdb-client";
-import { Unit } from "./unit.enum";
-import { AllowedDurationType } from "./allowed-duration.type";
+import { AllowedDurationType, Unit } from "./constants";
 
 @Injectable()
-export class ReadsService implements OnModuleInit {
-  private readonly logger = new Logger(ReadsService.name);
+export class ReadingsService implements OnModuleInit {
+  private readonly logger = new Logger(ReadingsService.name);
 
   private bucket: string;
   private organization: string;
@@ -50,12 +49,11 @@ export class ReadsService implements OnModuleInit {
 
   public async store(meterId: string, measurement: MeasurementDTO) {
     const multiplier = this.getMultiplier(measurement.unit);
-
-    const points = measurement.reads.map((m) =>
+    const points = measurement.readings.map((r) =>
       new Point("reading")
         .tag("meter", meterId)
-        .intField("reading", m.value * multiplier)
-        .timestamp(new Date(m.timestamp)),
+        .intField("reading", r.value * multiplier)
+        .timestamp(new Date(r.timestamp)),
     );
 
     const writer = this.dbWriter;
@@ -74,8 +72,7 @@ export class ReadsService implements OnModuleInit {
       |> range(start: ${filter.start}, stop: ${filter.end})
       |> filter(fn: (r) => r.meter == "${meterId}" and r._field == "reading")
       ${filter.difference ? "|> difference()" : ""}
-      |> window(every: ${filter.window})
-      |> ${filter.aggregate}()
+      |> aggregateWindow(every: ${filter.window}, fn: ${filter.aggregate})
       `;
 
       return this.executeAggregated(query);
@@ -85,7 +82,10 @@ export class ReadsService implements OnModuleInit {
     }
   }
 
-  public async find(meterId: string, filter: FilterDTO): Promise<ReadingDTO[]> {
+  public async find(
+    meterId: string,
+    filter: ReadingsFilterDTO,
+  ): Promise<ReadingDTO[]> {
     try {
       const query = this.findByMeterQuery(meterId, filter);
 
@@ -118,7 +118,7 @@ export class ReadsService implements OnModuleInit {
 
   public async findDifference(
     meterId: string,
-    filter: FilterDTO,
+    filter: ReadingsFilterDTO,
   ): Promise<ReadingDTO[]> {
     try {
       const query = `${this.findByMeterQuery(meterId, filter)}
@@ -132,7 +132,7 @@ export class ReadsService implements OnModuleInit {
     }
   }
 
-  private findByMeterQuery(meterId: string, filter: FilterDTO): string {
+  private findByMeterQuery(meterId: string, filter: ReadingsFilterDTO): string {
     return `
     from(bucket: "${this.bucket}")
     |> range(start: ${filter.start}, stop: ${filter.end})

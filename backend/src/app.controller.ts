@@ -1,6 +1,6 @@
 import { Controller, Get } from "@nestjs/common";
 
-@Controller()
+@Controller("ping")
 export class AppController {
   constructor() {}
 
