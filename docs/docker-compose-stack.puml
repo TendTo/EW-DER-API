@@ -1,0 +1,44 @@
+@startuml Docker-compose stack
+title Docker-compose stack
+
+!include ./ew_logo.puml
+
+!include <tupadr3/common>
+!include <tupadr3/font-awesome-5/solar_panel>
+
+!include <logos/influxdb>
+!include <logos/react>
+!include <logos/nestjs>
+
+left to right direction
+
+skinparam DefaultTextAlignment center
+skinparam MaxMessageSize 140
+
+rectangle "Prosumer network" {
+    rectangle "<$nestjs,color=DarkRed>\nProsumer" as prosumer #White
+    FA5_SOLAR_PANEL(der1, "DER 1") #White
+    FA5_SOLAR_PANEL(der2, "DER 2") #White
+}
+rectangle "Aggregator network" {
+    rectangle "<$nestjs,color=DarkRed>\nBackend" as backend #White
+    rectangle "<$influxdb,color=Blue>\nInfluxDB" as influxDB #White
+}
+rectangle "<$react,color=Cyan>\nDApp" as dapp #White
+rectangle "<$ew_logo,color=Purple>\nEW chain" as ewc #White
+
+
+'Prosumer
+der1 --> prosumer : readings
+der2 --> prosumer : readings
+prosumer --> backend : aggregated readings
+
+'Backend
+backend --> influxDB : traditional storage
+backend --> ewc : storage of precise proof on EW-chain
+
+'DApp
+dapp <-- backend : interact with backend for both aggregators and prosumers
+dapp <-- ewc : check for roles and proofs from EW-chain
+
+@enduml
