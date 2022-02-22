@@ -1,4 +1,4 @@
-$uri = 'http://localhost:3000'
+$uri = 'http://localhost:3000/readings'
 $asset_id = '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819'
 $delays = @(
     10,
@@ -17,7 +17,7 @@ $delays = @(
 
 foreach ($delay in $delays) {
     $value = Get-Random -Minimum 100 -Maximum 10000
-    $timestamp = (Get-Date).AddSeconds($delay).ToString("yyyy-MM-ddTHH:mm:ssZ")
+    $timestamp = (Get-Date).ToUniversalTime().AddSeconds($delay).ToString("yyyy-MM-ddTHH:mm:ssZ")
 
     $Body = @{
         readings = @(
