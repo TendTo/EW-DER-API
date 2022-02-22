@@ -14,7 +14,7 @@ import {
 import {
   AggregateFilterDTO,
   ReadingsFilterDTO,
-  MeasurementDTO,
+  MeasurementsDTO,
   PeriodFilterDTO,
 } from "./dto";
 import { ReadingsService } from "./readings.service";
@@ -64,7 +64,7 @@ export class ReadingsController {
   @Post("/:meter")
   public async storeReads(
     @Param("meter") meterId: string,
-    @Body() measurement: MeasurementDTO,
+    @Body() measurement: MeasurementsDTO,
   ) {
     await this.readsService.store(meterId, measurement);
   }

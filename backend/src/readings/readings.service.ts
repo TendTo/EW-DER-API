@@ -8,7 +8,7 @@ import {
   ReadingDTO,
   ReadingsFilterDTO,
   AggregatedReadDTO,
-  MeasurementDTO,
+  MeasurementsDTO,
   AggregateFilterDTO,
 } from "./dto";
 import { ConfigService } from "@nestjs/config";
@@ -47,30 +47,30 @@ export class ReadingsService implements OnModuleInit {
     };
   }
 
-  public async store(meterId: string, measurement: MeasurementDTO) {
+  public async store(assetDID: string, measurement: MeasurementsDTO) {
     const multiplier = this.getMultiplier(measurement.unit);
     const points = measurement.readings.map((r) =>
       new Point("reading")
-        .tag("meter", meterId)
+        .tag("assetDID", assetDID)
         .intField("reading", r.value * multiplier)
         .timestamp(new Date(r.timestamp)),
     );
 
     const writer = this.dbWriter;
-
+    this.logger.debug(`Writing points to InfluxDB: ${points}`);
     writer.writePoints(points);
     await writer.close();
   }
 
   public async aggregate(
-    meterId: string,
+    assetDID: string,
     filter: AggregateFilterDTO,
   ): Promise<AggregatedReadDTO[]> {
     try {
       const query = `
       from(bucket: "${this.bucket}")
       |> range(start: ${filter.start}, stop: ${filter.end})
-      |> filter(fn: (r) => r.meter == "${meterId}" and r._field == "reading")
+      |> filter(fn: (r) => r.assetDID == "${assetDID}" and r._field == "reading")
       ${filter.difference ? "|> difference()" : ""}
       |> aggregateWindow(every: ${filter.window}, fn: ${filter.aggregate})
       `;
@@ -83,11 +83,11 @@ export class ReadingsService implements OnModuleInit {
   }
 
   public async find(
-    meterId: string,
+    massetDID: string,
     filter: ReadingsFilterDTO,
   ): Promise<ReadingDTO[]> {
     try {
-      const query = this.findByMeterQuery(meterId, filter);
+      const query = this.findByMeterQuery(massetDID, filter);
 
       return this.execute(query);
     } catch (e) {
@@ -97,16 +97,16 @@ export class ReadingsService implements OnModuleInit {
   }
 
   public async findLatestRead(
-    meterId: string,
+    assetDID: string,
     startDuration?: AllowedDurationType,
   ): Promise<ReadingDTO> {
     try {
-      const query = this.findLatestReadByMeterQuery(meterId, startDuration);
+      const query = this.findLatestReadByMeterQuery(assetDID, startDuration);
 
       const reads = await this.execute(query);
       if (reads.length === 0) {
         throw new NotFoundException(
-          `Unable to get the latest reading. There are no readings yet for meter ${meterId}`,
+          `Unable to get the latest reading. There are no readings yet for the asset ${assetDID}`,
         );
       }
       return reads[0];
@@ -117,11 +117,11 @@ export class ReadingsService implements OnModuleInit {
   }
 
   public async findDifference(
-    meterId: string,
+    assetDID: string,
     filter: ReadingsFilterDTO,
   ): Promise<ReadingDTO[]> {
     try {
-      const query = `${this.findByMeterQuery(meterId, filter)}
+      const query = `${this.findByMeterQuery(assetDID, filter)}
       |> difference()
       `;
 
@@ -132,24 +132,24 @@ export class ReadingsService implements OnModuleInit {
     }
   }
 
-  private findByMeterQuery(meterId: string, filter: ReadingsFilterDTO): string {
+  private findByMeterQuery(assetDID: string, filter: ReadingsFilterDTO): string {
     return `
     from(bucket: "${this.bucket}")
     |> range(start: ${filter.start}, stop: ${filter.end})
     |> limit(n: ${filter.limit}, offset: ${filter.offset})
-    |> filter(fn: (r) => r.meter == "${meterId}" and r._field == "reading")
+    |> filter(fn: (r) => r.assetDID == "${assetDID}" and r._field == "reading")
     `;
   }
 
   public findLatestReadByMeterQuery(
-    meterId: string,
+    assetDID: string,
     startDuration?: AllowedDurationType,
   ): string {
     const start = startDuration ? `-${startDuration}` : "-1d";
     return `
     from(bucket: "${this.bucket}")
     |> range(start: ${start}, stop: now())
-    |> filter(fn: (r) => r.meter == "${meterId}" and r._field == "reading")
+    |> filter(fn: (r) => r.assetDID == "${assetDID}" and r._field == "reading")
     |> last()
     `;
   }
