@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  influxdb:
+    image: influxdb:latest
+    volumes:
+      - influxdbVolume:/var/lib/influxdb2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: username
+      DOCKER_INFLUXDB_INIT_PASSWORD: password
+      DOCKER_INFLUXDB_INIT_ORG: myorg
+      DOCKER_INFLUXDB_INIT_BUCKET: mybucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: universal_api_token
+    ports:
+      - "8086:8086"
+    networks:
+      - aggregator
+
+  backend:
+    build:
+      context: ../backend
+    image: backend:latest
+    container_name: backend
+    ports:
+      - 3000:3000
+    networks:
+      - default
+      - aggregator
+    depends_on:
+      - influxdb
+
+  der1:
+    build:
+      context: ../der
+    image: der:latest
+    container_name: der1
+    environment:
+      BACKEND_URL: http://backend:3000
+      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000002
+    networks:
+      - default
+    depends_on:
+      - backend
+
+  der2:
+    build:
+      context: ../der
+    image: der:latest
+    container_name: der2
+    environment:
+      BACKEND_URL: http://backend:3000
+      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000001
+    networks:
+      - default
+    depends_on:
+      - backend
+
+volumes:
+  influxdbVolume:
+
+networks:
+  aggregator:
+  default:
