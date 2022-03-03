@@ -1,0 +1,88 @@
+@startuml Data schema
+title Data schema
+
+!include ./ew_logo.puml
+
+!include <logos/influxdb>
+!include <logos/sqlite>
+
+skinparam MaxMessageSize 140
+skinparam Linetype ortho
+
+rectangle "Enums" as enums {
+    enum "Status" as status {
+        NotSubmitted
+        Pending
+        Accepted
+    }
+    enum "Unit" as unit {
+        Wh
+        kWh
+        MWh
+        GWh
+    }
+    enum "DID" as did {
+        did:ethr:<address>
+    }
+}
+
+rectangle "<$sqlite,color=DarkRed>\nProsumer network" {
+    entity "Reading" as p_reading {
+        * id: int <<auto>>
+        * aggregation_id: <<FK>>
+        --
+        * asset_id: DID
+        * value: double
+        * timestamp: timestamp
+        * unit: **Unit**
+    }
+
+    entity "AggregatedReadings" as p_aggregated_readings {
+        * id: int <<auto>>
+        --
+        * asset_id: DID
+        * rootHash: string
+        * salts: string
+        * total_value: double
+        * startTimestamp: timestamp
+        * endTimestamp: timestamp
+        * status: **Status**
+    }
+}
+rectangle "<$influxdb,color=Blue>\nAggregator network" {
+    entity "AggregatedReadings" as a_aggregated_readings {
+        * id: int <<auto>>
+        --
+        * asset_id: DID
+        * rootHash: string
+        * salts: string
+        * total_value: double
+        * startTimestamp: timestamp
+        * endTimestamp: timestamp
+        * status: **Status**
+    }
+
+    interface "Reading" as a_reading {
+        * aggregation_id: <<FK>>
+        --
+        * asset_id: DID
+        * value: double
+        * timestamp: timestamp
+    }
+}
+rectangle "<$ew_logo,color=Purple>\nEW chain" {
+    annotation "StoreReadingLog" as e_log {
+        * asset_id: DID
+        * aggregator_id: DID
+        * rootHash: string
+    }
+}
+
+
+'Prosumer
+p_reading }o--o| p_aggregated_readings
+
+'Aggregator
+a_reading }o--o| a_aggregated_readings
+
+@enduml
