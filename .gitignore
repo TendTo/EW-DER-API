@@ -1,3 +1,11 @@
+# VsCode
 .vscode/
+
+# Node
 node_modules/
+
+# Env files
 .env
+
+# Sqlite db
+*sqlite
