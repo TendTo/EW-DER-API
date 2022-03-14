@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
-import { MeasurementDTO } from "./dto";
+import { ReadingDTO } from "./dto";
 import { ReadingsService } from "./readings.service";
 
 @Controller("readings")
@@ -7,8 +7,8 @@ export class ReadingsController {
   constructor(private readonly readingsService: ReadingsService) {}
 
   @Post()
-  create(@Body() measurement: MeasurementDTO) {
-    return this.readingsService.create(measurement);
+  create(@Body() reading: ReadingDTO) {
+    return this.readingsService.create(reading);
   }
 
   @Get()

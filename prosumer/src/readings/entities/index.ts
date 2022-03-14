@@ -1,1 +1,2 @@
-export * from "./measurement.entity";
+export * from "./reading.entity";
+export * from "./aggregatedReadings.entity";

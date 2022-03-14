@@ -1,2 +1,2 @@
-export * from "./measurement.dto";
-export * from "./sendMeasurementsFilter.dto";
+export * from "./reading.dto";
+export * from "./aggregatedReadings.dto";
