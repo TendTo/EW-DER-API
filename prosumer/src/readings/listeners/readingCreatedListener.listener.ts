@@ -19,7 +19,7 @@ export class ReadingCreatedListener {
     this.aggregationThreshold = this.configService.get<number>(
       Config.AGGREGATION_THRESHOLD,
     );
-    this.logger.debug(`Aggregation threshold: ${this.aggregationThreshold}`);
+    this.logger.debug("Aggregation threshold:", this.aggregationThreshold);
   }
 
   @OnEvent(onReadingCreatedId)
@@ -27,7 +27,7 @@ export class ReadingCreatedListener {
     const nNotSubmitted = await this.readingsService.countNotSubmitted();
 
     if (nNotSubmitted >= this.aggregationThreshold) {
-      this.logger.debug(`Aggregating readings`);
+      this.logger.debug("Aggregating readings");
       this.readingsService.aggregateReadings();
     }
   }

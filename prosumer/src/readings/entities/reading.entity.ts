@@ -1,3 +1,4 @@
+import { Unit } from "src/constants";
 import { unitConverter } from "src/utility";
 import {
   BaseEntity,
@@ -6,18 +7,21 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Unit } from "../../constants";
 import { ReadingDTO } from "../dto";
 import { AggregatedReadings } from "./aggregatedReadings.entity";
 
 @Entity()
 export class Reading extends BaseEntity {
+  constructor();
+  constructor(readingDTO: ReadingDTO, aggregatedReadings?: AggregatedReadings);
   constructor(
-    { assetId, timestamp, unit, value }: ReadingDTO,
+    readingDTO?: ReadingDTO,
     aggregatedReadings: AggregatedReadings = null,
   ) {
     super();
-    this.assetId = assetId;
+    if (!readingDTO) return;
+    const { assetDID, timestamp, unit, value } = readingDTO;
+    this.assetDID = assetDID;
     this.timestamp = timestamp;
     this.value = unitConverter(value, unit);
     this.aggregatedReadings = aggregatedReadings;
@@ -27,7 +31,7 @@ export class Reading extends BaseEntity {
   id: number;
 
   @Column()
-  assetId: string;
+  assetDID: string;
 
   @Column()
   value: number;
@@ -41,4 +45,12 @@ export class Reading extends BaseEntity {
     { nullable: true },
   )
   aggregatedReadings: AggregatedReadings;
+
+  public get dto() {
+    return {
+      assetDID: this.assetDID,
+      value: this.value,
+      timestamp: this.timestamp,
+    };
+  }
 }

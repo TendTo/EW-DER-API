@@ -10,6 +10,12 @@ export enum Unit {
 
 export enum Status {
   NotSubmitted = "NotSubmitted",
-  Pending = "Pending",
-  Accepted = "Accepted",
+  Submitted = "Submitted",
+  Rejected = "Rejected",
+  Confirmed = "Confirmed",
+}
+
+export enum Config {
+  AGGREGATION_THRESHOLD = "AGGREGATION_THRESHOLD",
+  AGGREGATOR_URL = "AGGREGATOR_URL",
 }

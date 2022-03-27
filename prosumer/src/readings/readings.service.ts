@@ -23,7 +23,7 @@ export class ReadingsService {
 
   public onModuleInit() {
     this.aggregatorUrl = this.configService.get<string>(Config.AGGREGATOR_URL);
-    this.logger.debug(`Aggregator url: ${this.aggregatorUrl}`);
+    this.logger.debug("Aggregator url:", this.aggregatorUrl);
     if (this.aggregatorUrl === "") {
       throw new Error("Aggregator url not set");
     }
@@ -36,6 +36,7 @@ export class ReadingsService {
       onReadingCreatedId,
       new OnReadingCreated(newReading),
     );
+    this.logger.debug("New reading created: ", res);
     return res;
   }
 
@@ -60,26 +61,30 @@ export class ReadingsService {
       where: { aggregatedReadings: null },
     });
 
-    const preciseProof =
-      this.preciseProof.generatePreciseProof(readingsToSubmit);
+    const readingDTOs = readingsToSubmit.map((reading) => reading.dto);
+    const preciseProof = this.preciseProof.generatePreciseProof(readingDTOs);
 
     const aggregatedReadings = new AggregatedReadings(
       preciseProof,
       readingsToSubmit,
+      Status.Submitted,
     );
-    console.debug("Aggregated readings: ", aggregatedReadings);
-    await aggregatedReadings.save();
+    this.logger.debug("Aggregated readings: ", aggregatedReadings.dto);
+    this.logger.debug(`URL: ${this.aggregatorUrl}/readings`);
     const { data, status } = await lastValueFrom(
       this.httpService
-        .post(this.aggregatorUrl, aggregatedReadings)
+        .post(`${this.aggregatorUrl}/readings`, aggregatedReadings.dto)
         .pipe(map((res) => ({ data: res.data, status: res.status }))),
     );
-    console.debug("Aggregated readings submitted: ", data);
-    if (status !== 200) {
+    this.logger.debug("Aggregated readings submitted: ", data);
+  
+    if (status !== 201) {
+      aggregatedReadings.status = Status.Rejected;
+      aggregatedReadings.readings = [];
+      await aggregatedReadings.save();
       throw new Error("Aggregated readings submission failed");
     }
 
-    aggregatedReadings.status = Status.Accepted;
     await aggregatedReadings.save();
   }
 

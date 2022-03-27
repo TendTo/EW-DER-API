@@ -12,19 +12,27 @@ import { PreciseProofDTO } from "src/precise-proofs/dto";
 
 @Entity()
 export class AggregatedReadings extends BaseEntity {
+  constructor();
   constructor(
-    { rootHash, salts }: PreciseProofDTO,
+    preciseProof: PreciseProofDTO,
     readings: Reading[],
+    status?: Status,
+  );
+  constructor(
+    preciseProof?: PreciseProofDTO,
+    readings?: Reading[],
     status: Status = Status.NotSubmitted,
   ) {
     super();
-    const [start, end] = getMinMax(readings, "timestamp");
+    if (!preciseProof || !readings) return;
+    const { rootHash, salts } = preciseProof;
+    const [start, stop] = getMinMax(readings, "timestamp");
     this.rootHash = rootHash;
-    this.salts = salts.join(",");
+    this.salts = salts;
     this.readings = readings;
     this.status = status;
-    this.startTimestamp = start.timestamp;
-    this.endTimestamp = end.timestamp;
+    this.start = start.timestamp;
+    this.stop = stop.timestamp;
   }
 
   @PrimaryGeneratedColumn()
@@ -33,18 +41,29 @@ export class AggregatedReadings extends BaseEntity {
   @Column()
   rootHash: string;
 
-  @Column()
-  salts: string;
+  @Column("text", { array: true })
+  salts: string[];
 
   @Column()
   status: Status;
 
   @Column()
-  startTimestamp: Date;
+  start: Date;
 
   @Column()
-  endTimestamp: Date;
+  stop: Date;
 
   @OneToMany(() => Reading, (reading) => reading.aggregatedReadings)
   readings: Reading[];
+
+  public get dto() {
+    return {
+      rootHash: this.rootHash,
+      salts: this.salts,
+      status: this.status,
+      start: this.start,
+      stop: this.stop,
+      readings: this.readings.map((reading) => reading.dto),
+    };
+  }
 }

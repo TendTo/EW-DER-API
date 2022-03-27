@@ -8,7 +8,12 @@ import { ReadingsModule } from "./readings/readings.module";
 @Module({
   imports: [
     ReadingsModule,
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: "sqlite",
+      database: "database.sqlite",
+      entities: [`${__dirname}/**/*.entity{.ts,.js}`],
+      synchronize: true,
+    }),
     EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],

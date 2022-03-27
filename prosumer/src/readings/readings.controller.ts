@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ReadingDTO } from "./dto";
 import { ReadingsService } from "./readings.service";
 
+@UseInterceptors(ClassSerializerInterceptor)
+@UsePipes(new ValidationPipe({ transform: true }))
 @Controller("readings")
 export class ReadingsController {
   constructor(private readonly readingsService: ReadingsService) {}

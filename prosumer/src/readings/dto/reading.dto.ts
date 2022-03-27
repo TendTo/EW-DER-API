@@ -1,23 +1,29 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, IsEnum, IsNumber, IsString } from "class-validator";
+import {
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { Unit } from "../../constants";
 
 export class ReadingDTO {
   @IsString()
   @ApiProperty({
     type: String,
-    example: "0x1234567890123456789012345678901234567890",
+    example: "did:ethr:0x1234567890123456789012345678901234567890",
     description: "DID of the asset",
   })
-  assetId: string;
+  assetDID: string;
 
   @IsDate()
   @Type(() => Date)
   @ApiProperty({
     type: String,
     format: "date-time",
-    example: "2020-01-01T00:00:00Z",
+    example: "2022-03-26T00:00:00Z",
     description: "Reading timestamp",
   })
   timestamp: Date;
@@ -30,7 +36,13 @@ export class ReadingDTO {
   })
   value: number;
 
+  @IsOptional()
   @IsEnum(Unit)
-  @ApiProperty({ enum: Unit, enumName: "Unit" })
-  unit: Unit;
+  @ApiPropertyOptional({
+    description: "Energy unit of value. Defaults to Wh",
+    enum: Unit,
+    enumName: "Unit",
+    default: Unit.Wh,
+  })
+  unit: Unit = Unit.Wh;
 }
