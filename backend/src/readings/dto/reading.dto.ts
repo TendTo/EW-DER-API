@@ -1,8 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, IsNumber } from "class-validator";
+import { IsDate, IsNumber, IsString } from "class-validator";
 
 export class ReadingDTO {
+  @IsString()
+  @ApiProperty({
+    type: String,
+    example: "did:ethr:0x1234567890123456789012345678901234567890",
+    description: "DID of the asset",
+  })
+  assetDID: string;
+
   @IsDate()
   @Type(() => Date)
   @ApiProperty({

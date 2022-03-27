@@ -7,7 +7,7 @@ import {
   IsString,
   Matches,
 } from "class-validator";
-import { Aggregate } from "../constants";
+import { Aggregate } from "../../constants";
 import { RangeFilterDTO } from "./rangeFilter.dto";
 
 export class AggregateFilterDTO extends RangeFilterDTO {

@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsOptional, IsString } from "class-validator";
-import { AllowedDurationType } from "../constants";
+import { AllowedDurationType } from "../../constants";
 
 export class PeriodFilterDTO {
   @IsOptional()

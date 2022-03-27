@@ -1,7 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import {
-  IsDateString,
   IsEnum,
   IsInt,
   IsOptional,
@@ -9,9 +8,8 @@ import {
   IsString,
   Max,
   Min,
-  Validate,
 } from "class-validator";
-import { DEFAULT_LIMIT, DEFAULT_OFFSET, Order } from "../constants";
+import { DEFAULT_LIMIT, DEFAULT_OFFSET, Order } from "../../constants";
 import { RangeFilterDTO } from "./rangeFilter.dto";
 
 export class ReadingsFilterDTO extends RangeFilterDTO {

@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Logger,
   Param,
   Post,
   Query,
@@ -12,10 +13,9 @@ import {
 } from "@nestjs/common";
 
 import {
-  AggregateFilterDTO,
   ReadingsFilterDTO,
-  MeasurementsDTO,
   PeriodFilterDTO,
+  AggregatedReadingsDTO,
 } from "./dto";
 import { ReadingsService } from "./readings.service";
 
@@ -25,47 +25,52 @@ import { ReadingsService } from "./readings.service";
 export class ReadingsController {
   constructor(private readonly readsService: ReadingsService) {}
 
-  @Get("/:meter")
+  @Get("/:assetDID")
   public async getReads(
-    @Param("meter") meterId: string,
+    @Param("assetDID") assetDID: string,
     @Query() filter: ReadingsFilterDTO,
   ) {
-    const res = await this.readsService.find(meterId, filter);
+    const res = await this.readsService.findReadings(assetDID, filter);
     return res;
   }
 
-  @Get("/:meter/difference")
-  public async getReadsDifference(
-    @Param("meter") meterId: string,
-    @Query() filter: ReadingsFilterDTO,
-  ) {
-    const res = await this.readsService.findDifference(meterId, filter);
-    return res;
-  }
+  // @Get("/:meter/difference")
+  // public async getReadsDifference(
+  //   @Param("meter") assetDID: string,
+  //   @Query() filter: ReadingsFilterDTO,
+  // ) {
+  //   const res = await this.readsService.findDifference(assetDID, filter);
+  //   return res;
+  // }
 
-  @Get("/:meter/aggregate")
-  public async getReadsAggregates(
-    @Param("meter") meterId: string,
-    @Query() filter: AggregateFilterDTO,
-  ) {
-    const res = await this.readsService.aggregate(meterId, filter);
-    return res;
-  }
+  // @Get("/:meter/aggregate")
+  // public async getReadsAggregates(
+  //   @Param("meter") assetDID: string,
+  //   @Query() filter: AggregateFilterDTO,
+  // ) {
+  //   return this.readsService.aggregate(assetDID, filter);
+  // }
 
-  @Get("/:meter/latest")
+  @Get("/:assetDID/latest")
   public async getLatestRead(
-    @Param("meter") meterId: string,
+    @Param("assetDID") assetDID: string,
     @Query() filter: PeriodFilterDTO,
   ) {
-    const res = await this.readsService.findLatestRead(meterId, filter?.start);
-    return res;
+    return this.readsService.findLastReading(assetDID, filter?.start);
   }
 
-  @Post("/:meter")
-  public async storeReads(
-    @Param("meter") meterId: string,
-    @Body() measurement: MeasurementsDTO,
-  ) {
-    await this.readsService.store(meterId, measurement);
+  // This endpoint should not be used, since the readings are only sent when aggregated
+  // @Post("/:meter")
+  // public async storeReads(
+  //   @Param("meter") assetDID: string,
+  //   @Body() reading: ReadingDTO,
+  // ) {
+  //   await this.readsService.storeReading({ ...reading, assetDID });
+  // }
+
+  @Post("/")
+  public async storeAggregated(@Body() aggregated: AggregatedReadingsDTO) {
+    Logger.debug(`Storing aggregated readings: ${aggregated}`);
+    await this.readsService.storeAggregateReadings(aggregated);
   }
 }

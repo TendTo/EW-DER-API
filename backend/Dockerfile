@@ -14,4 +14,4 @@ COPY tsconfig.json tsconfig.build.json nest-cli.json .env ./
 
 COPY src .
 
-CMD [ "npm", "run", "start:dev", "--preserveWatchOutput" ]
+CMD [ "npm", "run", "start:dev" ]

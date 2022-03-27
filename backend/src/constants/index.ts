@@ -25,4 +25,11 @@ export type AllowedDurationType =
   | "1d"
   | "1h"
   | "30m"
-  | "15m";
+  | "15m"
+  | "now()";
+
+export enum Status {
+  Accepted = "Accepted",
+  Rejected = "Rejected",
+  Submitted = "Submitted",
+}
