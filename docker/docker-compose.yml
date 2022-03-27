@@ -22,6 +22,11 @@ services:
       context: ../backend
     image: backend:latest
     container_name: backend
+    environment:
+      INFLUXDB_HOST: http://localhost:8086
+      INFLUXDB_TOKEN: universal_api_token
+      INFLUXDB_ORG: myorg
+      INFLUXDB_BUCKET: mybucket
     ports:
       - 3000:3000
     networks:
