@@ -1,5 +1,5 @@
 import { ClientOptions, InfluxDB } from "@influxdata/influxdb-client";
-import { Aggregate, AllowedDurationType } from "../../constants";
+import { AggregationFunction, Order } from "../../constants";
 
 type InfluxDbConfig = {
   connection: ClientOptions;
@@ -9,8 +9,8 @@ type InfluxDbConfig = {
 
 export type GetQueryOptions = {
   range?: {
-    start: AllowedDurationType | string;
-    stop: AllowedDurationType | string;
+    start: string;
+    stop: string;
   };
   limit?: {
     limit: number;
@@ -18,10 +18,11 @@ export type GetQueryOptions = {
   };
   aggregateWindow?: {
     every: string;
-    fn: Aggregate;
+    fn: AggregationFunction;
   };
   getLast?: boolean;
   difference?: boolean;
+  order?: Order;
 };
 
 export type GetQueryOptionsFn = GetQueryOptions & {
@@ -75,11 +76,11 @@ export class InfluxDBRepository {
     assetDID,
     aggregateWindow,
     difference,
+    order: sort,
   }: GetQueryOptionsAssetId | GetQueryOptionsFn) {
     return `
     from(bucket: "${this._bucket}")
     ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
-    ${limit ? `|> limit(n: ${limit.limit}, offset: ${limit.offset})` : ""}
     ${filterFn ? `|> filter(fn: ${filterFn})` : ""}
     ${
       assetDID
@@ -88,11 +89,17 @@ export class InfluxDBRepository {
     }
     ${getLast ? "|> last()" : ""}
     ${difference ? `|> difference()` : ""}
-  ${
-    aggregateWindow
-      ? `|> aggregateWindow(every: ${aggregateWindow.every}, fn: ${aggregateWindow.fn})`
-      : ""
-  }
+    ${
+      aggregateWindow
+        ? `|> aggregateWindow(every: ${aggregateWindow.every}, fn: ${aggregateWindow.fn}, createEmpty: false)`
+        : ""
+    }
+    ${
+      sort && sort === Order.DESC
+        ? `|> sort(columns: ["_time"], desc: true)`
+        : ""
+    }
+    ${limit ? `|> limit(n: ${limit.limit}, offset: ${limit.offset})` : ""}
     `;
   }
 }

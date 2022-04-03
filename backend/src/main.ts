@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle("EW DER API")
+  .setTitle("EW DER API (aggregator)")
     .setDescription("Sample API for EW DER readings management")
     .setVersion("1.0")
     .build();

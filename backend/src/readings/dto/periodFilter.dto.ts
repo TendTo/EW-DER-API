@@ -1,15 +1,15 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
-import { AllowedDurationType } from "../../constants";
+import { INFLUX_TIME_REGEX } from "src/constants";
+import { IsInfluxTime } from "src/utility";
 
-export class PeriodFilterDTO {
-  @IsOptional()
-  @IsString()
+export class StartFilterDTO {
+  @IsInfluxTime()
   @ApiPropertyOptional({
     type: String,
-    example: "1d",
+    example: "-2d",
     description:
-      "Start date since the last stored read. Must be one of these values: 1y, 1mo, 1w, 1d, 1h, 30m, 15m",
+      "Start date since the last stored read. Can be a negative duration or a date-string. Examples: -1d, -1y12m, 2022-04-01T00:00:00Z",
+    pattern: INFLUX_TIME_REGEX,
   })
-  start: AllowedDurationType;
+  start: string;
 }

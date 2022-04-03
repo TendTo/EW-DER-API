@@ -14,8 +14,9 @@ import {
 
 import {
   ReadingsFilterDTO,
-  PeriodFilterDTO,
+  StartFilterDTO,
   AggregatedReadingsDTO,
+  AggregateReadingsFilterDTO,
 } from "./dto";
 import { ReadingsService } from "./readings.service";
 
@@ -43,20 +44,20 @@ export class ReadingsController {
   //   return res;
   // }
 
-  // @Get("/:meter/aggregate")
-  // public async getReadsAggregates(
-  //   @Param("meter") assetDID: string,
-  //   @Query() filter: AggregateFilterDTO,
-  // ) {
-  //   return this.readsService.aggregate(assetDID, filter);
-  // }
+  @Get("/:assetDID/aggregate")
+  public async getReadsAggregates(
+    @Param("assetDID") assetDID: string,
+    @Query() filter: AggregateReadingsFilterDTO,
+  ) {
+    return this.readsService.findAggregatedReadings(assetDID, filter);
+  }
 
   @Get("/:assetDID/latest")
   public async getLatestRead(
     @Param("assetDID") assetDID: string,
-    @Query() filter: PeriodFilterDTO,
+    @Query() filter: StartFilterDTO,
   ) {
-    return this.readsService.findLastReading(assetDID, filter?.start);
+    return this.readsService.findLastReading(assetDID, filter.start);
   }
 
   // This endpoint should not be used, since the readings are only sent when aggregated

@@ -1,5 +1,9 @@
-export const DEFAULT_LIMIT = 10000;
+export const DEFAULT_LIMIT = 100;
 export const DEFAULT_OFFSET = 0;
+export const INFLUX_DURATION_REGEX =
+  "^(?:\\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\\d?\\1\\d.*)(?!.*\\d\\1\\d?)$";
+export const INFLUX_TIME_REGEX =
+  "^(?:-(?:\\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\\d?\\1\\d.*)(?!.*\\d?\\1\\d)|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)$";
 
 export enum Order {
   ASC = "ASC",
@@ -13,23 +17,30 @@ export enum Unit {
   GWh = "GWh",
 }
 
-export enum Aggregate {
-  Sum = "sum",
-  Mean = "mean",
-}
-
-export type AllowedDurationType =
-  | "1y"
-  | "1mo"
-  | "1w"
-  | "1d"
-  | "1h"
-  | "30m"
-  | "15m"
-  | "now()";
-
 export enum Status {
   Accepted = "Accepted",
   Rejected = "Rejected",
   Submitted = "Submitted",
 }
+
+export enum AggregationFunction {
+  sum = "sum",
+  mean = "mean",
+  last = "last",
+  max = "max",
+  min = "min",
+  count = "count",
+}
+
+export type DurationUnit =
+  | "ns"
+  | "us"
+  | "mo"
+  | "ms"
+  | "s"
+  | "m"
+  | "h"
+  | "d"
+  | "w"
+  | "mo"
+  | "y";

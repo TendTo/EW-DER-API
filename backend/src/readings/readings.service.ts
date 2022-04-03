@@ -7,10 +7,10 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
-import { AllowedDurationType } from "../constants";
+import { Order } from "../constants";
 import {
   AggregatedReadingsDTO,
-  AggregateFilterDTO,
+  AggregateReadingsFilterDTO,
   ReadingDTO,
   ReadingsFilterDTO,
 } from "./dto";
@@ -53,7 +53,7 @@ export class ReadingsService implements OnModuleInit {
     }
 
     const readings = aggregated.readings.map(
-      (reading) => new Reading(reading, ""),
+      (reading) => new Reading(reading, aggregated.rootHash),
     );
     await Reading.saveMany(readings);
     this.logger.debug(
@@ -78,23 +78,53 @@ export class ReadingsService implements OnModuleInit {
 
   public async findReadings(
     assetDID: string,
-    { start, stop, limit = 100, offset = 0 }: ReadingsFilterDTO,
+    {
+      start,
+      stop,
+      limit = 100,
+      offset = 0,
+      order = Order.ASC,
+    }: ReadingsFilterDTO,
   ): Promise<Reading[]> {
     this.logger.debug("Reading readings from InfluxDB:", assetDID);
     return Reading.findMany(assetDID, {
       range: { start, stop },
       limit: { limit, offset },
+      order,
     });
   }
 
   public async findLastReading(
     assetDID: string,
-    start: AllowedDurationType,
+    start: string,
   ): Promise<Reading> {
     this.logger.debug(
       `Reading last reading from InfluxDB (start: ${start}):`,
       assetDID,
     );
     return Reading.findLast(assetDID, start);
+  }
+
+  public async findAggregatedReadings(
+    assetDID: string,
+    {
+      start,
+      stop,
+      limit = 100,
+      offset = 0,
+      order = Order.ASC,
+      aggregationWindow,
+      aggregationFunction,
+      difference,
+    }: AggregateReadingsFilterDTO,
+  ): Promise<Reading[]> {
+    this.logger.debug("Reading readings from InfluxDB:", assetDID);
+    return Reading.findMany(assetDID, {
+      range: { start, stop },
+      limit: { limit, offset },
+      aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },
+      order,
+      difference,
+    });
   }
 }

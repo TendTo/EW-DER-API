@@ -1,5 +1,4 @@
 import { Point } from "@influxdata/influxdb-client";
-import { AllowedDurationType } from "../../constants";
 import { InfluxDbReadingDTO, ReadingDTO } from "../dto";
 import { GetQueryOptions, InfluxDBRepository } from "./influxDb.repository";
 
@@ -62,10 +61,10 @@ export class Reading {
     return rows.map(this.rowToReading).map((r) => new this(r, ""));
   }
 
-  static async findLast(assetDID: string, start?: AllowedDurationType) {
+  static async findLast(assetDID: string, start = "-1d") {
     const query = InfluxDBRepository.instance.getQuery({
       assetDID: assetDID,
-      range: { start: `-${start ?? "1d"}`, stop: "now()" },
+      range: { start, stop: "now()" },
       getLast: true,
     });
     const db = InfluxDBRepository.instance.dbReader;

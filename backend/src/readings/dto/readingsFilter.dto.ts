@@ -1,11 +1,10 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
+import { Type } from "class-transformer";
 import {
   IsEnum,
   IsInt,
   IsOptional,
   IsPositive,
-  IsString,
   Max,
   Min,
 } from "class-validator";
@@ -14,11 +13,12 @@ import { RangeFilterDTO } from "./rangeFilter.dto";
 
 export class ReadingsFilterDTO extends RangeFilterDTO {
   @IsOptional()
-  @Transform(({ value }) => parseInt(value), { toClassOnly: true })
   @IsInt()
   @IsPositive()
   @Max(10000)
+  @Type(() => Number)
   @ApiPropertyOptional({
+    description: "The maximum number of readings to return",
     type: "integer",
     default: DEFAULT_LIMIT,
     minimum: 0,
@@ -27,14 +27,23 @@ export class ReadingsFilterDTO extends RangeFilterDTO {
   limit = DEFAULT_LIMIT;
 
   @IsOptional()
-  @Transform(({ value }) => parseInt(value), { toClassOnly: true })
   @IsInt()
   @Min(0)
-  @ApiPropertyOptional({ type: "integer", default: DEFAULT_OFFSET, minimum: 0 })
+  @Type(() => Number)
+  @ApiPropertyOptional({
+    description: "Offset of the sliding window applyed to the list of readings",
+    type: "integer",
+    default: DEFAULT_OFFSET,
+    minimum: 0,
+  })
   offset = DEFAULT_OFFSET;
 
-  @IsString()
+  @IsOptional()
   @IsEnum(Order)
-  @ApiPropertyOptional({ enum: Order, default: Order.ASC })
-  order: "ASC" | "DESC" = "ASC";
+  @ApiPropertyOptional({
+    description: "Order of the readings, based on the timestamp",
+    enum: Order,
+    default: Order.ASC,
+  })
+  order: Order = Order.ASC;
 }
