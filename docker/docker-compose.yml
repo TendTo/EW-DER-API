@@ -17,13 +17,13 @@ services:
     networks:
       - aggregator
 
-  backend:
+  aggregator:
     build:
       context: ../backend
     image: backend:latest
     container_name: backend
     environment:
-      INFLUXDB_HOST: http://localhost:8086
+      INFLUXDB_HOST: http://influxdb:8086
       INFLUXDB_TOKEN: universal_api_token
       INFLUXDB_ORG: myorg
       INFLUXDB_BUCKET: mybucket
@@ -35,18 +35,35 @@ services:
     depends_on:
       - influxdb
 
+  prosumer:
+    build:
+      context: ../prosumer
+    image: prosumer:latest
+    container_name: prosumer
+    environment:
+      AGGREGATION_THRESHOLD: "10"
+      AGGREGATOR_URL: http://aggregator:3000
+    ports:
+      - 3000:3001
+    networks:
+      - default
+    depends_on:
+      - influxdb
+      - aggregator
+
   der1:
     build:
       context: ../der
     image: der:latest
     container_name: der1
     environment:
-      BACKEND_URL: http://backend:3000
-      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000002
+      SLEEP_SEC: "4"
+      PROSUMER_URL: http://prosumer:3000
+      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000001
     networks:
       - default
     depends_on:
-      - backend
+      - prosumer
 
   der2:
     build:
@@ -54,12 +71,13 @@ services:
     image: der:latest
     container_name: der2
     environment:
-      BACKEND_URL: http://backend:3000
-      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000001
+      SLEEP_SEC: "5"
+      PROSUMER_URL: http://prosumer:3000
+      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000002
     networks:
       - default
     depends_on:
-      - backend
+      - prosumer
 
 volumes:
   influxdbVolume:
