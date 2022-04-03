@@ -5,12 +5,11 @@ do
     value=$(shuf -i 100-10000 -n 1)
     json="
     {
-        \"readings\": [{
-            \"timestamp\": \"$timestamp\",
-            \"value\": $value
-        }],
+        \"assetDID\": \"${ASSET_DID:-missing-ASSET_DID}\",
+        \"timestamp\": \"$timestamp\",
+        \"value\": $value,
         \"unit\": \"Wh\"
     }"
-    curl -X POST -H "Content-Type: application/json" -d "$json" "${BACKEND_URL}/readings/${ASSET_DID}"
-    sleep 5s
+    curl -X POST -H "Content-Type: application/json" -d "$json" "${PROSUMER_URL:-missing-PROSUMER_URL}/readings"
+    sleep ${SLEEP_SEC:-5}s
 done

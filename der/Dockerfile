@@ -1,7 +1,8 @@
 FROM curlimages/curl:latest
 
-ENV BACKEND_URL="http://localhost:3000"
-ENV ASSET_DID="did:ethr:0x8b9d8a9f9a9f9a9f9a9f9a9f9a9f9a9f9a9f9a9f"
+ENV PROSUMER_URL="MISSING-PROSUMER_URL"
+ENV ASSET_DID="MISSING-ASSET_DID"
+ENV SLEEP_SEC="5"
 
 WORKDIR /app
 COPY iot_source.sh .
