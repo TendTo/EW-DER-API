@@ -1,4 +1,3 @@
-import { Unit } from "src/constants";
 import { unitConverter } from "src/utility";
 import {
   BaseEntity,
