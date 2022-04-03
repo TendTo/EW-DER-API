@@ -6,14 +6,14 @@ This project contains the source code of the many parts that make up the DER man
 
 ```yaml
 .
+├── aggregator           # backend owned by an aggregator
 ├── app                  # frontend application for both aggregators and common users
-├── backend              # backend owned by an aggregator
 ├── contract             # all the smart contract to deploy on the blockchain
 ├── der                  # DER simulator as an IOT device
 ├── docker               # docker stack
 ├── .gitignore           # .gitignore file
 ├── LICENSE              # open license of the project
-├── README.md            # THIS FILE
+└── README.md            # THIS FILE
 ```
 
 ## 🧾 Requirements

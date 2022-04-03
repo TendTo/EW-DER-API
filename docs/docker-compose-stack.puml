@@ -21,7 +21,7 @@ rectangle "Prosumer network" {
     FA5_SOLAR_PANEL(der2, "DER 2") #White
 }
 rectangle "Aggregator network" {
-    rectangle "<$nestjs,color=DarkRed>\nBackend" as backend #White
+    rectangle "<$nestjs,color=DarkRed>\nAggregator" as aggregator #White
     rectangle "<$influxdb,color=Blue>\nInfluxDB" as influxDB #White
 }
 rectangle "<$react,color=Cyan>\nDApp" as dapp #White
@@ -31,14 +31,14 @@ rectangle "<$ew_logo,color=Purple>\nEW chain" as ewc #White
 'Prosumer
 der1 --> prosumer : readings
 der2 --> prosumer : readings
-prosumer --> backend : aggregated readings
+prosumer --> aggregator : aggregated readings
 
-'Backend
-backend --> influxDB : traditional storage
-backend --> ewc : storage of precise proof on EW-chain
+'Aggregator
+aggregator --> influxDB : traditional storage
+aggregator --> ewc : storage of precise proof on EW-chain
 
 'DApp
-dapp <-- backend : interact with backend for both aggregators and prosumers
+dapp <-- aggregator : interact with the aggregator's backend for both aggregators and prosumers
 dapp <-- ewc : check for roles and proofs from EW-chain
 
 @enduml
