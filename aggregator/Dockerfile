@@ -12,6 +12,6 @@ RUN npm ci
 # Copy important files
 COPY tsconfig.json tsconfig.build.json nest-cli.json .env ./
 
-COPY src .
+COPY src src
 
-CMD [ "npm", "run", "start:dev" ]
+CMD [ "npm", "start" ]
