@@ -12,8 +12,9 @@ skinparam Linetype ortho
 rectangle "Enums" as enums {
     enum "Status" as status {
         NotSubmitted
-        Pending
-        Accepted
+        Submitted
+        Rejected
+        Confirmed
     }
     enum "Unit" as unit {
         Wh
@@ -63,9 +64,8 @@ rectangle "<$influxdb,color=Blue>\nAggregator network" {
     }
 
     interface "Reading" as a_reading {
-        * aggregation_id: <<FK>>
-        --
         * asset_id: DID
+        * rootHash: string
         * value: double
         * timestamp: timestamp
     }
@@ -84,5 +84,9 @@ p_reading }o--o| p_aggregated_readings
 
 'Aggregator
 a_reading }o--o| a_aggregated_readings
+note bottom of a_reading: Data stored on InfluxDB
+note top of a_aggregated_readings: JSON object recieved\nfrom a Prosumer.\nNot actually stored
 
+'EW chain
+note bottom of e_log: Log emitted by\nthe EW chain
 @enduml
