@@ -81,9 +81,25 @@ services:
     depends_on:
       - prosumer
 
+  der3:
+    build:
+      context: ../der
+    image: der:latest
+    container_name: der3
+    environment:
+      SLEEP_SEC: "6"
+      PROSUMER_URL: http://prosumer:3000
+      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000003
+      NEGATIVE_CONSUME: "true"
+    networks:
+      - default
+    depends_on:
+      - prosumer
+
 volumes:
   influxdbVolume:
 
 networks:
+  prosumer:
   aggregator:
   default:

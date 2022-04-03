@@ -3,6 +3,7 @@ while :
 do
     timestamp=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
     value=$(shuf -i 100-10000 -n 1)
+    if [ "$NEGATIVE_CONSUME" = "true" ]; then value=$((-value)); fi
     json="
     {
         \"assetDID\": \"${ASSET_DID:-missing-ASSET_DID}\",
