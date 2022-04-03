@@ -63,7 +63,7 @@ export class ReadingsService implements OnModuleInit {
   }
 
   public async storeReading(reading: ReadingDTO) {
-    const newReading = new Reading(reading, "");
+    const newReading = new Reading(reading);
     await newReading.save();
     this.logger.debug("Writing reading to InfluxDB:", newReading);
   }
@@ -120,6 +120,47 @@ export class ReadingsService implements OnModuleInit {
   ): Promise<Reading[]> {
     this.logger.debug("Reading readings from InfluxDB:", assetDID);
     return Reading.findMany(assetDID, {
+      range: { start, stop },
+      limit: { limit, offset },
+      aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },
+      order,
+      difference,
+    });
+  }
+
+  public async findReadingsByRootHash(
+    rootHash: string,
+    {
+      start,
+      stop,
+      limit = 100,
+      offset = 0,
+      order = Order.ASC,
+    }: ReadingsFilterDTO,
+  ): Promise<Reading[]> {
+    this.logger.debug("Reading reading from InfluxDB:", rootHash);
+    return Reading.findByRootHash(rootHash, {
+      range: { start, stop },
+      limit: { limit, offset },
+      order,
+    });
+  }
+
+  public async findAggregatedReadingsByRootHash(
+    rootHash: string,
+    {
+      start,
+      stop,
+      limit = 100,
+      offset = 0,
+      order = Order.ASC,
+      aggregationWindow,
+      aggregationFunction,
+      difference,
+    }: AggregateReadingsFilterDTO,
+  ): Promise<Reading[]> {
+    this.logger.debug("Reading reading from InfluxDB:", rootHash);
+    return Reading.findByRootHash(rootHash, {
       range: { start, stop },
       limit: { limit, offset },
       aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },

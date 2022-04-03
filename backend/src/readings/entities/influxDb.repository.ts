@@ -28,11 +28,19 @@ export type GetQueryOptions = {
 export type GetQueryOptionsFn = GetQueryOptions & {
   filterFn?: string;
   assetDID: never;
+  rootHash: never;
 };
 
 export type GetQueryOptionsAssetId = GetQueryOptions & {
   filterFn?: never;
   assetDID?: string;
+  rootHash?: never;
+};
+
+export type GetQueryOptionsRootHash = GetQueryOptions & {
+  filterFn?: never;
+  assetDID?: never;
+  rootHash?: string;
 };
 
 export class InfluxDBRepository {
@@ -74,10 +82,11 @@ export class InfluxDBRepository {
     getLast,
     limit,
     assetDID,
+    rootHash,
     aggregateWindow,
     difference,
     order: sort,
-  }: GetQueryOptionsAssetId | GetQueryOptionsFn) {
+  }: GetQueryOptionsAssetId | GetQueryOptionsFn | GetQueryOptionsRootHash) {
     return `
     from(bucket: "${this._bucket}")
     ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
@@ -85,6 +94,11 @@ export class InfluxDBRepository {
     ${
       assetDID
         ? `|> filter(fn: (r) => r.assetDID == "${assetDID}" and r._field == "reading")`
+        : ""
+    }
+    ${
+      rootHash
+        ? `|> filter(fn: (r) => r.rootHash == "${rootHash}" and r._field == "reading")`
         : ""
     }
     ${getLast ? "|> last()" : ""}

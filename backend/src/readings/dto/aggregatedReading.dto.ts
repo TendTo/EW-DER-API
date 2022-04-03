@@ -27,8 +27,8 @@ export class AggregatedReadingsDTO {
 
   @IsString()
   @ApiProperty({
-    type: "string",
-    example: "09urv0un981evup2m8u3",
+    type: String,
+    example: "0x6a2d994fb3bfbb568f940a7fd3a2f43555858a001fb5f2783cc76335431b93c1",
     description:
       "Root hash calculated by the prosumer and to be confirmed by the validator, before being sent to the blockchain",
   })

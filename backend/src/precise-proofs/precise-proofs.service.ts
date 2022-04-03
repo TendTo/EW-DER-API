@@ -9,14 +9,14 @@ export class PreciseProofsService {
     readings: ReadingDTO[],
     salts?: string[],
   ): PreciseProofDTO {
-    const readingsToStore = readings.map(({ assetDID, timestamp, value }) => ({
+    const sanitizedReading = readings.map(({ assetDID, timestamp, value }) => ({
       assetDID,
       timestamp,
       value,
     }));
     let leafs = salts
-      ? PreciseProofs.createLeafs(readingsToStore, salts)
-      : PreciseProofs.createLeafs(readingsToStore);
+      ? PreciseProofs.createLeafs(sanitizedReading, salts)
+      : PreciseProofs.createLeafs(sanitizedReading);
 
     leafs = PreciseProofs.sortLeafsByKey(leafs);
 

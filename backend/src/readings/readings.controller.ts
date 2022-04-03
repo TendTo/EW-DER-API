@@ -26,6 +26,12 @@ import { ReadingsService } from "./readings.service";
 export class ReadingsController {
   constructor(private readonly readsService: ReadingsService) {}
 
+  @Post("/")
+  public async storeAggregated(@Body() aggregated: AggregatedReadingsDTO) {
+    Logger.debug(`Storing aggregated readings: ${aggregated}`);
+    await this.readsService.storeAggregateReadings(aggregated);
+  }
+
   @Get("/:assetDID")
   public async getReads(
     @Param("assetDID") assetDID: string,
@@ -34,15 +40,6 @@ export class ReadingsController {
     const res = await this.readsService.findReadings(assetDID, filter);
     return res;
   }
-
-  // @Get("/:meter/difference")
-  // public async getReadsDifference(
-  //   @Param("meter") assetDID: string,
-  //   @Query() filter: ReadingsFilterDTO,
-  // ) {
-  //   const res = await this.readsService.findDifference(assetDID, filter);
-  //   return res;
-  // }
 
   @Get("/:assetDID/aggregate")
   public async getReadsAggregates(
@@ -60,18 +57,19 @@ export class ReadingsController {
     return this.readsService.findLastReading(assetDID, filter.start);
   }
 
-  // This endpoint should not be used, since the readings are only sent when aggregated
-  // @Post("/:meter")
-  // public async storeReads(
-  //   @Param("meter") assetDID: string,
-  //   @Body() reading: ReadingDTO,
-  // ) {
-  //   await this.readsService.storeReading({ ...reading, assetDID });
-  // }
+  @Get("/roothash/:rootHash")
+  public async getReadingsByRootHash(
+    @Param("rootHash") rootHash: string,
+    @Query() filter: ReadingsFilterDTO,
+  ) {
+    return this.readsService.findReadingsByRootHash(rootHash, filter);
+  }
 
-  @Post("/")
-  public async storeAggregated(@Body() aggregated: AggregatedReadingsDTO) {
-    Logger.debug(`Storing aggregated readings: ${aggregated}`);
-    await this.readsService.storeAggregateReadings(aggregated);
+  @Get("/roothash/:rootHash/aggregated")
+  public async getAggregatedReadingsByRootHash(
+    @Param("rootHash") rootHash: string,
+    @Query() filter: AggregateReadingsFilterDTO,
+  ) {
+    return this.readsService.findAggregatedReadingsByRootHash(rootHash, filter);
   }
 }

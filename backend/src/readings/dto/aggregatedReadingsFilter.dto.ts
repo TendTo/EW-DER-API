@@ -13,8 +13,9 @@ export class AggregateReadingsFilterDTO extends ReadingsFilterDTO {
     type: Boolean,
     description:
       'When "true" it will calculate the difference between reads before applying aggregation functions',
+    default: false,
   })
-  difference?: boolean;
+  difference: boolean = false;
 
   @IsOptional()
   @IsInfluxDuration()
