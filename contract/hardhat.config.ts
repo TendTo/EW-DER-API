@@ -45,10 +45,10 @@ const config: HardhatUserConfig = {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
   paths: {
-    artifacts: "../app/src/artifacts",
+    artifacts: "./artifacts",
   },
   typechain: {
-    outDir: "../app/src/typechain",
+    outDir: "./typechain",
   },
 };
 
