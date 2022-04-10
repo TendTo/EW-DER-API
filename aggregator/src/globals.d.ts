@@ -8,6 +8,8 @@ declare global {
       PORT?: string;
       SK?: string;
       VOLTA_URL?: string;
+      READINGS_NOTARY_ADDRESS?: string;
+      IDENTITY_MANAGER_ADDRESS?: string;
     }
   }
 }

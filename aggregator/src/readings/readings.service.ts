@@ -1,10 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Logger,
-  OnModuleInit,
-} from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { BlockchainService } from "src/blockchain/blockchain.service";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
@@ -16,11 +10,7 @@ import { InfluxDBRepository, Reading } from "./entities";
 export class ReadingsService implements OnModuleInit {
   private readonly logger = new Logger(ReadingsService.name);
 
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly preciseProofsService: PreciseProofsService,
-    private readonly blockchainService: BlockchainService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   public async onModuleInit() {
     const url = this.configService.get<string>("INFLUXDB_HOST");

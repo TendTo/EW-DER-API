@@ -1,15 +1,18 @@
 import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { BlockchainService } from "src/blockchain/blockchain.service";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
 import { Order } from "../constants";
-import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
 import { Reading } from "../readings/entities";
+import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
+import { OnReadingsCreated, onReadingsCreatedId } from "./events";
 
 @Injectable()
 export class AggregatedReadingsService {
   private readonly logger = new Logger(AggregatedReadingsService.name);
 
   constructor(
+    private readonly eventEmitter: EventEmitter2,
     private readonly preciseProofsService: PreciseProofsService,
     private readonly blockchainService: BlockchainService,
   ) {}
@@ -41,6 +44,11 @@ export class AggregatedReadingsService {
     this.logger.debug(
       `Writing ${readings.length} readings to InfluxDB`,
       readings,
+    );
+
+    this.eventEmitter.emit(
+      onReadingsCreatedId,
+      new OnReadingsCreated(aggregated),
     );
   }
 
