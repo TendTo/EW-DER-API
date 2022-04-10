@@ -2,13 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { PreciseProofs } from "precise-proofs-js";
 import { ReadingDTO } from "src/readings/dto";
 import { PreciseProofDTO } from "./dto";
+import { Wallet } from "ethers";
 
 @Injectable()
 export class PreciseProofsService {
-  generatePreciseProof(
+  async generatePreciseProof(
     readings: Omit<ReadingDTO, "unit">[],
     salts?: string[],
-  ): PreciseProofDTO {
+  ): Promise<PreciseProofDTO> {
     const readingsToStore = readings.map(({ assetDID, timestamp, value }) => ({
       assetDID,
       timestamp,
@@ -24,10 +25,12 @@ export class PreciseProofsService {
       leafs.map((leaf: PreciseProofs.Leaf) => leaf.hash),
     );
 
+    const rootHash = PreciseProofs.getRootHash(merkleTree);
     return {
-      rootHash: PreciseProofs.getRootHash(merkleTree),
+      rootHash,
       salts: leafs.map((leaf: PreciseProofs.Leaf) => leaf.salt),
       leafs,
+      signature: await new Wallet(process.env.PK ?? "").signMessage(rootHash),
     };
   }
 

@@ -53,4 +53,11 @@ export class AggregatedReadingsDTO {
     type: [ReadingDTO],
   })
   readings: ReadingDTO[];
+
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: "Signature of the rootHash",
+  })
+  signature: string;
 }

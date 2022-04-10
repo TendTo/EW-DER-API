@@ -62,7 +62,9 @@ export class ReadingsService {
     });
 
     const readingDTOs = readingsToSubmit.map((reading) => reading.dto);
-    const preciseProof = this.preciseProof.generatePreciseProof(readingDTOs);
+    const preciseProof = await this.preciseProof.generatePreciseProof(
+      readingDTOs,
+    );
 
     const aggregatedReadings = new AggregatedReadings(
       preciseProof,
@@ -77,7 +79,7 @@ export class ReadingsService {
         .pipe(map((res) => ({ data: res.data, status: res.status }))),
     );
     this.logger.debug("Aggregated readings submitted: ", data);
-  
+
     if (status !== 201) {
       aggregatedReadings.status = Status.Rejected;
       aggregatedReadings.readings = [];
@@ -86,6 +88,10 @@ export class ReadingsService {
     }
 
     await aggregatedReadings.save();
+  }
+
+  findAllAggregatedReadings() {
+    return AggregatedReadings.find();
   }
 
   async changeAggregateStatus() {
