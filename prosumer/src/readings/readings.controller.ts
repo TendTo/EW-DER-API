@@ -23,7 +23,7 @@ export class ReadingsController {
 
   @ApiOperation({ summary: "Store a new reading" })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: "Stored a new reading",
     type: ReadingDTO,
   })

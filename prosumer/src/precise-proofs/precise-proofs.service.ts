@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PreciseProofs } from "precise-proofs-js";
 import { ReadingDTO } from "src/readings/dto";
 import { PreciseProofDTO } from "./dto";
-import { Wallet } from "ethers";
+import { Wallet, utils } from "ethers";
 
 @Injectable()
 export class PreciseProofsService {
@@ -26,11 +26,15 @@ export class PreciseProofsService {
     );
 
     const rootHash = PreciseProofs.getRootHash(merkleTree);
+    const wallet = utils.isValidMnemonic(process.env.SK)
+      ? Wallet.fromMnemonic(process.env.SK)
+      : new Wallet(process.env.SK);
+
     return {
       rootHash,
       salts: leafs.map((leaf: PreciseProofs.Leaf) => leaf.salt),
       leafs,
-      signature: await new Wallet(process.env.PK ?? "").signMessage(rootHash),
+      signature: await wallet.signMessage(rootHash),
     };
   }
 

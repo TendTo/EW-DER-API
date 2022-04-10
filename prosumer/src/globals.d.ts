@@ -3,7 +3,8 @@ declare global {
     interface ProcessEnv {
       AGGREGATOR_URL?: string;
       PORT?: string;
-      PK?: string;
+      SK?: string;
+      READINGS_NOTARY_ADDRESS?: string;
     }
   }
 }

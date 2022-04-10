@@ -1,8 +1,8 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable, Logger } from "@nestjs/common";
+import { HttpException, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { lastValueFrom, map } from "rxjs";
+import { lastValueFrom, map, catchError } from "rxjs";
 import { Config, Status } from "src/constants";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
 import { ReadingDTO } from "./dto";
@@ -72,21 +72,22 @@ export class ReadingsService {
       Status.Submitted,
     );
     this.logger.debug("Aggregated readings: ", aggregatedReadings.dto);
-    this.logger.debug(`URL: ${this.aggregatorUrl}/readings`);
+    this.logger.debug(`URL: ${this.aggregatorUrl}/aggregated-readings`);
     const { data, status } = await lastValueFrom(
       this.httpService
-        .post(`${this.aggregatorUrl}/readings`, aggregatedReadings.dto)
-        .pipe(map((res) => ({ data: res.data, status: res.status }))),
+        .post(`${this.aggregatorUrl}/aggregated-readings`, aggregatedReadings.dto)
+        .pipe(
+          map((res) => ({ data: res.data, status: res.status })),
+          catchError(async (err) => {
+            aggregatedReadings.status = Status.Rejected;
+            aggregatedReadings.readings = [];
+            await aggregatedReadings.save();
+            throw new HttpException(err.message, err.response.status);
+          }),
+        ),
     );
+
     this.logger.debug("Aggregated readings submitted: ", data);
-
-    if (status !== 201) {
-      aggregatedReadings.status = Status.Rejected;
-      aggregatedReadings.readings = [];
-      await aggregatedReadings.save();
-      throw new Error("Aggregated readings submission failed");
-    }
-
     await aggregatedReadings.save();
   }
 

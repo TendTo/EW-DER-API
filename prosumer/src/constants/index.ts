@@ -1,5 +1,10 @@
 export const MAX_SEND_QUANTITY = 10000;
 export const DEFAULT_LIMIT = 2;
+export const VOLTA_CHAIN = {
+  chainId: 0x12047,
+  name: "Volta",
+  ensAddress: "0xd7CeF70Ba7efc2035256d828d5287e2D285CD1ac",
+};
 
 export enum Unit {
   Wh = "Wh",
