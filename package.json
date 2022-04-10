@@ -1,0 +1,33 @@
+{
+  "name": "ew-der-api",
+  "version": "1.0.0",
+  "description": "Sample EW-DER api project",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TendTo/EW-DER-API.git"
+  },
+  "keywords": [
+    "blockchain",
+    "energy-web",
+    "EW"
+  ],
+  "author": "TendTo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TendTo/EW-DER-API/issues"
+  },
+  "homepage": "https://github.com/TendTo/EW-DER-API#readme",
+  "workspaces": [
+    "aggregator",
+    "contract",
+    "app",
+    "prosumer"
+  ]
+}

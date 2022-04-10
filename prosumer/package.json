@@ -1,8 +1,8 @@
 {
   "name": "prosumer",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Node that collects all the readings from any number of IOT devices and, once it has collected AGGREGATION_THRESHOLD of them, sends them to the configured aggregator, not before having calculated the root hash of the readings.",
+  "author": "TendTo",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

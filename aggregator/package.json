@@ -1,8 +1,8 @@
 {
   "name": "aggregator",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Node that collects all the aggregated readings coming from any prosumer. Readings could also be negative (consumes). It checks that the rootHash of the aggregated reading is valid, calls the appropriate smart contract on the Energy Web chain and stores the readings on an [InfluxDb database](https://www.influxdata.com/), ready to be queried by any application.",
+  "author": "TendTo",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

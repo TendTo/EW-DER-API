@@ -12,7 +12,7 @@
     "deploy:ganache": "hardhat run --network ganache scripts/deploy.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "TendTo",
   "license": "ISC",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
