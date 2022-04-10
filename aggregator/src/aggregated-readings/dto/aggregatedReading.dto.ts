@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsArray, IsDate, IsEnum, IsOptional, IsString } from "class-validator";
 import { Status } from "../../constants";
-import { ReadingDTO } from "./reading.dto";
+import { ReadingDTO } from "../../readings/dto";
 
 export class AggregatedReadingsDTO {
   @IsDate()
@@ -28,7 +28,8 @@ export class AggregatedReadingsDTO {
   @IsString()
   @ApiProperty({
     type: String,
-    example: "0x6a2d994fb3bfbb568f940a7fd3a2f43555858a001fb5f2783cc76335431b93c1",
+    example:
+      "0x6a2d994fb3bfbb568f940a7fd3a2f43555858a001fb5f2783cc76335431b93c1",
     description:
       "Root hash calculated by the prosumer and to be confirmed by the validator, before being sent to the blockchain",
   })
@@ -54,4 +55,11 @@ export class AggregatedReadingsDTO {
   @IsEnum(Status)
   @ApiPropertyOptional({ enum: Status, enumName: "Status" })
   status: Status = Status.Accepted;
+
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: "Signature of the rootHash",
+  })
+  signature: string;
 }

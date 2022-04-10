@@ -11,26 +11,16 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-
-import {
-  ReadingsFilterDTO,
-  StartFilterDTO,
-  AggregatedReadingsDTO,
-  AggregateReadingsFilterDTO,
-} from "./dto";
+import { ApiTags } from "@nestjs/swagger";
+import { ReadingsFilterDTO, StartFilterDTO } from "./dto";
 import { ReadingsService } from "./readings.service";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
+@ApiTags("readings")
 @Controller("readings")
 export class ReadingsController {
   constructor(private readonly readsService: ReadingsService) {}
-
-  @Post("/")
-  public async storeAggregated(@Body() aggregated: AggregatedReadingsDTO) {
-    Logger.debug(`Storing aggregated readings: ${aggregated}`);
-    await this.readsService.storeAggregateReadings(aggregated);
-  }
 
   @Get("/:assetDID")
   public async getReads(
@@ -39,14 +29,6 @@ export class ReadingsController {
   ) {
     const res = await this.readsService.findReadings(assetDID, filter);
     return res;
-  }
-
-  @Get("/:assetDID/aggregate")
-  public async getReadsAggregates(
-    @Param("assetDID") assetDID: string,
-    @Query() filter: AggregateReadingsFilterDTO,
-  ) {
-    return this.readsService.findAggregatedReadings(assetDID, filter);
   }
 
   @Get("/:assetDID/latest")
@@ -63,13 +45,5 @@ export class ReadingsController {
     @Query() filter: ReadingsFilterDTO,
   ) {
     return this.readsService.findReadingsByRootHash(rootHash, filter);
-  }
-
-  @Get("/roothash/:rootHash/aggregated")
-  public async getAggregatedReadingsByRootHash(
-    @Param("rootHash") rootHash: string,
-    @Query() filter: AggregateReadingsFilterDTO,
-  ) {
-    return this.readsService.findAggregatedReadingsByRootHash(rootHash, filter);
   }
 }

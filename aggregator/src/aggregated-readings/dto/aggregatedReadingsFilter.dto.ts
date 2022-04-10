@@ -3,7 +3,7 @@ import { Transform } from "class-transformer";
 import { IsBoolean, IsEnum, IsOptional } from "class-validator";
 import { IsInfluxDuration } from "src/utility";
 import { AggregationFunction, INFLUX_DURATION_REGEX } from "../../constants";
-import { ReadingsFilterDTO } from "./readingsFilter.dto";
+import { ReadingsFilterDTO } from "../../readings/dto";
 
 export class AggregateReadingsFilterDTO extends ReadingsFilterDTO {
   @IsOptional()

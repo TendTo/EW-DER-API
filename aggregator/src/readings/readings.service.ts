@@ -6,14 +6,10 @@ import {
   OnModuleInit,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { BlockchainService } from "src/blockchain/blockchain.service";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
 import { Order } from "../constants";
-import {
-  AggregatedReadingsDTO,
-  AggregateReadingsFilterDTO,
-  ReadingDTO,
-  ReadingsFilterDTO,
-} from "./dto";
+import { ReadingDTO, ReadingsFilterDTO } from "./dto";
 import { InfluxDBRepository, Reading } from "./entities";
 
 @Injectable()
@@ -23,6 +19,7 @@ export class ReadingsService implements OnModuleInit {
   constructor(
     private readonly configService: ConfigService,
     private readonly preciseProofsService: PreciseProofsService,
+    private readonly blockchainService: BlockchainService,
   ) {}
 
   public async onModuleInit() {
@@ -42,24 +39,6 @@ export class ReadingsService implements OnModuleInit {
       organization,
       connection: { url, token },
     });
-  }
-
-  public async storeAggregateReadings(aggregated: AggregatedReadingsDTO) {
-    if (!this.preciseProofsService.validateAggregatedReadings(aggregated)) {
-      throw new HttpException(
-        "Invalid aggregated readings: root hash did not match",
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    const readings = aggregated.readings.map(
-      (reading) => new Reading(reading, aggregated.rootHash),
-    );
-    await Reading.saveMany(readings);
-    this.logger.debug(
-      `Writing ${readings.length} readings to InfluxDB`,
-      readings,
-    );
   }
 
   public async storeReading(reading: ReadingDTO) {
@@ -105,29 +84,6 @@ export class ReadingsService implements OnModuleInit {
     return Reading.findLast(assetDID, start);
   }
 
-  public async findAggregatedReadings(
-    assetDID: string,
-    {
-      start,
-      stop,
-      limit = 100,
-      offset = 0,
-      order = Order.ASC,
-      aggregationWindow,
-      aggregationFunction,
-      difference,
-    }: AggregateReadingsFilterDTO,
-  ): Promise<Reading[]> {
-    this.logger.debug("Reading readings from InfluxDB:", assetDID);
-    return Reading.findMany(assetDID, {
-      range: { start, stop },
-      limit: { limit, offset },
-      aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },
-      order,
-      difference,
-    });
-  }
-
   public async findReadingsByRootHash(
     rootHash: string,
     {
@@ -143,29 +99,6 @@ export class ReadingsService implements OnModuleInit {
       range: { start, stop },
       limit: { limit, offset },
       order,
-    });
-  }
-
-  public async findAggregatedReadingsByRootHash(
-    rootHash: string,
-    {
-      start,
-      stop,
-      limit = 100,
-      offset = 0,
-      order = Order.ASC,
-      aggregationWindow,
-      aggregationFunction,
-      difference,
-    }: AggregateReadingsFilterDTO,
-  ): Promise<Reading[]> {
-    this.logger.debug("Reading reading from InfluxDB:", rootHash);
-    return Reading.findByRootHash(rootHash, {
-      range: { start, stop },
-      limit: { limit, offset },
-      aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },
-      order,
-      difference,
     });
   }
 }
