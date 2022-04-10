@@ -14,15 +14,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  if (typeof process.argv[2] !== "string")
-    throw new Error("Please provide the name of the contract to deploy");
+  const ReadingsNotary = await ethers.getContractFactory("ReadingsNotary");
+  const notary = await ReadingsNotary.deploy();
 
-  const ContractFactory = await ethers.getContractFactory(process.argv[2]);
-  const contract = await ContractFactory.deploy(10000);
+  await notary.deployed();
 
-  await contract.deployed();
-
-  console.log("Contract deployed to:", contract.address);
+  console.log("ReadingsNotary deployed to:", notary.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

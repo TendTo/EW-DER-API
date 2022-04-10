@@ -28,13 +28,16 @@ const config: HardhatUserConfig = {
     ganache: {
       chainId: 1337,
       url: "http://192.168.1.29:8545",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      accounts: process.env.SK !== undefined ? [process.env.SK] : [],
     },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      accounts: process.env.SK !== undefined ? [process.env.SK] : [],
+    },
+    volta: {
+      chainId: 73799,
+      url: process.env.VOLTA_URL || "https://volta-rpc.energyweb.org/",
+      accounts: process.env.SK !== undefined ? [process.env.SK] : [],
     },
   },
   gasReporter: {
