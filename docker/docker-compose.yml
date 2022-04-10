@@ -61,7 +61,7 @@ services:
     environment:
       SLEEP_SEC: "4"
       PROSUMER_URL: http://prosumer:3000
-      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000001
+      ASSET_DID: did:ethr:0xD6bB29F7332208508BE1C301F4582889E605A33d
     networks:
       - default
     depends_on:
@@ -75,7 +75,7 @@ services:
     environment:
       SLEEP_SEC: "5"
       PROSUMER_URL: http://prosumer:3000
-      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000002
+      ASSET_DID: did:ethr:0xff0B184697827882560e08C7AA35531aEEc76aBF
     networks:
       - default
     depends_on:
@@ -89,7 +89,7 @@ services:
     environment:
       SLEEP_SEC: "6"
       PROSUMER_URL: http://prosumer:3000
-      ASSET_DID: did:ethr:0x0000000000000000000000000000000000000003
+      ASSET_DID: did:ethr:0x96A95cCC7b50BC6c22F2896BBfbE9a9139ae9e15
       NEGATIVE_CONSUME: "true"
     networks:
       - default
