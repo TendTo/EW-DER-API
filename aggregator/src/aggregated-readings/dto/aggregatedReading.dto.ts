@@ -1,6 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsDate, IsEnum, IsOptional, IsString } from "class-validator";
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDate,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { Status } from "../../constants";
 import { ReadingDTO } from "../../readings/dto";
 
@@ -44,6 +51,7 @@ export class AggregatedReadingsDTO {
   salts: string[];
 
   @IsArray()
+  @ArrayMinSize(parseInt(process.env.AGGREGATION_THRESHOLD ?? "10"))
   @Type(() => ReadingDTO)
   @ApiProperty({
     description: "List of readings that have been aggregated",

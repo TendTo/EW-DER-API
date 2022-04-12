@@ -10,6 +10,7 @@ declare global {
       VOLTA_URL?: string;
       READINGS_NOTARY_ADDRESS?: string;
       IDENTITY_MANAGER_ADDRESS?: string;
+      AGGREGATION_THRESHOLD?: string;
     }
   }
 }
