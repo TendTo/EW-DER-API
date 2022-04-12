@@ -1,3 +1,4 @@
+import { NonceManager } from "@ethersproject/experimental";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Injectable, Logger } from "@nestjs/common";
 import { utils, Wallet } from "ethers";
@@ -16,6 +17,7 @@ import {
 export class BlockchainService {
   private readonly logger = new Logger(BlockchainService.name);
   private readonly wallet: Wallet;
+  private readonly manager: NonceManager;
   private readonly identityManager: IdentityManager;
   private readonly notary: ReadingsNotary;
 
@@ -27,7 +29,7 @@ export class BlockchainService {
     this.wallet = utils.isValidMnemonic(process.env.SK)
       ? Wallet.fromMnemonic(process.env.SK).connect(provider)
       : new Wallet(process.env.SK, provider);
-
+    this.manager = new NonceManager(this.wallet);
     this.identityManager = IdentityManager__factory.connect(
       process.env.IDENTITY_MANAGER_ADDRESS,
       this.wallet,
@@ -35,7 +37,7 @@ export class BlockchainService {
 
     this.notary = ReadingsNotary__factory.connect(
       process.env.READINGS_NOTARY_ADDRESS,
-      this.wallet,
+      this.manager,
     );
   }
 
