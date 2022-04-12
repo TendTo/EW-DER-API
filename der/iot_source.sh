@@ -3,6 +3,7 @@ while :
 do
     timestamp=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
     value=$(shuf -i 100-10000 -n 1)
+    value=$(awk -v value="${value}" -v mult="${SCALE:-1}" 'BEGIN{print (value*mult)}')
     if [ "${NEGATIVE_CONSUME:-false}" = "true" ]; then value="-$value"; fi
     json="
     {

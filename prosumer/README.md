@@ -30,8 +30,8 @@ The following environment variables can be configured:
 ```yaml
 AGGREGATION_THRESHOLD: 2 # Amount of readings to accumulate before sending them. Must be equal or greated than the one configured by the aggregator
 AGGREGATOR_URL: http://localhost:3000 # URL of the aggregator node
-READINGS_NOTARY_ADDRESS=0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566 # Address of the Readings Notary smart contract on Volta
-SK=<secret-key or mnemonic> # Secret key of mnemonic of the prosumer. Must be the owner of all the DERs
+READINGS_NOTARY_ADDRESS: 0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566 # Address of the Readings Notary smart contract on Volta
+SK: <secret-key or mnemonic> # Secret key of mnemonic of the prosumer. Must be the owner of all the DERs
 VOLTA_URL: https://volta-rpc.energyweb.org # Url for the rpc provider for Volta
 PORT: 3001 # Port the process will run on
 ```

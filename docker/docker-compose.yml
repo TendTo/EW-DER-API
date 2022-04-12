@@ -27,6 +27,10 @@ services:
       INFLUXDB_TOKEN: universal_api_token
       INFLUXDB_ORG: myorg
       INFLUXDB_BUCKET: mybucket
+      IDENTITY_MANAGER_ADDRESS: "0x84d0c7284A869213CB047595d34d6044d9a7E14A"
+      READINGS_NOTARY_ADDRESS: "0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566"
+      VOLTA_URL: https://volta-rpc.energyweb.org
+      SK: <secret-key or mnemonic>
       PORT: "3000"
     ports:
       - 3000:3000
@@ -45,6 +49,9 @@ services:
       AGGREGATION_THRESHOLD: "10"
       AGGREGATOR_URL: http://aggregator:3000
       PORT: "3000"
+      READINGS_NOTARY_ADDRESS: "0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566"
+      SK: <secret-key or mnemonic> # Secret key of mnemonic of the prosumer. Must be the owner of all the DERs
+      VOLTA_URL: https://volta-rpc.energyweb.org # Url for the rpc provider for Volta
     ports:
       - 3001:3000
     networks:
@@ -75,6 +82,7 @@ services:
     environment:
       SLEEP_SEC: "5"
       PROSUMER_URL: http://prosumer:3000
+      SCALE: "5"
       ASSET_DID: did:ethr:0xff0B184697827882560e08C7AA35531aEEc76aBF
     networks:
       - default
