@@ -76,9 +76,8 @@ export class ReadingsService implements OnModuleInit {
       readingsToSubmit,
       Status.Submitted,
     );
-    this.logger.debug("Aggregated readings: ", aggregatedReadings.dto);
-    this.logger.debug(`URL: ${this.aggregatorUrl}/aggregated-readings`);
-    const { data, status } = await lastValueFrom(
+    this.logger.debug("Sending aggregated reading");
+    const { data } = await lastValueFrom(
       this.httpService
         .post(
           `${this.aggregatorUrl}/aggregated-readings`,
@@ -89,13 +88,12 @@ export class ReadingsService implements OnModuleInit {
           catchError(async (err) => {
             aggregatedReadings.status = Status.Rejected;
             aggregatedReadings.readings = [];
-            await aggregatedReadings.save();
-            throw new HttpException(err.message, err.response.status);
+            return { data: err };
           }),
         ),
     );
 
-    this.logger.debug("Aggregated readings submitted: ", data);
+    this.logger.debug("On aggregated readings submitted: ", data);
     await aggregatedReadings.save();
   }
 
