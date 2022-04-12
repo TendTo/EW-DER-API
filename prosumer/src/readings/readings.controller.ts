@@ -21,6 +21,18 @@ import { ReadingsService } from "./readings.service";
 export class ReadingsController {
   constructor(private readonly readingsService: ReadingsService) {}
 
+  @ApiOperation({ summary: "Read all aggregated readings" })
+  @ApiResponse({
+    status: 200,
+    description: "All aggregated readings",
+    type: AggregatedReadingsDTO,
+    isArray: true,
+  })
+  @Get("aggregatedReadings")
+  findAllAggregatedReadings() {
+    return this.readingsService.findAllAggregatedReadings();
+  }
+
   @ApiOperation({ summary: "Store a new reading" })
   @ApiResponse({
     status: 201,
@@ -67,17 +79,5 @@ export class ReadingsController {
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.readingsService.remove(+id);
-  }
-
-  @ApiOperation({ summary: "Read all aggregated readings" })
-  @ApiResponse({
-    status: 200,
-    description: "All aggregated readings",
-    type: AggregatedReadingsDTO,
-    isArray: true,
-  })
-  @Get("aggregatedReadings")
-  findAllAggregatedReadings() {
-    return this.readingsService.findAllAggregatedReadings();
   }
 }

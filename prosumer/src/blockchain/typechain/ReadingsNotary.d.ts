@@ -96,8 +96,8 @@ export class ReadingsNotary extends BaseContract {
 
   filters: {
     NewMeterReading(
-      operator?: string | null,
-      proof?: BytesLike | null
+      operator?: string | string[] | null,
+      proof?: BytesLike | BytesLike[] | null
     ): TypedEventFilter<[string, string], { operator: string; proof: string }>;
   };
 

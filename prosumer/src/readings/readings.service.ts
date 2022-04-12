@@ -1,5 +1,10 @@
 import { HttpService } from "@nestjs/axios";
-import { HttpException, Injectable, Logger } from "@nestjs/common";
+import {
+  HttpException,
+  Injectable,
+  Logger,
+  OnModuleInit,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { lastValueFrom, map, catchError } from "rxjs";
@@ -10,7 +15,7 @@ import { AggregatedReadings, Reading } from "./entities";
 import { OnReadingCreated, onReadingCreatedId } from "./events";
 
 @Injectable()
-export class ReadingsService {
+export class ReadingsService implements OnModuleInit {
   private readonly logger = new Logger(ReadingsService.name);
   private aggregatorUrl = "";
 
@@ -75,7 +80,10 @@ export class ReadingsService {
     this.logger.debug(`URL: ${this.aggregatorUrl}/aggregated-readings`);
     const { data, status } = await lastValueFrom(
       this.httpService
-        .post(`${this.aggregatorUrl}/aggregated-readings`, aggregatedReadings.dto)
+        .post(
+          `${this.aggregatorUrl}/aggregated-readings`,
+          aggregatedReadings.dto,
+        )
         .pipe(
           map((res) => ({ data: res.data, status: res.status })),
           catchError(async (err) => {

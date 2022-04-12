@@ -25,11 +25,12 @@ export class AggregatedReadings extends BaseEntity {
   ) {
     super();
     if (!preciseProof || !readings) return;
-    const { rootHash, salts, signature } = preciseProof;
+    const { rootHash, salts, signature, hashedRootHash } = preciseProof;
     const [start, stop] = getMinMax(readings, "timestamp");
     this.rootHash = rootHash;
     this.salts = salts;
     this.signature = signature;
+    this.hashedRootHash = hashedRootHash;
     this.readings = readings;
     this.status = status;
     this.start = start.timestamp;
@@ -41,6 +42,9 @@ export class AggregatedReadings extends BaseEntity {
 
   @Column()
   rootHash: string;
+
+  @Column()
+  hashedRootHash: string;
 
   @Column()
   signature: string;

@@ -1,4 +1,4 @@
-import { Contract, EventFilter } from 'ethers';
+import { Contract, EventFilter } from "ethers";
 import { Unit } from "src/constants";
 
 /**
@@ -85,8 +85,8 @@ export function* range(
 }
 
 /**
- * Convert the value of energy measured in {@link unit} in Wh. 
- * 
+ * Convert the value of energy measured in {@link unit} in Wh.
+ *
  * @param value energy value gathered from the meter
  * @param unit unit of the energy value
  * @returns energy value in Wh
@@ -105,36 +105,3 @@ export function unitConverter(value: number, unit: Unit): number {
       throw new Error(`Unknown unit: ${unit}`);
   }
 }
-
-export interface IBlockchainEvent {
-    transactionHash: string;
-    blockHash: string;
-    name?: string;
-    timestamp?: number;
-    [key: string]: any;
-}
-
-export const getEventsFromContract = async (
-    contract: Contract,
-    eventFilter: EventFilter
-): Promise<IBlockchainEvent[]> => {
-    const logs = await contract.provider.getLogs({
-        ...eventFilter,
-        fromBlock: 0,
-        toBlock: 'latest'
-    });
-
-    const parsedLogs = logs.map(
-        (log: { data: any; topics: any; blockHash: any; transactionHash: any }) => {
-            const { name } = contract.interface.parseLog(log);
-
-            return {
-                ...contract.interface.decodeEventLog(name, log.data, log.topics),
-                blockHash: log.blockHash,
-                transactionHash: log.transactionHash
-            };
-        }
-    );
-
-    return parsedLogs;
-};

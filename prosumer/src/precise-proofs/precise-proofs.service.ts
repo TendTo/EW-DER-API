@@ -2,10 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { PreciseProofs } from "precise-proofs-js";
 import { ReadingDTO } from "src/readings/dto";
 import { PreciseProofDTO } from "./dto";
-import { Wallet, utils } from "ethers";
+import { utils } from "ethers";
+import { BlockchainService } from "src/blockchain/blockchain.service";
 
 @Injectable()
 export class PreciseProofsService {
+  constructor(private readonly blockchainService: BlockchainService) {}
+
   async generatePreciseProof(
     readings: Omit<ReadingDTO, "unit">[],
     salts?: string[],
@@ -26,15 +29,13 @@ export class PreciseProofsService {
     );
 
     const rootHash = PreciseProofs.getRootHash(merkleTree);
-    const wallet = utils.isValidMnemonic(process.env.SK)
-      ? Wallet.fromMnemonic(process.env.SK)
-      : new Wallet(process.env.SK);
 
     return {
       rootHash,
       salts: leafs.map((leaf: PreciseProofs.Leaf) => leaf.salt),
       leafs,
-      signature: await wallet.signMessage(rootHash),
+      signature: await this.blockchainService.signMessage(rootHash),
+      hashedRootHash: utils.keccak256(rootHash),
     };
   }
 
