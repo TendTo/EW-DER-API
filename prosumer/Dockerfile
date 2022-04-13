@@ -1,17 +1,28 @@
+FROM node:16-alpine AS development
 
-FROM node:16-alpine
+WORKDIR /usr/src/app
 
-# Create app directory
-WORKDIR /app
+COPY package*.json ./
 
-# Install app dependencies - For NPM use: `COPY package.json package-lock.lock ./`
-COPY package.json package-lock.json ./
-# For NPM use: `RUN npm ci`
 RUN npm ci
 
-# Copy important files
-COPY tsconfig.json tsconfig.build.json nest-cli.json .env ./
+COPY . .
 
-COPY src src
+RUN npm run build
 
-CMD [ "npm", "start" ]
+FROM node:16-alpine as production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+COPY --from=development /usr/src/app/dist ./dist
+
+ENTRYPOINT ["node", "dist/main"]
