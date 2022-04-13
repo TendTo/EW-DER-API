@@ -18,9 +18,7 @@ services:
       - aggregator
 
   aggregator:
-    build:
-      context: ../aggregator
-    image: aggregator:latest
+    image: tendto/ew-der-api:aggregator
     container_name: aggregatorv
     environment:
       INFLUXDB_HOST: http://influxdb:8086
@@ -42,9 +40,7 @@ services:
       - influxdb
 
   prosumer:
-    build:
-      context: ../prosumer
-    image: prosumer:latest
+    image: tendto/ew-der-api:prosumer
     container_name: prosumer
     environment:
       AGGREGATION_THRESHOLD: "30"
@@ -62,9 +58,7 @@ services:
       - aggregator
 
   der1:
-    build:
-      context: ../der
-    image: der:latest
+    image: tendto/ew-der-api:der
     container_name: der1
     environment:
       SLEEP_SEC: "4"
@@ -76,9 +70,7 @@ services:
       - prosumer
 
   der2:
-    build:
-      context: ../der
-    image: der:latest
+    image: tendto/ew-der-api:der
     container_name: der2
     environment:
       SLEEP_SEC: "5"
@@ -91,9 +83,7 @@ services:
       - prosumer
 
   der3:
-    build:
-      context: ../der
-    image: der:latest
+    image: tendto/ew-der-api:der
     container_name: der3
     environment:
       SLEEP_SEC: "6"
