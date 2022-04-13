@@ -5,7 +5,8 @@ import { ReadingsNotary, ReadingsNotary__factory } from "./typechain";
 import { Status, VOLTA_CHAIN } from "src/constants";
 import { AggregatedReadings } from "src/readings/entities";
 
-type NewReadingsArgs = [string, { hash: string; _isIndexed: boolean }];
+type HashedRootHash = { hash: string; _isIndexed: boolean };
+type NewReadingsArgs = [string, HashedRootHash];
 @Injectable()
 export class BlockchainService implements OnModuleInit {
   private readonly logger = new Logger(BlockchainService.name);
@@ -43,13 +44,14 @@ export class BlockchainService implements OnModuleInit {
 
   private async registerReadingLogListener() {
     const filter = this.notary.filters.NewMeterReading();
-    this.notary.on(filter, async (aggregator, hashedRootHash) => {
-      this.logger.debug(`HashedRootHash ${hashedRootHash} by ${aggregator}`);
-      await AggregatedReadings.update(
-        { hashedRootHash, status: Status.Submitted },
+    const readingLogListener = ((aggregator, { hash }: HashedRootHash) => {
+      this.logger.debug(`HashedRootHash ${hash} by ${aggregator}`);
+      AggregatedReadings.update(
+        { hashedRootHash: hash, status: Status.Submitted },
         { status: Status.Confirmed },
       );
-    });
+    }) as any;
+    this.notary.on(filter, readingLogListener);
   }
 
   private async checkReadingLogs() {
