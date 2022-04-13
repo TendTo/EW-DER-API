@@ -28,7 +28,7 @@ $ npm run start:prod
 The following environment variables can be configured:
 
 ```yaml
-AGGREGATION_THRESHOLD: 10 # Minimum number of readings needed to accept an aggregated reading
+AGGREGATION_THRESHOLD: 30 # Minimum number of readings needed to accept an aggregated reading
 INFLUXDB_HOST: http://localhost:8086 # Host of the InfluxDb
 INFLUXDB_TOKEN: universal_api_token # Token used to access InfluxDb
 INFLUXDB_ORG: myorg # Organization used on InfluxDb

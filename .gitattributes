@@ -1,0 +1,5 @@
+# These files are checked out using CRLF locally
+*.bat eol=crlf
+
+# These files are checked out using LF locally
+*.sh eol=lf
