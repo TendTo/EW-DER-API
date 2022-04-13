@@ -1,0 +1,90 @@
+name: Docker CI
+
+# Controls when the action will run.
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - "*.md"
+      - "docs/**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker aggregator image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          context: ./aggregator
+          push: true
+          tags: tendto/ew-der-api:aggregator
+
+      - name: Docker prosumer image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          context: ./prosumer
+          push: true
+          tags: tendto/ew-der-api:prosumer
+
+      - name: Docker der image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          context: ./der
+          push: true
+          tags: tendto/ew-der-api:der
+
+      - name: Docker cassandra image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./cassandra
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:cassandra
+
+      - name: Docker ingestion image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./ingestion
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:ingestion
+
+      - name: Docker kafkastream image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./stream
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:kafkastream
+
+      - name: Docker api image
+        uses: docker/build-push-action@v2.5.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: ./api
+          # Whether to push the image
+          push: true
+          # Tag to assign the image
+          tags: tendto/dotingestion2:api
