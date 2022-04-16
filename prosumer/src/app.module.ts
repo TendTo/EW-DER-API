@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AppController } from "./app.controller";
@@ -7,14 +8,15 @@ import { ReadingsModule } from "./readings/readings.module";
 
 @Module({
   imports: [
-    ReadingsModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    EventEmitterModule.forRoot({ global: true }),
     TypeOrmModule.forRoot({
       type: "sqlite",
       database: "database.sqlite",
       entities: [`${__dirname}/**/*.entity{.ts,.js}`],
       synchronize: true,
     }),
-    EventEmitterModule.forRoot(),
+    ReadingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

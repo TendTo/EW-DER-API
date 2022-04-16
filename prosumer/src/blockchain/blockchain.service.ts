@@ -2,8 +2,9 @@ import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { utils, Wallet } from "ethers";
 import { ReadingsNotary, ReadingsNotary__factory } from "./typechain";
-import { Status, VOLTA_CHAIN } from "src/constants";
+import { Config, Status, VOLTA_CHAIN } from "src/constants";
 import { AggregatedReadings } from "src/readings/entities";
+import { ConfigService } from "@nestjs/config";
 
 type HashedRootHash = { hash: string; _isIndexed: boolean };
 type NewReadingsArgs = [string, HashedRootHash];
@@ -13,17 +14,18 @@ export class BlockchainService implements OnModuleInit {
   private readonly wallet: Wallet;
   private readonly notary: ReadingsNotary;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     const provider = new JsonRpcProvider(
-      process.env.VOLTA_URL ?? "https://volta-rpc.energyweb.org",
+      this.configService.get(Config.VOLTA_URL) ??
+        "https://volta-rpc.energyweb.org",
       VOLTA_CHAIN,
     );
-    this.wallet = utils.isValidMnemonic(process.env.SK)
-      ? Wallet.fromMnemonic(process.env.SK).connect(provider)
-      : new Wallet(process.env.SK, provider);
+    this.wallet = utils.isValidMnemonic(this.configService.get(Config.SK))
+      ? Wallet.fromMnemonic(this.configService.get(Config.SK)).connect(provider)
+      : new Wallet(this.configService.get(Config.SK), provider);
 
     this.notary = ReadingsNotary__factory.connect(
-      process.env.READINGS_NOTARY_ADDRESS,
+      this.configService.get(Config.READINGS_NOTARY_ADDRESS),
       this.wallet,
     );
   }
