@@ -30,6 +30,7 @@ services:
       VOLTA_URL: https://volta-rpc.energyweb.org
       AGGREGATION_THRESHOLD: "30"
       SK: <secret-key or mnemonic>
+      JWT_SECRET: <secret-key or mnemonic>
       PORT: "3000"
     ports:
       - 3000:3000
