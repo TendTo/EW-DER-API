@@ -37,8 +37,10 @@ export class Reading {
   static async find(assetDID: string, options: GetQueryOptions) {
     const db = InfluxDBRepository.instance.dbReader;
     const query = InfluxDBRepository.instance.getQuery({
-      assetDID,
       ...options,
+      assetDID,
+      limit: { limit: 1, offset: 0 },
+      group: [assetDID],
     });
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
     return rows.map(this.rowToReading).find((r) => r.assetDID === assetDID);
@@ -47,8 +49,9 @@ export class Reading {
   static async findMany(assetDID: string, options: GetQueryOptions) {
     const db = InfluxDBRepository.instance.dbReader;
     const query = InfluxDBRepository.instance.getQuery({
-      assetDID,
       ...options,
+      group: [assetDID],
+      assetDID,
     });
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
     return rows.map(this.rowToReading);
@@ -56,6 +59,7 @@ export class Reading {
 
   static async findLast(assetDID: string, start = "-1d") {
     const query = InfluxDBRepository.instance.getQuery({
+      group: [assetDID],
       assetDID: assetDID,
       range: { start, stop: "now()" },
       getLast: true,
@@ -70,8 +74,9 @@ export class Reading {
 
   static async findByRootHash(rootHash: string, options: GetQueryOptions) {
     const query = InfluxDBRepository.instance.getQuery({
-      rootHash,
       ...options,
+      group: [rootHash],
+      rootHash,
     });
     const db = InfluxDBRepository.instance.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);

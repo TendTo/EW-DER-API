@@ -23,6 +23,7 @@ export type GetQueryOptions = {
   getLast?: boolean;
   difference?: boolean;
   order?: Order;
+  group?: string[];
 };
 
 export type GetQueryOptionsFn = GetQueryOptions & {
@@ -86,6 +87,7 @@ export class InfluxDBRepository {
     aggregateWindow,
     difference,
     order: sort,
+    group,
   }: GetQueryOptionsAssetId | GetQueryOptionsFn | GetQueryOptionsRootHash) {
     return `
     from(bucket: "${this._bucket}")
@@ -107,6 +109,9 @@ export class InfluxDBRepository {
       aggregateWindow
         ? `|> aggregateWindow(every: ${aggregateWindow.every}, fn: ${aggregateWindow.fn}, createEmpty: false)`
         : ""
+    }
+    ${
+      group && group.length > 0 ? `|> group(columns: ["${group.join('","')}"])` : ""
     }
     ${
       sort && sort === Order.DESC

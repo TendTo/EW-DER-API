@@ -1,7 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { BlockchainService } from "src/blockchain/blockchain.service";
-import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
 import { Order } from "../constants";
 import { ReadingDTO, ReadingsFilterDTO } from "./dto";
 import { InfluxDBRepository, Reading } from "./entities";
