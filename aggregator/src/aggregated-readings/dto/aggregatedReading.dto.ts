@@ -51,7 +51,7 @@ export class AggregatedReadingsDTO {
   salts: string[];
 
   @IsArray()
-  @ArrayMinSize(parseInt(process.env.AGGREGATION_THRESHOLD ?? "10"))
+  @ArrayMinSize(parseInt(process.env.AGGREGATION_THRESHOLD ?? "30"))
   @Type(() => ReadingDTO)
   @ApiProperty({
     description: "List of readings that have been aggregated",

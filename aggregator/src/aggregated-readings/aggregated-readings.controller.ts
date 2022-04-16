@@ -11,8 +11,10 @@ import {
   Logger,
   Query,
   HttpStatus,
+  UseGuards,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { JwtGuard } from "src/auth/guards";
 import { ReadingDTO } from "src/readings/dto";
 import { AggregatedReadingsService } from "./aggregated-readings.service";
 import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
@@ -54,6 +56,8 @@ export class AggregatedReadingsController {
     type: ReadingDTO,
     isArray: true,
   })
+  @ApiBearerAuth("JWT")
+  @UseGuards(JwtGuard)
   @Get("/:assetDID")
   public async getReadsAggregates(
     @Param("assetDID") assetDID: string,
@@ -72,6 +76,8 @@ export class AggregatedReadingsController {
     type: ReadingDTO,
     isArray: true,
   })
+  @ApiBearerAuth("JWT")
+  @UseGuards(JwtGuard)
   @Get("/roothash/:rootHash")
   public async getAggregatedReadingsByRootHash(
     @Param("rootHash") rootHash: string,

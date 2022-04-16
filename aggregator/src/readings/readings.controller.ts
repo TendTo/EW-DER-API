@@ -1,25 +1,30 @@
 import {
-  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
   HttpStatus,
-  Logger,
   Param,
-  Post,
   Query,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
+import { JwtGuard } from "src/auth/guards";
 import { ReadingDTO, ReadingsFilterDTO, StartFilterDTO } from "./dto";
-import { Reading } from "./entities";
 import { ReadingsService } from "./readings.service";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
 @ApiTags("readings")
+@ApiBearerAuth("JWT")
+@UseGuards(JwtGuard)
 @Controller("readings")
 export class ReadingsController {
   constructor(private readonly readsService: ReadingsService) {}

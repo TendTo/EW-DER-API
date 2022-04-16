@@ -11,6 +11,7 @@ declare global {
       READINGS_NOTARY_ADDRESS?: string;
       IDENTITY_MANAGER_ADDRESS?: string;
       AGGREGATION_THRESHOLD?: string;
+      JWT_SECRET?: string;
     }
   }
 }

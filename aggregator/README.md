@@ -36,6 +36,7 @@ INFLUXDB_BUCKET: mybucket # Bucket in wich to store the readings on InfluxDb
 IDENTITY_MANAGER_ADDRESS: 0x84d0c7284A869213CB047595d34d6044d9a7E14A # Address of the EW's identity manager smart contract on Volta
 READINGS_NOTARY_ADDRESS: 0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566 # Address of the Readings Notary smart contract on Volta
 SK: <secret-key or mnemonic> # Secret key of mnemonic of the aggregator
+JWT_SECRET: <secret for the jwt auth> # Secret key used for the jwt token signing
 VOLTA_URL: https://volta-rpc.energyweb.org # Url for the rpc provider for Volta
 PORT: 3001 # Port the process will run on
 ```
