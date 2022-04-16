@@ -1,3 +1,4 @@
+export * from "./dynamic.module";
 import { Matches } from "class-validator";
 
 export function IsInfluxTime() {

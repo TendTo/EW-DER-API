@@ -5,7 +5,6 @@ import {
   Inject,
   CACHE_MANAGER,
   HttpException,
-  Logger,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { BlockchainService } from "src/blockchain/blockchain.service";

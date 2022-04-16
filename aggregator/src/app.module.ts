@@ -6,6 +6,7 @@ import { AppController } from "./app.controller";
 import { ReadingsModule } from "./readings/readings.module";
 import { AuthModule } from "./auth/auth.module";
 import { InfluxdbModule } from "./influxdb/influxdb.module";
+import { BlockchainModule } from "./blockchain/blockchain.module";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { InfluxdbModule } from "./influxdb/influxdb.module";
     ConfigModule.forRoot({ isGlobal: true }),
     EventEmitterModule.forRoot({ global: true }),
     InfluxdbModule.forRoot({ global: true }),
+    BlockchainModule.forRoot({ global: true }),
     AggregatedReadingsModule,
     AuthModule,
   ],

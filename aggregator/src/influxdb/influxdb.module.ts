@@ -1,24 +1,12 @@
-import { DynamicModule, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
+import { ConfigurableModule } from "src/utility";
 import { InfluxdbService } from "./influxdb.service";
-
-type InfluxdbModuleOptions = {
-  global?: boolean;
-  imports?: any[];
-};
 
 @Module({
   providers: [InfluxdbService],
   exports: [InfluxdbService],
 })
-export class InfluxdbModule {
-  static forRoot(options?: InfluxdbModuleOptions): DynamicModule {
-    const { global = false, imports = [] } = options ?? {};
-    return {
-      module: InfluxdbModule,
-      providers: [InfluxdbService],
-      exports: [InfluxdbService],
-      global,
-      imports,
-    };
-  }
+export class InfluxdbModule extends ConfigurableModule {
+  protected static defaultExports = [InfluxdbService];
+  protected static defaultProviders = [InfluxdbService];
 }
