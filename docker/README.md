@@ -48,6 +48,7 @@ READINGS_NOTARY_ADDRESS: "0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566" # Address 
 VOLTA_URL: https://volta-rpc.energyweb.org # Url for the rpc provider for Volta
 SK: <secret-key or mnemonic> # Secret key of mnemonic of the aggregator
 JWT_SECRET: <secret for the jwt auth> # Secret key used for the jwt token signing
+DISABLE_AUTH: false # Whether to disable the JWT auth
 PORT: "3000" # Port the process will run on
 ```
 

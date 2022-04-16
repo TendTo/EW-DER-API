@@ -12,6 +12,7 @@ declare global {
       IDENTITY_MANAGER_ADDRESS?: string;
       AGGREGATION_THRESHOLD?: string;
       JWT_SECRET?: string;
+      DISABLE_AUTH?: string;
     }
   }
 }
