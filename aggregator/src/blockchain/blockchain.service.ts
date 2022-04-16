@@ -1,9 +1,10 @@
 import { NonceManager } from "@ethersproject/experimental";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { utils, Wallet } from "ethers";
 import { AggregatedReadingsDTO } from "src/aggregated-readings/dto";
-import { VOLTA_CHAIN } from "src/constants";
+import { Config, VOLTA_CHAIN } from "src/constants";
 import { ReadingDTO } from "src/readings/dto";
 import { getAddressFromDID } from "src/utility";
 import {
@@ -21,22 +22,24 @@ export class BlockchainService {
   private readonly identityManager: IdentityManager;
   private readonly notary: ReadingsNotary;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     const provider = new JsonRpcProvider(
-      process.env.VOLTA_URL ?? "https://volta-rpc.energyweb.org",
+      this.configService.get(Config.VOLTA_URL) ??
+        "https://volta-rpc.energyweb.org",
       VOLTA_CHAIN,
     );
-    this.wallet = utils.isValidMnemonic(process.env.SK)
-      ? Wallet.fromMnemonic(process.env.SK).connect(provider)
-      : new Wallet(process.env.SK, provider);
+    this.wallet = utils.isValidMnemonic(this.configService.get(Config.SK))
+      ? Wallet.fromMnemonic(this.configService.get(Config.SK)).connect(provider)
+      : new Wallet(this.configService.get(Config.SK), provider);
     this.manager = new NonceManager(this.wallet);
+
     this.identityManager = IdentityManager__factory.connect(
-      process.env.IDENTITY_MANAGER_ADDRESS,
+      this.configService.get(Config.IDENTITY_MANAGER_ADDRESS),
       this.wallet,
     );
 
     this.notary = ReadingsNotary__factory.connect(
-      process.env.READINGS_NOTARY_ADDRESS,
+      this.configService.get(Config.READINGS_NOTARY_ADDRESS),
       this.manager,
     );
   }

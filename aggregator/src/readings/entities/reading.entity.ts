@@ -1,8 +1,9 @@
 import { Point } from "@influxdata/influxdb-client";
+import { GetQueryOptions, InfluxdbService } from "src/influxdb/influxdb.service";
 import { InfluxDbReadingDTO, ReadingDTO } from "../dto";
-import { GetQueryOptions, InfluxDBRepository } from "./influxDb.repository";
 
 export class Reading {
+  public static influxDBRepository: InfluxdbService;
   assetDID: string;
   value: number;
   timestamp: Date;
@@ -18,25 +19,27 @@ export class Reading {
     this.timestamp = timestamp;
     this.value = value;
     this.rootHash = readingRootHash || rootHash;
+    if (!Reading.influxDBRepository)
+      throw new Error("InfluxDBRepository not set");
   }
 
   static async saveMany(readings: Reading[]) {
     const points = readings.map((r) => this.buildPoint(r));
-    const db = InfluxDBRepository.instance.dbWriter;
+    const db = this.influxDBRepository.dbWriter;
     db.writePoints(points);
     await db.close();
   }
 
   async save() {
     const point = Reading.buildPoint(this);
-    const db = InfluxDBRepository.instance.dbWriter;
+    const db = Reading.influxDBRepository.dbWriter;
     db.writePoint(point);
     await db.close();
   }
 
   static async find(assetDID: string, options: GetQueryOptions) {
-    const db = InfluxDBRepository.instance.dbReader;
-    const query = InfluxDBRepository.instance.getQuery({
+    const db = this.influxDBRepository.dbReader;
+    const query = this.influxDBRepository.getQuery({
       ...options,
       assetDID,
       limit: { limit: 1, offset: 0 },
@@ -47,8 +50,8 @@ export class Reading {
   }
 
   static async findMany(assetDID: string, options: GetQueryOptions) {
-    const db = InfluxDBRepository.instance.dbReader;
-    const query = InfluxDBRepository.instance.getQuery({
+    const db = this.influxDBRepository.dbReader;
+    const query = this.influxDBRepository.getQuery({
       ...options,
       group: [assetDID],
       assetDID,
@@ -58,13 +61,13 @@ export class Reading {
   }
 
   static async findLast(assetDID: string, start = "-1d") {
-    const query = InfluxDBRepository.instance.getQuery({
+    const query = this.influxDBRepository.getQuery({
       group: [assetDID],
       assetDID: assetDID,
       range: { start, stop: "now()" },
       getLast: true,
     });
-    const db = InfluxDBRepository.instance.dbReader;
+    const db = this.influxDBRepository.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
     const rest = rows
       .map(this.rowToReading)
@@ -73,12 +76,12 @@ export class Reading {
   }
 
   static async findByRootHash(rootHash: string, options: GetQueryOptions) {
-    const query = InfluxDBRepository.instance.getQuery({
+    const query = this.influxDBRepository.getQuery({
       ...options,
       group: [rootHash],
       rootHash,
     });
-    const db = InfluxDBRepository.instance.dbReader;
+    const db = this.influxDBRepository.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
     return rows.map(this.rowToReading);
   }

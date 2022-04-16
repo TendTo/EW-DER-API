@@ -1,11 +1,7 @@
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ClientOptions, InfluxDB } from "@influxdata/influxdb-client";
-import { AggregationFunction, Order } from "../../constants";
-
-type InfluxDbConfig = {
-  connection: ClientOptions;
-  bucket: string;
-  organization: string;
-};
+import { AggregationFunction, Order } from "../constants";
+import { ConfigService } from "@nestjs/config";
 
 export type GetQueryOptions = {
   range?: {
@@ -44,37 +40,39 @@ export type GetQueryOptionsRootHash = GetQueryOptions & {
   rootHash?: string;
 };
 
-export class InfluxDBRepository {
-  private static _instance: InfluxDBRepository;
-  private _connectionConfig: ClientOptions;
-  private _organization: string;
-  private _bucket: string;
-
-  public static get instance() {
-    if (!this._instance)
-      throw new Error("InfluxDBRepository is not initialized");
-    return this._instance;
-  }
+@Injectable()
+export class InfluxdbService implements OnModuleInit {
+  private readonly logger = new Logger(InfluxdbService.name);
+  private connectionConfig: ClientOptions;
+  private organization: string;
+  private bucket: string;
 
   public get dbWriter() {
-    return new InfluxDB(this._connectionConfig).getWriteApi(
-      this._organization,
-      this._bucket,
+    return new InfluxDB(this.connectionConfig).getWriteApi(
+      this.organization,
+      this.bucket,
     );
   }
 
   public get dbReader() {
-    return new InfluxDB(this._connectionConfig).getQueryApi(this._organization);
+    return new InfluxDB(this.connectionConfig).getQueryApi(this.organization);
   }
 
-  private constructor({ bucket, connection, organization }: InfluxDbConfig) {
-    this._connectionConfig = connection;
-    this._bucket = bucket;
-    this._organization = organization;
-  }
+  constructor(private readonly configService: ConfigService) {}
 
-  public static setDbConfig(config: InfluxDbConfig) {
-    this._instance = new this(config);
+  public async onModuleInit() {
+    const url = this.configService.get<string>("INFLUXDB_HOST");
+    const token = this.configService.get<string>("INFLUXDB_TOKEN");
+    this.organization = this.configService.get<string>("INFLUXDB_ORG") ?? "";
+    this.bucket = this.configService.get<string>("INFLUXDB_BUCKET");
+
+    if (!url) throw new Error("Missing INFLUXDB_HOST parameter");
+    if (!token) throw new Error("Missing INFLUXDB_TOKEN parameter");
+    if (!this.organization) throw new Error("Missing INFLUXDB_ORG parameter");
+    if (!this.bucket) throw new Error("Missing INFLUXDB_BUCKET parameter");
+
+    this.connectionConfig = { url, token };
+    this.logger.debug(`Using InfluxDB instance on ${url}`);
   }
 
   public getQuery({
@@ -90,7 +88,7 @@ export class InfluxDBRepository {
     group,
   }: GetQueryOptionsAssetId | GetQueryOptionsFn | GetQueryOptionsRootHash) {
     return `
-    from(bucket: "${this._bucket}")
+    from(bucket: "${this.bucket}")
     ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
     ${filterFn ? `|> filter(fn: ${filterFn})` : ""}
     ${
@@ -111,7 +109,9 @@ export class InfluxDBRepository {
         : ""
     }
     ${
-      group && group.length > 0 ? `|> group(columns: ["${group.join('","')}"])` : ""
+      group && group.length > 0
+        ? `|> group(columns: ["${group.join('","')}"])`
+        : ""
     }
     ${
       sort && sort === Order.DESC
