@@ -3,17 +3,17 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   ClassSerializerInterceptor,
   UseInterceptors,
   ValidationPipe,
   UsePipes,
   Logger,
   Query,
+  HttpStatus,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ReadingDTO } from "src/readings/dto";
 import { AggregatedReadingsService } from "./aggregated-readings.service";
 import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
 
@@ -28,12 +28,32 @@ export class AggregatedReadingsController {
     private readonly aggregatedReadingsService: AggregatedReadingsService,
   ) {}
 
+  @ApiOperation({ summary: "Store the list of aggregated readings" })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "The list of aggregated readings has been stored",
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description:
+      "The signature is invalid or the signer is not the owner of all the assets, the request is invalid or missing a required parameter",
+  })
   @Post("/")
   public async storeAggregated(@Body() aggregated: AggregatedReadingsDTO) {
-    Logger.debug(`Storing aggregated readings: ${aggregated}`);
+    this.logger.debug(`Storing aggregated readings: ${aggregated}`);
     await this.aggregatedReadingsService.store(aggregated);
   }
 
+  @ApiOperation({
+    summary:
+      "Return the readings for the specified DER, aggregating the data with the provided query parameters",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Aggregated readings",
+    type: ReadingDTO,
+    isArray: true,
+  })
   @Get("/:assetDID")
   public async getReadsAggregates(
     @Param("assetDID") assetDID: string,
@@ -42,6 +62,16 @@ export class AggregatedReadingsController {
     return this.aggregatedReadingsService.find(assetDID, filter);
   }
 
+  @ApiOperation({
+    summary:
+      "Return the readings for the specified rootHash, aggregating the data with the provided query parameters",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Aggregated readings",
+    type: ReadingDTO,
+    isArray: true,
+  })
   @Get("/roothash/:rootHash")
   public async getAggregatedReadingsByRootHash(
     @Param("rootHash") rootHash: string,

@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  HttpStatus,
   Logger,
   Param,
   Post,
@@ -11,8 +12,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
-import { ReadingsFilterDTO, StartFilterDTO } from "./dto";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ReadingDTO, ReadingsFilterDTO, StartFilterDTO } from "./dto";
+import { Reading } from "./entities";
 import { ReadingsService } from "./readings.service";
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -22,6 +24,15 @@ import { ReadingsService } from "./readings.service";
 export class ReadingsController {
   constructor(private readonly readsService: ReadingsService) {}
 
+  @ApiOperation({
+    summary: "Return the readings for the specified DER",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Readings",
+    type: ReadingDTO,
+    isArray: true,
+  })
   @Get("/:assetDID")
   public async getReads(
     @Param("assetDID") assetDID: string,
@@ -31,6 +42,14 @@ export class ReadingsController {
     return res;
   }
 
+  @ApiOperation({
+    summary: "Return the last readings for the specified DER",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Readings",
+    type: ReadingDTO,
+  })
   @Get("/:assetDID/latest")
   public async getLatestRead(
     @Param("assetDID") assetDID: string,
@@ -39,6 +58,15 @@ export class ReadingsController {
     return this.readsService.findLastReading(assetDID, filter.start);
   }
 
+  @ApiOperation({
+    summary: "Return the readings with the specified root hash",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Readings",
+    type: ReadingDTO,
+    isArray: true,
+  })
   @Get("/roothash/:rootHash")
   public async getReadingsByRootHash(
     @Param("rootHash") rootHash: string,
