@@ -1,7 +1,5 @@
-import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { BlockchainService } from "src/blockchain/blockchain.service";
-import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
 import { Order } from "../constants";
 import { Reading } from "../readings/entities";
 import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
@@ -11,32 +9,9 @@ import { OnReadingsCreated, onReadingsCreatedId } from "./events";
 export class AggregatedReadingsService {
   private readonly logger = new Logger(AggregatedReadingsService.name);
 
-  constructor(
-    private readonly eventEmitter: EventEmitter2,
-    private readonly preciseProofsService: PreciseProofsService,
-    private readonly blockchainService: BlockchainService,
-  ) {}
+  constructor(private readonly eventEmitter: EventEmitter2) {}
 
   public async store(aggregated: AggregatedReadingsDTO) {
-    if (!this.preciseProofsService.validateAggregatedReadings(aggregated)) {
-      throw new HttpException(
-        "Invalid aggregated readings: root hash did not match",
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    const user = this.blockchainService.getSignatureAddress(
-      aggregated.rootHash,
-      aggregated.signature,
-    );
-
-    if (!(await this.blockchainService.isOwner(user, aggregated.readings))) {
-      throw new HttpException(
-        "The user who signed the aggregated readings is not the owner of at least one asset",
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     const readings = aggregated.readings.map(
       (reading) => new Reading(reading, aggregated.rootHash),
     );

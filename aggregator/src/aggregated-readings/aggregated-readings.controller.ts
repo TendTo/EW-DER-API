@@ -13,11 +13,17 @@ import {
   HttpStatus,
   UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { JwtGuard } from "src/auth/guards";
 import { ReadingDTO } from "src/readings/dto";
 import { AggregatedReadingsService } from "./aggregated-readings.service";
 import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
+import { AggregatedGuard } from "./guards";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -40,6 +46,7 @@ export class AggregatedReadingsController {
     description:
       "The signature is invalid or the signer is not the owner of all the assets, the request is invalid or missing a required parameter",
   })
+  @UseGuards(AggregatedGuard)
   @Post("/")
   public async storeAggregated(@Body() aggregated: AggregatedReadingsDTO) {
     this.logger.debug(`Storing aggregated readings: ${aggregated}`);
