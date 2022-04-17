@@ -1,16 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import {
-  IsDate,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from "class-validator";
+import { IsDate, IsEnum, IsNumber, IsOptional } from "class-validator";
+import { IsDID } from "src/utility";
 import { Unit } from "../../constants";
 
 export class ReadingDTO {
-  @IsString()
+  @IsDID()
   @ApiProperty({
     type: String,
     example: "did:ethr:0x1234567890123456789012345678901234567890",
