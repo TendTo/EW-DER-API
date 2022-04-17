@@ -1,17 +1,24 @@
 # Energy Web DER management API
 
+[![Docker CI](https://github.com/TendTo/EW-DER-API/actions/workflows/docker.yml/badge.svg?branch=master)](https://github.com/TendTo/EW-DER-API/actions/workflows/docker.yml)
+
 This project contains the source code of the many parts that make up the DER management API.
 
 ## 🗂 Project structure
 
 ```yaml
 .
+├── .github              # github actions
 ├── aggregator           # backend owned by an aggregator
 ├── app                  # frontend application for both aggregators and common users
 ├── contract             # all the smart contract to deploy on the blockchain
 ├── der                  # DER simulator as an IOT device
 ├── docker               # docker stack
+├── docs                 # documentation and architecture's schema
+├── prosumer             # backend owned by the prosumer
+├── .gitattributes       # .gitattributes file
 ├── .gitignore           # .gitignore file
+├── package.json         # npm package that uses the workspaces functionalities of npm >=7
 ├── LICENSE              # open license of the project
 └── README.md            # THIS FILE
 ```
@@ -24,9 +31,14 @@ This project contains the source code of the many parts that make up the DER man
 
 > `NOTE:` Node.js version's should be 16.10 <= v < 17. You may encounter some incompatibilities otherwise
 
+### ⚙️ Docker-compose configuration
+
+To configure the docker-compose, read the [documentation](./docker/README.md).
+You can also use a docker-compose.override.yml to set some more confidential settings, like private keys.
+
 ### 🐳 Launch the Docker-compose
 
-In the main root of the project, launch the configuration described in the _docker-compose.yaml_ file with
+In the docker folder of the project, launch the configuration described in the _docker-compose.yaml_ file with
 
 ```bash
 docker compose up -d
@@ -39,16 +51,4 @@ docker compose down
 ```
 
 Here's the stack this Docker-compose will produce:
-
-## Quando e chi carica le precise proofs?
-
-1. Il prosumer prima di mandare le letture all'aggregatore (no conferma)
-1. Il prosumer prima di mandare le letture all'aggregatore e l'aggregatore come conferma
-1. L'aggregatore non appena riceve le letture
-1. L'aggregatore quando ha raggiunto un volume sufficiente di letture
-
-## Quali informazioni sono mantenute dalle parti?
-
-1. Le letture vengono mantenute dal database dell'aggregatore. Bisogna però assicurarsi che non vengano emesse precise proofs ripetute. Fornire un timestamp dell'ultima prova nell'evento?
-1. Vengono comunicate anche al TSO?
-1. Il prosumer ha la possibilità di mantenere una traccia delle letture per poter verificare in qualsiasi momento che la precise proof corrisponde. Per poter fare la verifica, però, deve sapere quali delle sue letture sono finite nella precise proof. (si potrebbe aggiungere anche l'aggregatore per una tracciabilità delle responsabilità)
+![stack](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/docker-compose-stack.puml)
