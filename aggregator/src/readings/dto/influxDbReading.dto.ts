@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsDate, IsNumber, IsString } from "class-validator";
+import { IsDID } from "src/utility";
 
 export class InfluxDbReadingDTO {
   @IsString()
@@ -12,7 +13,7 @@ export class InfluxDbReadingDTO {
   })
   rootHash: string;
 
-  @IsString()
+  @IsDID()
   @ApiProperty({
     type: String,
     example: "did:ethr:0x1234567890123456789012345678901234567890",

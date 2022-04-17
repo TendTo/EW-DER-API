@@ -17,7 +17,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { JwtGuard } from "src/auth/guards";
-import { ReadingDTO, ReadingsFilterDTO, StartFilterDTO } from "./dto";
+import { DIDDTO, ReadingDTO, ReadingsFilterDTO, StartFilterDTO } from "./dto";
 import { ReadingsService } from "./readings.service";
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -40,7 +40,7 @@ export class ReadingsController {
   })
   @Get("/:assetDID")
   public async getReads(
-    @Param("assetDID") assetDID: string,
+    @Param() { assetDID }: DIDDTO,
     @Query() filter: ReadingsFilterDTO,
   ) {
     const res = await this.readsService.findReadings(assetDID, filter);

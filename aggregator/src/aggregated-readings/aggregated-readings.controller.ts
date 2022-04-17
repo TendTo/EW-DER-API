@@ -22,7 +22,11 @@ import {
 import { JwtGuard } from "src/auth/guards";
 import { ReadingDTO } from "src/readings/dto";
 import { AggregatedReadingsService } from "./aggregated-readings.service";
-import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
+import {
+  AggregatedReadingsDTO,
+  AggregateReadingsFilterDTO,
+  DIDDTO,
+} from "./dto";
 import { AggregatedGuard } from "./guards";
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -67,7 +71,7 @@ export class AggregatedReadingsController {
   @UseGuards(JwtGuard)
   @Get("/:assetDID")
   public async getReadsAggregates(
-    @Param("assetDID") assetDID: string,
+    @Param() { assetDID }: DIDDTO,
     @Query() filter: AggregateReadingsFilterDTO,
   ) {
     return this.aggregatedReadingsService.find(assetDID, filter);

@@ -4,6 +4,7 @@ export const INFLUX_DURATION_REGEX =
   "^(?:\\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\\d?\\1\\d.*)(?!.*\\d\\1\\d?)$";
 export const INFLUX_TIME_REGEX =
   "^(?:-(?:\\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\\d?\\1\\d.*)(?!.*\\d?\\1\\d)|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)$";
+export const DID_REGEX = "^did:ethr:0x[0-9a-fA-F]{40}$";
 export const VOLTA_CHAIN = {
   chainId: 0x12047,
   name: "Volta",

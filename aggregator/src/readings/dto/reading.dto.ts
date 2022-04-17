@@ -1,9 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsDate, IsNumber, IsString } from "class-validator";
+import { IsDID } from "src/utility";
 
 export class ReadingDTO {
-  @IsString()
+  @IsDID()
   @ApiProperty({
     type: String,
     example: "did:ethr:0x1234567890123456789012345678901234567890",
@@ -14,7 +15,8 @@ export class ReadingDTO {
   @IsString()
   @ApiProperty({
     type: String,
-    example: "0x6a2d994fb3bfbb568f940a7fd3a2f43555858a001fb5f2783cc76335431b93c1",
+    example:
+      "0x6a2d994fb3bfbb568f940a7fd3a2f43555858a001fb5f2783cc76335431b93c1",
     description:
       "Root hash calculated by the prosumer and to be confirmed by the validator, before being sent to the blockchain",
   })
