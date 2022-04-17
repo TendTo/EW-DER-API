@@ -8,10 +8,7 @@ import { DurationUnit } from "../../constants";
 @ValidatorConstraint({ name: "isBefore", async: false })
 export class IsBeforeConstraint implements ValidatorConstraintInterface {
   validate(propertyValue: string, args: ValidationArguments) {
-    return (
-      this.getTime(propertyValue) <
-      this.getTime(args.object[args.constraints[0]])
-    );
+    return this.getTime(propertyValue) < this.getTime(args.object[args.constraints[0]]);
   }
 
   defaultMessage(args: ValidationArguments) {

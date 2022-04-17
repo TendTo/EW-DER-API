@@ -32,10 +32,7 @@ export class ReadingsService implements OnModuleInit {
   async create(readingDTO: ReadingDTO) {
     const newReading = new Reading(readingDTO);
     const res = await newReading.save();
-    this.eventEmitter.emit(
-      onReadingCreatedId,
-      new OnReadingCreated(newReading),
-    );
+    this.eventEmitter.emit(onReadingCreatedId, new OnReadingCreated(newReading));
     this.logger.debug("New reading created: ", res);
     return res;
   }
@@ -62,9 +59,7 @@ export class ReadingsService implements OnModuleInit {
     });
 
     const readingDTOs = readingsToSubmit.map((reading) => reading.dto);
-    const preciseProof = await this.preciseProof.generatePreciseProof(
-      readingDTOs,
-    );
+    const preciseProof = await this.preciseProof.generatePreciseProof(readingDTOs);
 
     const aggregatedReadings = new AggregatedReadings(
       preciseProof,
@@ -74,10 +69,7 @@ export class ReadingsService implements OnModuleInit {
     this.logger.debug("Sending aggregated reading");
     const { data } = await lastValueFrom(
       this.httpService
-        .post(
-          `${this.aggregatorUrl}/aggregated-readings`,
-          aggregatedReadings.dto,
-        )
+        .post(`${this.aggregatorUrl}/aggregated-readings`, aggregatedReadings.dto)
         .pipe(
           map((res) => ({ data: res.data, status: res.status })),
           catchError(async (err) => {

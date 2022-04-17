@@ -11,9 +11,7 @@ describe("AggregatedReadingsController", () => {
       providers: [AggregatedReadingsService],
     }).compile();
 
-    controller = module.get<AggregatedReadingsController>(
-      AggregatedReadingsController,
-    );
+    controller = module.get<AggregatedReadingsController>(AggregatedReadingsController);
   });
 
   it("should be defined", () => {

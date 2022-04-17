@@ -32,65 +32,26 @@ interface IdentityManagerInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(functionFragment: "compliant", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "createIdentity",
-    values: [string],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "identityAccepted",
-    values: [string],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "identityCreated",
-    values: [string],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "identityOfferCanceled",
-    values: [string],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "identityOffered",
-    values: [string],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "identityOwner",
-    values: [string],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "identityRejected",
-    values: [string],
-  ): string;
+  encodeFunctionData(functionFragment: "createIdentity", values: [string]): string;
+  encodeFunctionData(functionFragment: "identityAccepted", values: [string]): string;
+  encodeFunctionData(functionFragment: "identityCreated", values: [string]): string;
+  encodeFunctionData(functionFragment: "identityOfferCanceled", values: [string]): string;
+  encodeFunctionData(functionFragment: "identityOffered", values: [string]): string;
+  encodeFunctionData(functionFragment: "identityOwner", values: [string]): string;
+  encodeFunctionData(functionFragment: "identityRejected", values: [string]): string;
   encodeFunctionData(functionFragment: "verified", values: [string]): string;
 
   decodeFunctionResult(functionFragment: "compliant", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "createIdentity",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "identityAccepted",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "identityCreated",
-    data: BytesLike,
-  ): Result;
+  decodeFunctionResult(functionFragment: "createIdentity", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "identityAccepted", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "identityCreated", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "identityOfferCanceled",
     data: BytesLike,
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "identityOffered",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "identityOwner",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "identityRejected",
-    data: BytesLike,
-  ): Result;
+  decodeFunctionResult(functionFragment: "identityOffered", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "identityOwner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "identityRejected", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "verified", data: BytesLike): Result;
 
   events: {
@@ -179,10 +140,7 @@ export class IdentityManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
-    identityOwner(
-      identity: string,
-      overrides?: CallOverrides,
-    ): Promise<[string]>;
+    identityOwner(identity: string, overrides?: CallOverrides): Promise<[string]>;
 
     identityRejected(
       _offeredTo: string,
@@ -237,22 +195,13 @@ export class IdentityManager extends BaseContract {
 
     identityCreated(_owner: string, overrides?: CallOverrides): Promise<void>;
 
-    identityOfferCanceled(
-      _offeredTo: string,
-      overrides?: CallOverrides,
-    ): Promise<void>;
+    identityOfferCanceled(_offeredTo: string, overrides?: CallOverrides): Promise<void>;
 
-    identityOffered(
-      _offeredTo: string,
-      overrides?: CallOverrides,
-    ): Promise<void>;
+    identityOffered(_offeredTo: string, overrides?: CallOverrides): Promise<void>;
 
     identityOwner(identity: string, overrides?: CallOverrides): Promise<string>;
 
-    identityRejected(
-      _offeredTo: string,
-      overrides?: CallOverrides,
-    ): Promise<void>;
+    identityRejected(_offeredTo: string, overrides?: CallOverrides): Promise<void>;
 
     verified(identity: string, overrides?: CallOverrides): Promise<boolean>;
   };
@@ -335,10 +284,7 @@ export class IdentityManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
-    identityOwner(
-      identity: string,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>;
+    identityOwner(identity: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     identityRejected(
       _offeredTo: string,
@@ -349,10 +295,7 @@ export class IdentityManager extends BaseContract {
   };
 
   populateTransaction: {
-    compliant(
-      identity: string,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>;
+    compliant(identity: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     createIdentity(
       _owner: string,
@@ -389,9 +332,6 @@ export class IdentityManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
-    verified(
-      identity: string,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>;
+    verified(identity: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

@@ -30,13 +30,7 @@ export class ReadingsService implements OnModuleInit {
 
   public async findReadings(
     assetDID: string,
-    {
-      start,
-      stop,
-      limit = 100,
-      offset = 0,
-      order = Order.ASC,
-    }: ReadingsFilterDTO,
+    { start, stop, limit = 100, offset = 0, order = Order.ASC }: ReadingsFilterDTO,
   ): Promise<Reading[]> {
     this.logger.debug("Reading readings from InfluxDB:", assetDID);
     return Reading.findMany(assetDID, {
@@ -46,26 +40,14 @@ export class ReadingsService implements OnModuleInit {
     });
   }
 
-  public async findLastReading(
-    assetDID: string,
-    start: string,
-  ): Promise<Reading> {
-    this.logger.debug(
-      `Reading last reading from InfluxDB (start: ${start}):`,
-      assetDID,
-    );
+  public async findLastReading(assetDID: string, start: string): Promise<Reading> {
+    this.logger.debug(`Reading last reading from InfluxDB (start: ${start}):`, assetDID);
     return Reading.findLast(assetDID, start);
   }
 
   public async findReadingsByRootHash(
     rootHash: string,
-    {
-      start,
-      stop,
-      limit = 100,
-      offset = 0,
-      order = Order.ASC,
-    }: ReadingsFilterDTO,
+    { start, stop, limit = 100, offset = 0, order = Order.ASC }: ReadingsFilterDTO,
   ): Promise<Reading[]> {
     this.logger.debug("Reading reading from InfluxDB:", rootHash);
     return Reading.findByRootHash(rootHash, {

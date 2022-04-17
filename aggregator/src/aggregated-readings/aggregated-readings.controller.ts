@@ -13,20 +13,11 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "src/auth/guards";
 import { ReadingDTO } from "src/readings/dto";
 import { AggregatedReadingsService } from "./aggregated-readings.service";
-import {
-  AggregatedReadingsDTO,
-  AggregateReadingsFilterDTO,
-  DIDDTO,
-} from "./dto";
+import { AggregatedReadingsDTO, AggregateReadingsFilterDTO, DIDDTO } from "./dto";
 import { AggregatedGuard } from "./guards";
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -36,9 +27,7 @@ import { AggregatedGuard } from "./guards";
 export class AggregatedReadingsController {
   private readonly logger = new Logger(AggregatedReadingsController.name);
 
-  constructor(
-    private readonly aggregatedReadingsService: AggregatedReadingsService,
-  ) {}
+  constructor(private readonly aggregatedReadingsService: AggregatedReadingsService) {}
 
   @ApiOperation({ summary: "Store the list of aggregated readings" })
   @ApiResponse({

@@ -16,15 +16,9 @@ export class AggregatedReadingsService {
       (reading) => new Reading(reading, aggregated.rootHash),
     );
     await Reading.saveMany(readings);
-    this.logger.debug(
-      `Writing ${readings.length} readings to InfluxDB`,
-      readings,
-    );
+    this.logger.debug(`Writing ${readings.length} readings to InfluxDB`, readings);
 
-    this.eventEmitter.emit(
-      onReadingsCreatedId,
-      new OnReadingsCreated(aggregated),
-    );
+    this.eventEmitter.emit(onReadingsCreatedId, new OnReadingsCreated(aggregated));
   }
 
   public async find(

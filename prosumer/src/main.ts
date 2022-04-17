@@ -7,9 +7,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle("EW DER API (prosumer)")
-    .setDescription(
-      "Sample API for EW DER readings management from the prosumer",
-    )
+    .setDescription("Sample API for EW DER readings management from the prosumer")
     .setVersion("1.0")
     .build();
   const document = SwaggerModule.createDocument(app, config);

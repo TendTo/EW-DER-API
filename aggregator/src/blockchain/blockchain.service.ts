@@ -24,8 +24,7 @@ export class BlockchainService {
 
   constructor(private readonly configService: ConfigService) {
     const provider = new JsonRpcProvider(
-      this.configService.get(Config.VOLTA_URL) ??
-        "https://volta-rpc.energyweb.org",
+      this.configService.get(Config.VOLTA_URL) ?? "https://volta-rpc.energyweb.org",
       VOLTA_CHAIN,
     );
     this.wallet = utils.isValidMnemonic(this.configService.get(Config.SK))
@@ -58,6 +57,11 @@ export class BlockchainService {
 
   getSignatureAddress(message: string, signature: string) {
     return utils.verifyMessage(message, signature);
+  }
+
+  getMeterReadingLog(rootHash: string) {
+    const filter = this.notary.filters.NewMeterReading(undefined, rootHash);
+    return this.notary.queryFilter(filter);
   }
 
   async isOwner(prosumer: string, readings: ReadingDTO[]): Promise<boolean>;

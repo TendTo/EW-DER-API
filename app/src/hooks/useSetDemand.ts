@@ -5,10 +5,7 @@ import smartContractAddress from "../config/contracts.config.json";
 import { useContractCallToast } from "./useContractCallToast";
 
 const IMarketplace = new ethers.utils.Interface(MarketplaceABI.abi);
-const marketplace = new Contract(
-  smartContractAddress.marketplaceAddress,
-  IMarketplace,
-);
+const marketplace = new Contract(smartContractAddress.marketplaceAddress, IMarketplace);
 
 export function useSetDemand(): {
   send: (volume: number, price: number) => Promise<void>;

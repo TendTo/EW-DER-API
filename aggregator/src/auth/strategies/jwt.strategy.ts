@@ -33,8 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!this.blockchainService.isDID(assetDID))
       throw new HttpException("Invalid assetDID", HttpStatus.BAD_REQUEST);
 
-    if (this.blockchainService.aggregatorAddress === address)
-      return { address, exp };
+    if (this.blockchainService.aggregatorAddress === address) return { address, exp };
 
     if (await this.blockchainService.isOwner(address, assetDID)) {
       return { address, exp };

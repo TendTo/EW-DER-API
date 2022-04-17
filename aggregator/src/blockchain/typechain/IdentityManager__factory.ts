@@ -4,10 +4,7 @@
 
 import { Provider, TransactionRequest } from "@ethersproject/providers";
 import { Contract, ContractFactory, Overrides, Signer, utils } from "ethers";
-import type {
-  IdentityManager,
-  IdentityManagerInterface,
-} from "./IdentityManager";
+import type { IdentityManager, IdentityManagerInterface } from "./IdentityManager";
 
 const _abi = [
   {
@@ -313,10 +310,7 @@ export class IdentityManager__factory extends ContractFactory {
     _libraryAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<IdentityManager> {
-    return super.deploy(
-      _libraryAddress,
-      overrides || {},
-    ) as Promise<IdentityManager>;
+    return super.deploy(_libraryAddress, overrides || {}) as Promise<IdentityManager>;
   }
   getDeployTransaction(
     _libraryAddress: string,
@@ -335,10 +329,7 @@ export class IdentityManager__factory extends ContractFactory {
   static createInterface(): IdentityManagerInterface {
     return new utils.Interface(_abi) as IdentityManagerInterface;
   }
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider,
-  ): IdentityManager {
+  static connect(address: string, signerOrProvider: Signer | Provider): IdentityManager {
     return new Contract(address, _abi, signerOrProvider) as IdentityManager;
   }
 }

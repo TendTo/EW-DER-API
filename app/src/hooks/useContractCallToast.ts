@@ -2,10 +2,7 @@ import { TransactionStatus } from "@usedapp/core";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
-export function useContractCallToast(
-  state: TransactionStatus,
-  resetState: () => void,
-) {
+export function useContractCallToast(state: TransactionStatus, resetState: () => void) {
   useEffect(() => {
     switch (state.status) {
       case "Success":

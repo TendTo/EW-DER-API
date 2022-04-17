@@ -1,13 +1,6 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import {
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsPositive,
-  Max,
-  Min,
-} from "class-validator";
+import { IsEnum, IsInt, IsOptional, IsPositive, Max, Min } from "class-validator";
 import { DEFAULT_LIMIT, DEFAULT_OFFSET, Order } from "../../constants";
 import { RangeFilterDTO } from "./rangeFilter.dto";
 

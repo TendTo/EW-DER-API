@@ -16,8 +16,7 @@ export class BlockchainService implements OnModuleInit {
 
   constructor(private readonly configService: ConfigService) {
     const provider = new JsonRpcProvider(
-      this.configService.get(Config.VOLTA_URL) ??
-        "https://volta-rpc.energyweb.org",
+      this.configService.get(Config.VOLTA_URL) ?? "https://volta-rpc.energyweb.org",
       VOLTA_CHAIN,
     );
     this.wallet = utils.isValidMnemonic(this.configService.get(Config.SK))

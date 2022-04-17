@@ -53,10 +53,7 @@ export function range(stop: number): Generator<number, void, void>;
  * @param start starting value (including)
  * @param stop upper limit (exclusive)
  */
-export function range(
-  start: number,
-  stop: number,
-): Generator<number, void, void>;
+export function range(start: number, stop: number): Generator<number, void, void>;
 /**
  * Range function similar to Python's range function.
  * Starts from the start value (including) and goes up to the stop value (exlusive).

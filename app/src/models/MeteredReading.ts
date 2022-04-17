@@ -23,12 +23,7 @@ export class MeteredReading {
   }
 
   public clone(): MeteredReading {
-    return new MeteredReading(
-      this._asset,
-      this._owner,
-      this._volume,
-      this._timestamp,
-    );
+    return new MeteredReading(this._asset, this._owner, this._volume, this._timestamp);
   }
 
   get asset(): string {

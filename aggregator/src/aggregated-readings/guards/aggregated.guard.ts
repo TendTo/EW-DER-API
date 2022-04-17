@@ -23,15 +23,20 @@ export class AggregatedGuard implements CanActivate {
     return this.validateRequest(request.body);
   }
 
-  private async validateRequest(
-    aggregated: AggregatedReadingsDTO,
-  ): Promise<boolean> {
+  private async validateRequest(aggregated: AggregatedReadingsDTO): Promise<boolean> {
     if (!this.preciseProofsService.validateAggregatedReadings(aggregated)) {
       throw new HttpException(
         "Invalid aggregated readings: root hash did not match",
         HttpStatus.FORBIDDEN,
       );
     }
+
+    const logs = await this.blockchainService.getMeterReadingLog(aggregated.rootHash);
+    if (logs.length > 0)
+      throw new HttpException(
+        "These aggregated readings have already been stored",
+        HttpStatus.BAD_REQUEST,
+      );
 
     const user = this.blockchainService.getSignatureAddress(
       aggregated.rootHash,

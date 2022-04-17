@@ -1,8 +1,5 @@
 import { Point } from "@influxdata/influxdb-client";
-import {
-  GetQueryOptions,
-  InfluxdbService,
-} from "src/influxdb/influxdb.service";
+import { GetQueryOptions, InfluxdbService } from "src/influxdb/influxdb.service";
 import { InfluxDbReadingDTO, ReadingDTO } from "../dto";
 
 export class Reading {
@@ -22,8 +19,7 @@ export class Reading {
     this.timestamp = timestamp;
     this.value = value;
     this.rootHash = readingRootHash || rootHash;
-    if (!Reading.influxDBRepository)
-      throw new Error("InfluxDBRepository not set");
+    if (!Reading.influxDBRepository) throw new Error("InfluxDBRepository not set");
   }
 
   static async saveMany(readings: Reading[]) {
@@ -72,9 +68,7 @@ export class Reading {
     });
     const db = this.influxDBRepository.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    const rest = rows
-      .map(this.rowToReading)
-      .find((r) => r.assetDID === assetDID);
+    const rest = rows.map(this.rowToReading).find((r) => r.assetDID === assetDID);
     return rest;
   }
 

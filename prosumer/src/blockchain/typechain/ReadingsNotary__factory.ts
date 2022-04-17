@@ -70,10 +70,7 @@ export class ReadingsNotary__factory extends ContractFactory {
   static createInterface(): ReadingsNotaryInterface {
     return new utils.Interface(_abi) as ReadingsNotaryInterface;
   }
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider,
-  ): ReadingsNotary {
+  static connect(address: string, signerOrProvider: Signer | Provider): ReadingsNotary {
     return new Contract(address, _abi, signerOrProvider) as ReadingsNotary;
   }
 }

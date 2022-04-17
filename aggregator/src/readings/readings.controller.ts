@@ -10,12 +10,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "src/auth/guards";
 import { DIDDTO, ReadingDTO, ReadingsFilterDTO, StartFilterDTO } from "./dto";
 import { ReadingsService } from "./readings.service";

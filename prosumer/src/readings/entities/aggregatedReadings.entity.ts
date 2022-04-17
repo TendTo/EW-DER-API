@@ -1,23 +1,13 @@
 import { PreciseProofDTO } from "src/precise-proofs/dto";
 import { getMinMax } from "src/utility";
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Status } from "../../constants";
 import { Reading } from "./reading.entity";
 
 @Entity()
 export class AggregatedReadings extends BaseEntity {
   constructor();
-  constructor(
-    preciseProof: PreciseProofDTO,
-    readings: Reading[],
-    status?: Status,
-  );
+  constructor(preciseProof: PreciseProofDTO, readings: Reading[], status?: Status);
   constructor(
     preciseProof?: PreciseProofDTO,
     readings?: Reading[],

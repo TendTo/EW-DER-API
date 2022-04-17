@@ -9,10 +9,7 @@ async function bootstrap() {
     .setTitle("EW DER API (aggregator)")
     .setDescription("Sample API for EW DER readings management")
     .setVersion("1.0")
-    .addBearerAuth(
-      { type: "http", scheme: "bearer", bearerFormat: "JWT" },
-      "JWT",
-    )
+    .addBearerAuth({ type: "http", scheme: "bearer", bearerFormat: "JWT" }, "JWT")
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);

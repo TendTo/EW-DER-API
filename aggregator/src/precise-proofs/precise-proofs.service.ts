@@ -6,10 +6,7 @@ import { PreciseProofDTO } from "./dto";
 
 @Injectable()
 export class PreciseProofsService {
-  generatePreciseProof(
-    readings: ReadingDTO[],
-    salts?: string[],
-  ): PreciseProofDTO {
+  generatePreciseProof(readings: ReadingDTO[], salts?: string[]): PreciseProofDTO {
     const sanitizedReading = readings.map(({ assetDID, timestamp, value }) => ({
       assetDID,
       timestamp,

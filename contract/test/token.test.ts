@@ -33,9 +33,7 @@ describe("Token", function () {
     await transferTx.wait();
 
     expect(await token.balanceOf(address2)).to.equal(transferAmount);
-    expect(await token.balanceOf(address)).to.equal(
-      initialAmount - transferAmount,
-    );
+    expect(await token.balanceOf(address)).to.equal(initialAmount - transferAmount);
   });
 
   it("transfer function: insufficient amount", async function () {

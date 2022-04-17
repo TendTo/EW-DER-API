@@ -5,8 +5,7 @@ import { ReadingsNotary as ReadingsNotaryType } from "../typechain";
 
 describe("Token", function () {
   const readingNotaryName = "ReadingsNotary";
-  const rootHash =
-    "0x48f604b36ef74ccc9bed54bc7a373158e0f6641bc951dc7a8cd58deda785e8fb";
+  const rootHash = "0x48f604b36ef74ccc9bed54bc7a373158e0f6641bc951dc7a8cd58deda785e8fb";
   let accounts: Signer[];
   let address: string;
   let notary: ReadingsNotaryType;

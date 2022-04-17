@@ -6,10 +6,6 @@ import { ReadingCreatedListener } from "./listeners";
 
 @Module({
   controllers: [AggregatedReadingsController],
-  providers: [
-    AggregatedReadingsService,
-    PreciseProofsService,
-    ReadingCreatedListener,
-  ],
+  providers: [AggregatedReadingsService, PreciseProofsService, ReadingCreatedListener],
 })
 export class AggregatedReadingsModule {}

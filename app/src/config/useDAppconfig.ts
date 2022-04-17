@@ -22,8 +22,7 @@ export const ganache: Chain = {
   chainId: 5777,
   chainName: "ganache",
   multicallAddress: "0xaB7E524B88B66759990Ec8AFb8Af131218be7788",
-  getExplorerAddressLink: (address: string) =>
-    `${voltaExplorerUrl}/address/${address}`,
+  getExplorerAddressLink: (address: string) => `${voltaExplorerUrl}/address/${address}`,
   getExplorerTransactionLink: (transactionHash: string) =>
     `${voltaExplorerUrl}/tx/${transactionHash}`,
 };

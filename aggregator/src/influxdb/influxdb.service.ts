@@ -108,16 +108,8 @@ export class InfluxdbService implements OnModuleInit {
         ? `|> aggregateWindow(every: ${aggregateWindow.every}, fn: ${aggregateWindow.fn}, createEmpty: false)`
         : ""
     }
-    ${
-      group && group.length > 0
-        ? `|> group(columns: ["${group.join('","')}"])`
-        : ""
-    }
-    ${
-      sort && sort === Order.DESC
-        ? `|> sort(columns: ["_time"], desc: true)`
-        : ""
-    }
+    ${group && group.length > 0 ? `|> group(columns: ["${group.join('","')}"])` : ""}
+    ${sort && sort === Order.DESC ? `|> sort(columns: ["_time"], desc: true)` : ""}
     ${limit ? `|> limit(n: ${limit.limit}, offset: ${limit.offset})` : ""}
     `;
   }
