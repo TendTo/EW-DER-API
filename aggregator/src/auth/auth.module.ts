@@ -7,7 +7,7 @@ import { ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
-    CacheModule.register({ ttl: 60 }),
+    CacheModule.register({ ttl: 600 }),
     JwtModule.registerAsync({
       useFactory: (config: ConfigService) => ({
         secret: config.get<string>("JWT_SECRET"),

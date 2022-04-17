@@ -5,6 +5,7 @@ import {
   Inject,
   CACHE_MANAGER,
   HttpException,
+  HttpStatus,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { BlockchainService } from "src/blockchain/blockchain.service";
@@ -30,12 +31,12 @@ export class NonceGuard implements CanActivate {
   }: JWTRequestDTO): Promise<boolean> {
     const storedNonce = await this.cacheManager.get<string>(address);
     if (!storedNonce)
-      throw new HttpException("Nonce not found or expired", 403);
+      throw new HttpException("Nonce not found or expired", HttpStatus.BAD_REQUEST);
     const signer = this.blockchainService.getSignatureAddress(
       storedNonce,
       signedNonce,
     );
-    if (signer !== address) throw new HttpException("Invalid nonce", 403);
+    if (signer !== address) throw new HttpException("Invalid signature", HttpStatus.FORBIDDEN);
     return true;
   }
 }
