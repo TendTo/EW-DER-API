@@ -1,13 +1,8 @@
 import { HttpService } from "@nestjs/axios";
-import {
-  HttpException,
-  Injectable,
-  Logger,
-  OnModuleInit,
-} from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { lastValueFrom, map, catchError } from "rxjs";
+import { catchError, lastValueFrom, map } from "rxjs";
 import { Config, Status } from "src/constants";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
 import { ReadingDTO } from "./dto";

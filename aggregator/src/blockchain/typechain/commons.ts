@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { EventFilter, Event } from "ethers";
 import { Result } from "@ethersproject/abi";
+import { Event, EventFilter } from "ethers";
 
 export interface TypedEventFilter<_EventArgsArray, _EventArgsObject>
   extends EventFilter {}
@@ -14,11 +14,11 @@ export interface TypedEvent<EventArgs extends Result> extends Event {
 
 export type TypedListener<
   EventArgsArray extends Array<any>,
-  EventArgsObject
+  EventArgsObject,
 > = (
   ...listenerArg: [
     ...EventArgsArray,
-    TypedEvent<EventArgsArray & EventArgsObject>
+    TypedEvent<EventArgsArray & EventArgsObject>,
   ]
 ) => void;
 

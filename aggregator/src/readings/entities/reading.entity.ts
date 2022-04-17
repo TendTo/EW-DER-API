@@ -1,5 +1,8 @@
 import { Point } from "@influxdata/influxdb-client";
-import { GetQueryOptions, InfluxdbService } from "src/influxdb/influxdb.service";
+import {
+  GetQueryOptions,
+  InfluxdbService,
+} from "src/influxdb/influxdb.service";
 import { InfluxDbReadingDTO, ReadingDTO } from "../dto";
 
 export class Reading {

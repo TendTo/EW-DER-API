@@ -1,9 +1,9 @@
 import { useEthers } from "@usedapp/core";
 import { initWithMetamask } from "iam-client-lib";
 import { useContext } from "react";
-import { IAMContext } from "../context";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import { IAMContext } from "../context";
 
 export function useLogin() {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ export function useLogin() {
         pending: t("IAM.CONNECTION_PROGRESS"),
         success: t("IAM.CONNECTION_SUCCESS"),
         error: t("ERROR.IAM_CONNECTION"),
-      }
+      },
     );
   };
 

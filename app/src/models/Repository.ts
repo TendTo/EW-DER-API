@@ -5,7 +5,7 @@ export class BaseRepository {
     path?: string,
     method: string = "GET",
     queryParams?: Record<string, string | number | boolean>,
-    body?: Record<string, string | number | boolean>
+    body?: Record<string, string | number | boolean>,
   ): Promise<string> {
     const res = await this.apiRequest(path, method, queryParams, body);
     this.handleError(res);
@@ -16,7 +16,7 @@ export class BaseRepository {
     path?: string,
     method: string = "GET",
     queryParams?: Record<string, string | number | boolean>,
-    body?: Record<string, string | number | boolean>
+    body?: Record<string, string | number | boolean>,
   ): Promise<T> {
     const res = await this.apiRequest(path, method, queryParams, body);
     this.handleError(res);
@@ -27,7 +27,7 @@ export class BaseRepository {
     path?: string,
     method: string = "GET",
     queryParams?: Record<string, string | number | boolean>,
-    body?: Record<string, string | number | boolean>
+    body?: Record<string, string | number | boolean>,
   ): Promise<Response> {
     const url = `${this.baseUrl}/${path ?? ""}${
       queryParams ? `?${this.queryStringify(queryParams)}` : ""
@@ -38,7 +38,7 @@ export class BaseRepository {
   protected httpRequest(
     url: string,
     method: string = "GET",
-    body?: Record<string, string | number | boolean>
+    body?: Record<string, string | number | boolean>,
   ) {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");

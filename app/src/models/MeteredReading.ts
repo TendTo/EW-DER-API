@@ -7,7 +7,7 @@ export class MeteredReading {
     private _asset: string,
     private _owner: string,
     private _volume: number,
-    private _timestamp: Date
+    private _timestamp: Date,
   ) {}
 
   public static async getAll() {
@@ -27,7 +27,7 @@ export class MeteredReading {
       this._asset,
       this._owner,
       this._volume,
-      this._timestamp
+      this._timestamp,
     );
   }
 

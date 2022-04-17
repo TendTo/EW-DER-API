@@ -5,6 +5,6 @@ export type {
   IdentityManager,
   IdentityManagerInterface,
 } from "./IdentityManager";
-export type { ReadingsNotary, ReadingsNotaryInterface } from "./ReadingsNotary";
 export { IdentityManager__factory } from "./IdentityManager__factory";
+export type { ReadingsNotary, ReadingsNotaryInterface } from "./ReadingsNotary";
 export { ReadingsNotary__factory } from "./ReadingsNotary__factory";

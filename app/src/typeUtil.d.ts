@@ -8,12 +8,12 @@ export type Test<C extends Contract, M extends keyof C["functions"]> = Awaited<
 
 export type ContractReturnType<
   C extends Contract,
-  M extends keyof C["functions"]
+  M extends keyof C["functions"],
 > = Awaited<ReturnType<C["functions"][M]>>;
 
 export type ContractReturnTypeArray<
   C extends Contract,
-  M extends keyof C["functions"]
+  M extends keyof C["functions"],
 > = {
   [K in keyof ContractReturnType<C, M> as K extends ArrayKeys
     ? K
@@ -22,7 +22,7 @@ export type ContractReturnTypeArray<
 
 export type ContractReturnTypeObject<
   C extends Contract,
-  M extends keyof C["functions"]
+  M extends keyof C["functions"],
 > = {
   [K in keyof ContractReturnType<C, M> as K extends keyof Array<any>
     ? never

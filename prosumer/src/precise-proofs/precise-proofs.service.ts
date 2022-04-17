@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { utils } from "ethers";
 import { PreciseProofs } from "precise-proofs-js";
+import { BlockchainService } from "src/blockchain/blockchain.service";
 import { ReadingDTO } from "src/readings/dto";
 import { PreciseProofDTO } from "./dto";
-import { utils } from "ethers";
-import { BlockchainService } from "src/blockchain/blockchain.service";
 
 @Injectable()
 export class PreciseProofsService {

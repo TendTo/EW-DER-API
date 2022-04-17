@@ -3,10 +3,10 @@ import { ConfigModule } from "@nestjs/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { AggregatedReadingsModule } from "./aggregated-readings/aggregated-readings.module";
 import { AppController } from "./app.controller";
-import { ReadingsModule } from "./readings/readings.module";
 import { AuthModule } from "./auth/auth.module";
-import { InfluxdbModule } from "./influxdb/influxdb.module";
 import { BlockchainModule } from "./blockchain/blockchain.module";
+import { InfluxdbModule } from "./influxdb/influxdb.module";
+import { ReadingsModule } from "./readings/readings.module";
 
 @Module({
   imports: [

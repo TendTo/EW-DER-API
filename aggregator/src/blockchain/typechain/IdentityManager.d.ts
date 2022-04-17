@@ -2,22 +2,21 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import {
-  ethers,
-  EventFilter,
-  Signer,
-  BigNumber,
-  BigNumberish,
-  PopulatedTransaction,
-  BaseContract,
-  ContractTransaction,
-  Overrides,
-  CallOverrides,
-} from "ethers";
+import { EventFragment, FunctionFragment, Result } from "@ethersproject/abi";
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
-import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import {
+  BaseContract,
+  BigNumber,
+  BigNumberish,
+  CallOverrides,
+  ContractTransaction,
+  ethers,
+  Overrides,
+  PopulatedTransaction,
+  Signer,
+} from "ethers";
+import { TypedEvent, TypedEventFilter, TypedListener } from "./commons";
 
 interface IdentityManagerInterface extends ethers.utils.Interface {
   functions: {
@@ -35,62 +34,62 @@ interface IdentityManagerInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "compliant", values: [string]): string;
   encodeFunctionData(
     functionFragment: "createIdentity",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(
     functionFragment: "identityAccepted",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(
     functionFragment: "identityCreated",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(
     functionFragment: "identityOfferCanceled",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(
     functionFragment: "identityOffered",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(
     functionFragment: "identityOwner",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(
     functionFragment: "identityRejected",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(functionFragment: "verified", values: [string]): string;
 
   decodeFunctionResult(functionFragment: "compliant", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createIdentity",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "identityAccepted",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "identityCreated",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "identityOfferCanceled",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "identityOffered",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "identityOwner",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "identityRejected",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "verified", data: BytesLike): Result;
 
@@ -115,26 +114,26 @@ export class IdentityManager extends BaseContract {
   deployed(): Promise<this>;
 
   listeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): Array<TypedListener<EventArgsArray, EventArgsObject>>;
   off<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   on<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   once<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): this;
 
   listeners(eventName?: string): Array<Listener>;
@@ -147,7 +146,7 @@ export class IdentityManager extends BaseContract {
   queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
     event: TypedEventFilter<EventArgsArray, EventArgsObject>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
   interface: IdentityManagerInterface;
@@ -157,37 +156,37 @@ export class IdentityManager extends BaseContract {
 
     createIdentity(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     identityAccepted(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     identityCreated(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     identityOfferCanceled(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     identityOffered(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     identityOwner(
       identity: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     identityRejected(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     verified(identity: string, overrides?: CallOverrides): Promise<[boolean]>;
@@ -197,34 +196,34 @@ export class IdentityManager extends BaseContract {
 
   createIdentity(
     _owner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   identityAccepted(
     _owner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   identityCreated(
     _owner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   identityOfferCanceled(
     _offeredTo: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   identityOffered(
     _offeredTo: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   identityOwner(identity: string, overrides?: CallOverrides): Promise<string>;
 
   identityRejected(
     _offeredTo: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   verified(identity: string, overrides?: CallOverrides): Promise<boolean>;
@@ -240,19 +239,19 @@ export class IdentityManager extends BaseContract {
 
     identityOfferCanceled(
       _offeredTo: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     identityOffered(
       _offeredTo: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     identityOwner(identity: string, overrides?: CallOverrides): Promise<string>;
 
     identityRejected(
       _offeredTo: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     verified(identity: string, overrides?: CallOverrides): Promise<boolean>;
@@ -262,7 +261,7 @@ export class IdentityManager extends BaseContract {
     IdentityCreated(
       identity?: string | null,
       owner?: string | null,
-      at?: BigNumberish | null
+      at?: BigNumberish | null,
     ): TypedEventFilter<
       [string, string, BigNumber],
       { identity: string; owner: string; at: BigNumber }
@@ -272,7 +271,7 @@ export class IdentityManager extends BaseContract {
       identity?: string | null,
       owner?: string | null,
       oferedto?: null,
-      at?: BigNumberish | null
+      at?: BigNumberish | null,
     ): TypedEventFilter<
       [string, string, string, BigNumber],
       { identity: string; owner: string; oferedto: string; at: BigNumber }
@@ -282,7 +281,7 @@ export class IdentityManager extends BaseContract {
       identity?: string | null,
       owner?: null,
       offeredTo?: string | null,
-      at?: BigNumberish | null
+      at?: BigNumberish | null,
     ): TypedEventFilter<
       [string, string, string, BigNumber],
       { identity: string; owner: string; offeredTo: string; at: BigNumber }
@@ -292,7 +291,7 @@ export class IdentityManager extends BaseContract {
       identity?: string | null,
       owner?: string | null,
       offeredTo?: null,
-      at?: BigNumberish | null
+      at?: BigNumberish | null,
     ): TypedEventFilter<
       [string, string, string, BigNumber],
       { identity: string; owner: string; offeredTo: string; at: BigNumber }
@@ -301,7 +300,7 @@ export class IdentityManager extends BaseContract {
     IdentityTransferred(
       identity?: string | null,
       owner?: string | null,
-      at?: BigNumberish | null
+      at?: BigNumberish | null,
     ): TypedEventFilter<
       [string, string, BigNumber],
       { identity: string; owner: string; at: BigNumber }
@@ -313,37 +312,37 @@ export class IdentityManager extends BaseContract {
 
     createIdentity(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     identityAccepted(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     identityCreated(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     identityOfferCanceled(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     identityOffered(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     identityOwner(
       identity: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     identityRejected(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     verified(identity: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -352,47 +351,47 @@ export class IdentityManager extends BaseContract {
   populateTransaction: {
     compliant(
       identity: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     createIdentity(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     identityAccepted(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     identityCreated(
       _owner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     identityOfferCanceled(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     identityOffered(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     identityOwner(
       identity: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     identityRejected(
       _offeredTo: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     verified(
       identity: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
   };
 }

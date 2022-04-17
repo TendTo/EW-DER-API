@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write  \"**/*.{ts,json,md}\""
   },
   "repository": {
     "type": "git",
@@ -29,5 +30,8 @@
     "contract",
     "app",
     "prosumer"
-  ]
+  ],
+  "devDependencies": {
+    "prettier-plugin-organize-imports": "^2.3.4"
+  }
 }

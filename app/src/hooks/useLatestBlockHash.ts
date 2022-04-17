@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
 import { MultiCall, useContractCall } from "@usedapp/core";
+import { ethers } from "ethers";
 import { Volta } from "../config/useDAppconfig";
 
 const multicallInterface = new ethers.utils.Interface(MultiCall.abi);

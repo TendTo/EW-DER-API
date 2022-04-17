@@ -1,14 +1,14 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
   HttpException,
   HttpStatus,
+  Injectable,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { BlockchainService } from "src/blockchain/blockchain.service";
-import { AggregatedReadingsDTO } from "../dto";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
+import { AggregatedReadingsDTO } from "../dto";
 
 @Injectable()
 export class AggregatedGuard implements CanActivate {

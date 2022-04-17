@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export function useContractCallToast(
   state: TransactionStatus,
-  resetState: () => void
+  resetState: () => void,
 ) {
   useEffect(() => {
     switch (state.status) {

@@ -1,8 +1,6 @@
 {
-    "type": "sqlite",
-    "database": "database.sqlite",
-    "entities": [
-        "dist/readings/entities/*.entity.{ts,js}"
-    ],
-    "synchronize": true
+  "type": "sqlite",
+  "database": "database.sqlite",
+  "entities": ["dist/readings/entities/*.entity.{ts,js}"],
+  "synchronize": true
 }

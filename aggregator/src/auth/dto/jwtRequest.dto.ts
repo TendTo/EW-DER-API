@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsEthereumAddress } from "class-validator";
+import { IsEthereumAddress, IsString } from "class-validator";
 
 export class JWTRequestDTO {
   @IsEthereumAddress()

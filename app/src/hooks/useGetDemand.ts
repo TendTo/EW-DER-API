@@ -6,11 +6,11 @@ import { Marketplace, MarketplaceInterface } from "../typechain/Marketplace";
 import { ContractReturnTypeObject } from "../typeUtil";
 
 const IMarketplace = new ethers.utils.Interface(
-  MarketplaceABI.abi
+  MarketplaceABI.abi,
 ) as MarketplaceInterface;
 
 export function useGetDemand(
-  address?: string | null
+  address?: string | null,
 ): ContractReturnTypeObject<Marketplace, "demands"> {
   const { account } = useEthers();
 

@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Signer, utils, Contract, ContractFactory, Overrides } from "ethers";
 import { Provider, TransactionRequest } from "@ethersproject/providers";
+import { Contract, ContractFactory, Overrides, Signer, utils } from "ethers";
 import type {
   IdentityManager,
   IdentityManagerInterface,
@@ -311,16 +311,16 @@ export class IdentityManager__factory extends ContractFactory {
 
   deploy(
     _libraryAddress: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<IdentityManager> {
     return super.deploy(
       _libraryAddress,
-      overrides || {}
+      overrides || {},
     ) as Promise<IdentityManager>;
   }
   getDeployTransaction(
     _libraryAddress: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): TransactionRequest {
     return super.getDeployTransaction(_libraryAddress, overrides || {});
   }
@@ -337,7 +337,7 @@ export class IdentityManager__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): IdentityManager {
     return new Contract(address, _abi, signerOrProvider) as IdentityManager;
   }

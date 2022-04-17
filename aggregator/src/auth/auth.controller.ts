@@ -1,15 +1,15 @@
 import {
+  Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
+  HttpStatus,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
-  ClassSerializerInterceptor,
   UsePipes,
   ValidationPipe,
-  Query,
-  HttpStatus,
-  Body,
 } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";

@@ -1,7 +1,7 @@
-import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ClientOptions, InfluxDB } from "@influxdata/influxdb-client";
-import { AggregationFunction, Order } from "../constants";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { AggregationFunction, Order } from "../constants";
 
 export type GetQueryOptions = {
   range?: {

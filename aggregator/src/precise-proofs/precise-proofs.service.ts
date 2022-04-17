@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PreciseProofs } from "precise-proofs-js";
-import { ReadingDTO } from "src/readings/dto";
 import { AggregatedReadingsDTO } from "src/aggregated-readings/dto";
+import { ReadingDTO } from "src/readings/dto";
 import { PreciseProofDTO } from "./dto";
 
 @Injectable()

@@ -34,7 +34,7 @@ describe("Token", function () {
 
     expect(await token.balanceOf(address2)).to.equal(transferAmount);
     expect(await token.balanceOf(address)).to.equal(
-      initialAmount - transferAmount
+      initialAmount - transferAmount,
     );
   });
 
@@ -42,7 +42,7 @@ describe("Token", function () {
     const transferAmount = initialAmount + 1;
 
     await expect(token.transfer(address2, transferAmount)).to.be.revertedWith(
-      "Not enough tokens"
+      "Not enough tokens",
     );
 
     expect(await token.balanceOf(address2)).to.equal(0);

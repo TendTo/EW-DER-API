@@ -1,3 +1,5 @@
+import { PreciseProofDTO } from "src/precise-proofs/dto";
+import { getMinMax } from "src/utility";
 import {
   BaseEntity,
   Column,
@@ -5,10 +7,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Reading } from "./reading.entity";
 import { Status } from "../../constants";
-import { getMinMax } from "src/utility";
-import { PreciseProofDTO } from "src/precise-proofs/dto";
+import { Reading } from "./reading.entity";
 
 @Entity()
 export class AggregatedReadings extends BaseEntity {

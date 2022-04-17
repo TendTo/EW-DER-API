@@ -1,10 +1,10 @@
-import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { JsonRpcProvider } from "@ethersproject/providers";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { utils, Wallet } from "ethers";
-import { ReadingsNotary, ReadingsNotary__factory } from "./typechain";
 import { Config, Status, VOLTA_CHAIN } from "src/constants";
 import { AggregatedReadings } from "src/readings/entities";
-import { ConfigService } from "@nestjs/config";
+import { ReadingsNotary, ReadingsNotary__factory } from "./typechain";
 
 type HashedRootHash = { hash: string; _isIndexed: boolean };
 type NewReadingsArgs = [string, HashedRootHash];
