@@ -4,6 +4,9 @@
 
 Simple docker compose file that, when lanched, initializes a simulation of the infrastucture, as described in the _docs_ folder.
 
+Here's the stack this docker-compose will produce:
+![stack](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/docker-compose-stack.puml)
+
 ## docker-compose.yml
 
 Feel free to edit the _docker-compose.yml_ as you see fit. New DER or prosumers can be added, and the environment variables customized.  

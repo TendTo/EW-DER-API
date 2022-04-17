@@ -4,7 +4,10 @@ on:
   push:
     branches: [master]
     paths-ignore:
-      - "*.md"
+      - LICENSE
+      - .git*
+      - "**.md"
+      - "**.puml"
       - "docs/**"
 
   workflow_dispatch:
