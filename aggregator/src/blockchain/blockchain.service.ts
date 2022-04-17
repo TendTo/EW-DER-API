@@ -4,7 +4,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { utils, Wallet } from "ethers";
 import { AggregatedReadingsDTO } from "src/aggregated-readings/dto";
-import { Config, VOLTA_CHAIN } from "src/constants";
+import { Config, DID_REGEX, VOLTA_CHAIN } from "src/constants";
 import { ReadingDTO } from "src/readings/dto";
 import { getAddressFromDID } from "src/utility";
 import {
@@ -42,6 +42,18 @@ export class BlockchainService {
       this.configService.get(Config.READINGS_NOTARY_ADDRESS),
       this.manager,
     );
+  }
+
+  get aggregatorAddress() {
+    return this.wallet.address;
+  }
+
+  isDID(DID: string) {
+    return new RegExp(DID_REGEX).test(DID);
+  }
+
+  isAddress(address: string) {
+    return utils.isAddress(address);
   }
 
   getSignatureAddress(message: string, signature: string) {
