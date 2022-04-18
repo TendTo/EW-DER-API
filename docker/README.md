@@ -4,8 +4,13 @@
 
 Simple docker compose file that, when lanched, initializes a simulation of the infrastucture, as described in the _docs_ folder.
 
+## Visualization
+
 Here's the stack this docker-compose will produce:
 ![stack](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/docker-compose-stack.puml)
+
+What follows is the typical flow of the API:
+![flow](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/api-sequence.puml)
 
 ## docker-compose.yml
 
