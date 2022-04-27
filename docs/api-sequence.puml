@@ -71,7 +71,7 @@ skinparam participant {
 
 participant "<$solar_panel,color=DarkGreen>\nDER" as der1
 participant "<$solar_panel,color=DarkGreen>\nDER" as der2
-participant "<$user,color=Black>\nDER" as prosumer
+participant "<$user,color=Black>\nProsumer" as prosumer
 participant "<$bolt,color=Orange>\nAggregator" as aggregator
 participant "<$ew_logo,color=Purple>\nEW chain" as ewc
 participant "<$influxdb,color=Blue>\nInfluxDB" as influxDB

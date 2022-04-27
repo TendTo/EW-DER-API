@@ -19,7 +19,7 @@ services:
 
   aggregator:
     image: tendto/ew-der-api:aggregator
-    container_name: aggregatorv
+    container_name: aggregator
     environment:
       INFLUXDB_HOST: http://influxdb:8086
       INFLUXDB_TOKEN: universal_api_token
