@@ -3,6 +3,7 @@ version: "3.9"
 services:
   influxdb:
     image: influxdb:latest
+    container_name: influxdb
     volumes:
       - influxdbVolume:/var/lib/influxdb2
     environment:
