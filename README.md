@@ -53,7 +53,7 @@ docker compose down
 ## Visualization
 
 Here's the stack this Docker-compose will produce:
-![stack](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/docker-compose-stack.puml)
+![stack](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/diagrams/docker-compose-stack.puml)
 
 What follows is the typical flow of the API:
-![flow](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/api-sequence.puml)
+![flow](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/TendTo/EW-DER-API/master/docs/diagrams/api-sequence.puml)
