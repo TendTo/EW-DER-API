@@ -1,0 +1,78 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Imports
+%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{hyperref} % Extensive support for hypertext in LATEX (https://ctan.org/pkg/hyperref)
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{csquotes}
+\usepackage{graphicx} % Enhanced support for graphics (https://ctan.org/pkg/graphicx)
+\usepackage{framed} % Framed or shaded regions that can break across pages (https://ctan.org/pkg/framed)
+\usepackage[acronyms,style=altlist,nopostdot]{glossaries}
+\usepackage[font=small,labelfont=bf,tableposition=top]{caption}
+\usepackage[style=numeric,useprefix,hyperref,backend=bibtex,sorting=none]{biblatex} % Sophisticated Bibliographies in LATEX (https://ctan.org/pkg/biblatex)
+\usepackage{listings}
+\usepackage{subfig}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Settings
+%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand*{\figureautorefname}{Fig.}
+\renewcommand*{\sectionautorefname}{sez.} 
+\renewcommand*{\chapterautorefname}{Cap.} 
+\graphicspath{ {./img/} } % Base image path
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% References
+%%%%%%%%%%%%%%%%%%%%%%%%
+\addbibresource{resources.bib} %Import the bibliography file
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Glossary
+%%%%%%%%%%%%%%%%%%%%%%%%
+\makeglossaries
+\loadglsentries{glossary}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin document
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+% Metadata
+\title{EWT summary}
+\author{Ernesto Casablanca}
+\date{\today}
+
+% Title page
+\input{sections/title_page}
+
+% Index
+\tableofcontents
+
+% Abstract
+\input{sections/abstract}
+
+% Introduction
+\input{sections/chapter_1}
+
+% Energy web
+\input{sections/chapter_2}
+
+% Energy web chain
+\input{sections/chapter_3}
+
+% Energy web servizi
+\input{sections/chapter_4}
+
+% Chapters
+\input{sections/conclusion}
+
+% Chapters
+\input{sections/project}
+
+% Bibliografy
+\printglossary
+\printbibliography
+
+\end{document}
