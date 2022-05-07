@@ -14,6 +14,13 @@ export const Volta: Chain = {
   getExplorerTransactionLink(transactionHash: string) {
     return `${voltaExplorerUrl}/tx/${transactionHash}`;
   },
+  rpcUrl: "https://volta-rpc.energyweb.org",
+  blockExplorerUrl: voltaExplorerUrl,
+  nativeCurrency: {
+    name: "Volta",
+    symbol: "VT",
+    decimals: 18,
+  },
 };
 
 export const ganache: Chain = {
@@ -28,6 +35,9 @@ export const ganache: Chain = {
 };
 
 const config: Config = {
+  readOnlyUrls: {
+    [Volta.chainId]: Volta.rpcUrl!,
+  },
   networks: [Volta],
 };
 

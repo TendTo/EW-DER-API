@@ -1,8 +1,4 @@
-import {
-  Brightness4,
-  Brightness7,
-  Menu as MenuIcon,
-} from "@mui/icons-material";
+import { Brightness4, Brightness7, Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
@@ -21,8 +17,7 @@ import { useEtherBalance, useEthers, useLookupAddress } from "@usedapp/core";
 import { formatEther } from "ethers/lib/utils";
 import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IAMContext } from "../context";
-import { ColorModeContext } from "../context/colorModeContext";
+import { colorModeContext, useIamContext } from "../context";
 import { useLogin } from "../hooks";
 
 const pages = ["Products", "Pricing", "Blog"];
@@ -30,16 +25,16 @@ const pages = ["Products", "Pricing", "Blog"];
 export function AppTopBar() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { account, deactivate, library } = useEthers();
+  const { account, deactivate } = useEthers();
   const { login } = useLogin();
   const name = useLookupAddress();
   const balance = useEtherBalance(account);
-  const { toggleColorMode } = useContext(ColorModeContext);
-  const { state } = useContext(IAMContext);
+  const { toggleColorMode } = useContext(colorModeContext);
+  const { state: iam } = useIamContext();
   const [anchorElNav, setAnchorElNav] = useState<HTMLElement>();
   const [anchorElUser, setAnchorElUser] = useState<HTMLElement>();
 
-  const loggedIn = state && state.connected && account;
+  const loggedIn = iam && iam.connected && account;
 
   const getBalance = () => {
     if (!balance) return "0 VT";
@@ -174,24 +169,18 @@ export function AppTopBar() {
               {loggedIn ? (
                 [
                   <MenuItem key="bar-account" onClick={onClickAccount}>
-                    <Typography textAlign="center">
-                      {name ?? account}
-                    </Typography>
+                    <Typography textAlign="center">{name ?? account}</Typography>
                   </MenuItem>,
                   <MenuItem key="bar-balance" onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">{getBalance()}</Typography>
                   </MenuItem>,
                   <MenuItem key="bar-logout" onClick={handleLogout}>
-                    <Typography textAlign="center">
-                      {t("GENERAL.LOGOUT")}
-                    </Typography>
+                    <Typography textAlign="center">{t("GENERAL.LOGOUT")}</Typography>
                   </MenuItem>,
                 ]
               ) : (
                 <MenuItem key="bar-login" onClick={handleLogin}>
-                  <Typography textAlign="center">
-                    {t("GENERAL.LOGIN")}
-                  </Typography>
+                  <Typography textAlign="center">{t("GENERAL.LOGIN")}</Typography>
                 </MenuItem>
               )}
             </Menu>

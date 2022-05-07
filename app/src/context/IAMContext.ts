@@ -19,7 +19,8 @@ export type IAMContextType = {
   didDocument: DidDocumentType;
 };
 
-const [ctx, provider] = createCtx<IAMContextType>();
+const [ctx, provider, useContext] = createCtx<IAMContextType>();
 
 export const IAMContext = ctx;
 export const IAMContextProvider = provider;
+export const useIamContext = useContext;

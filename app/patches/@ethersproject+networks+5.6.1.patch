@@ -1,11 +1,11 @@
 diff --git a/node_modules/@ethersproject/networks/lib.esm/index.js b/node_modules/@ethersproject/networks/lib.esm/index.js
-index f7d142e..64c3b1e 100644
+index ac09121..88962fa 100644
 --- a/node_modules/@ethersproject/networks/lib.esm/index.js
 +++ b/node_modules/@ethersproject/networks/lib.esm/index.js
-@@ -123,6 +123,18 @@ const networks = {
-         name: "goerli",
+@@ -131,6 +131,18 @@ const networks = {
          _defaultProvider: ethDefaultProvider("goerli")
      },
+     kintsugi: { chainId: 1337702, name: "kintsugi" },
 +    ewc: {
 +        chainId: 246,
 +        ensAddress: "0x0A6d64413c07E10E890220BBE1c49170080C6Ca0",
@@ -22,13 +22,13 @@ index f7d142e..64c3b1e 100644
      classic: {
          chainId: 61,
 diff --git a/node_modules/@ethersproject/networks/lib/index.js b/node_modules/@ethersproject/networks/lib/index.js
-index 17a4176..016357d 100644
+index bf5c557..c9b5022 100644
 --- a/node_modules/@ethersproject/networks/lib/index.js
 +++ b/node_modules/@ethersproject/networks/lib/index.js
-@@ -125,6 +125,18 @@ var networks = {
-         name: "goerli",
+@@ -133,6 +133,18 @@ var networks = {
          _defaultProvider: ethDefaultProvider("goerli")
      },
+     kintsugi: { chainId: 1337702, name: "kintsugi" },
 +    ewc: {
 +        chainId: 246,
 +        ensAddress: "0x0A6d64413c07E10E890220BBE1c49170080C6Ca0",
@@ -45,14 +45,14 @@ index 17a4176..016357d 100644
      classic: {
          chainId: 61,
 diff --git a/node_modules/@ethersproject/networks/src.ts/index.ts b/node_modules/@ethersproject/networks/src.ts/index.ts
-index 1680051..1e619ab 100644
+index 9affd43..d306cc4 100644
 --- a/node_modules/@ethersproject/networks/src.ts/index.ts
 +++ b/node_modules/@ethersproject/networks/src.ts/index.ts
-@@ -153,6 +153,18 @@ const networks: { [name: string]: Network } = {
-         _defaultProvider: ethDefaultProvider("goerli")
-      },
+@@ -162,6 +162,18 @@ const networks: { [name: string]: Network } = {
  
-+     ewc: {
+     kintsugi: { chainId: 1337702, name: "kintsugi" },
+ 
++    ewc: {
 +        chainId: 246,
 +        ensAddress: "0x0A6d64413c07E10E890220BBE1c49170080C6Ca0",
 +        name: "ewc",
