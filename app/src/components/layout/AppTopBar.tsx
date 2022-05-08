@@ -17,8 +17,8 @@ import { useEtherBalance, useEthers, useLookupAddress } from "@usedapp/core";
 import { formatEther } from "ethers/lib/utils";
 import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { colorModeContext, useIamContext } from "../context";
-import { useLogin } from "../hooks";
+import { colorModeContext, useIamContext } from "../../context";
+import { useLogin } from "../../hooks";
 
 const pages = ["Products", "Pricing", "Blog"];
 

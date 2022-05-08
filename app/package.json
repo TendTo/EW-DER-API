@@ -20,9 +20,12 @@
     "iam-client-lib": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.30.0",
+    "react-hook-form-mui": "^3.2.1",
     "react-i18next": "^11.16.9",
     "react-scripts": "^5.0.1",
     "react-toastify": "^9.0.1",
+    "recharts": "^2.1.9",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4"
   },

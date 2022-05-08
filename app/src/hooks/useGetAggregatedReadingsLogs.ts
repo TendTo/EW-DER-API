@@ -10,17 +10,19 @@ import { useAsync } from "./useAsync";
  * If not provided, the latest log will be fetched.
  * @returns aggregated readings logs
  */
-export function useGetAggregatedReadingsLogs(rootHash?: string, aggregator?: string) {
+export function useGetAggregatedReadingsLogs(
+  rootHash?: string | string[],
+  aggregator?: string | string[],
+) {
   const { library } = useEthers();
   const query = useMemo(() => {
-    if (library) {
-      const notary = ReadingsNotary__factory.connect(
-        Addresses.readingsNotaryAddress,
-        library,
-      );
-      const filter = notary.filters.NewMeterReading(aggregator, rootHash);
-      return () => notary.queryFilter(filter);
-    } else return undefined;
+    if (!library) return undefined;
+    const notary = ReadingsNotary__factory.connect(
+      Addresses.readingsNotaryAddress,
+      library,
+    );
+    const filter = notary.filters.NewMeterReading(aggregator, rootHash);
+    return () => notary.queryFilter(filter);
   }, [library, rootHash, aggregator]);
   return useAsync(query);
 }

@@ -1,7 +1,7 @@
 import { Stack, Container, Typography, Box } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import metamaskLogo from "../asset/icon/metamask.svg";
+import metamaskLogo from "../../asset/icon/metamask.svg";
 
 export function LoginPage() {
   const { t } = useTranslation();

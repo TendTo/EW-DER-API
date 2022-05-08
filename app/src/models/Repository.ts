@@ -1,35 +1,43 @@
+type FetchOptions = {
+  method?: string;
+  queryParams?: Record<string, string | number | boolean>;
+  body?: Record<string, string | number | boolean>;
+};
+
 export class BaseRepository {
-  constructor(readonly baseUrl: string, readonly apiVersion = "v1") {}
+  constructor(
+    readonly baseUrl: string = process.env.REACT_API_URL ?? "http://localhost:3000",
+    readonly apiVersion = "v1",
+  ) {
+    if (baseUrl === "") {
+      throw new Error("baseUrl is required");
+    }
+  }
 
   public async fetchText(
-    path?: string,
-    method: string = "GET",
-    queryParams?: Record<string, string | number | boolean>,
-    body?: Record<string, string | number | boolean>,
+    path: string,
+    { method = "GET", queryParams, body }: FetchOptions = {},
   ): Promise<string> {
-    const res = await this.apiRequest(path, method, queryParams, body);
+    const res = await this.apiRequest(path, { method, queryParams, body });
     this.handleError(res);
     return res.text();
   }
 
   public async fetchJson<T>(
-    path?: string,
-    method: string = "GET",
-    queryParams?: Record<string, string | number | boolean>,
-    body?: Record<string, string | number | boolean>,
+    path: string,
+    { method = "GET", queryParams, body }: FetchOptions = {},
   ): Promise<T> {
-    const res = await this.apiRequest(path, method, queryParams, body);
+    const res = await this.apiRequest(path, { method, queryParams, body });
     this.handleError(res);
     return res.json();
   }
 
   public apiRequest(
-    path?: string,
-    method: string = "GET",
-    queryParams?: Record<string, string | number | boolean>,
-    body?: Record<string, string | number | boolean>,
+    path: string,
+    { method = "GET", queryParams, body }: FetchOptions = {},
   ): Promise<Response> {
-    const url = `${this.baseUrl}/${path ?? ""}${
+    const fixedPath = path.startsWith("/") ? path : `/${path}`;
+    const url = `${this.baseUrl}${fixedPath}${
       queryParams ? `?${this.queryStringify(queryParams)}` : ""
     }`;
     return this.httpRequest(url, method, body);
@@ -40,8 +48,12 @@ export class BaseRepository {
     method: string = "GET",
     body?: Record<string, string | number | boolean>,
   ) {
+    const jwt = localStorage.getItem("jwt");
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+    headers.append("X-API-Version", this.apiVersion);
+    jwt && headers.append("Authorization", `Bearer ${jwt}`);
     const options: RequestInit = {
       headers: headers,
       method: method,
@@ -52,8 +64,9 @@ export class BaseRepository {
   }
 
   protected handleError(error: Response) {
+    if (error.status < 400) return;
     const errMsg =
-      error.status && error.status !== 200
+      error.status && error.status >= 400
         ? `${error.status} - ${error.statusText}`
         : "Server error";
     throw Error(errMsg);

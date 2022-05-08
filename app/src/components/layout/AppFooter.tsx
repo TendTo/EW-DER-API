@@ -2,9 +2,9 @@ import { GitHub } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import gb from "../asset/icon/gb.svg";
-import it from "../asset/icon/it.svg";
-import ew_logo from "../asset/img/ew-logo-small.png";
+import gb from "../../asset/icon/gb.svg";
+import it from "../../asset/icon/it.svg";
+import ew_logo from "../../asset/img/ew-logo-small.png";
 import "./AppFooter.css";
 
 export function AppFooter() {

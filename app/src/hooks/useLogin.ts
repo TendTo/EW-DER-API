@@ -4,14 +4,17 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { IAMContext } from "../context";
+import { useJwtLogin } from "./useJwtLogin";
 
 export function useLogin() {
   const { t } = useTranslation();
   const { update } = useContext(IAMContext);
   const { activateBrowserWallet } = useEthers();
+  const { jwtLogin } = useJwtLogin();
 
   const login = async () => {
     activateBrowserWallet();
+    await jwtLogin();
     toast.promise(
       async () => {
         const res = await initWithMetamask();
