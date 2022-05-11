@@ -1,5 +1,5 @@
 \chapter{Energy Web chain}
-\label{cap:ew}
+\label{cap:ewc}
 
 %%%%%%%%%%%%
 % Content
@@ -75,6 +75,16 @@ In breve, il funzionamento è il seguente:
     \label{lab:ew-poa}
 \end{figure}
 
+\subsection{Smart-contract di sistema}
+Gli smart-contract di sistema sono una collezione di smart-contract già presenti su \gls{ewc} che implementano il protocollo di consenso \gls{poa}.
+Il codice che li compone è pubblico e consultabile nella \href{https://github.com/energywebfoundation/ewc-system-contracts}{repository GitHub}.
+Sintetizzando, vi sono tre smart-contract principali:
+
+\begin{itemize}
+    \item \href{https://energy-web-foundation.gitbook.io/energy-web/technology/the-stack/trust-layer-energy-web-chain/system-architecture/system-contracts/validator-set-contract#overview}{\textbf{Validator Set Contracts}}: gestisce i permessi e il comportamento del validatore
+    \item \href{https://energy-web-foundation.gitbook.io/energy-web/technology/the-stack/trust-layer-energy-web-chain/system-architecture/system-contracts/block-reward-contract}{\textbf{Reward Contracts}}: gestisce la ricompensa dovuta al validatore
+    \item \href{https://energy-web-foundation.gitbook.io/energy-web/technology/the-stack/trust-layer-energy-web-chain/system-architecture/system-contracts/holding-contract#overview}{\textbf{Holding Contracts}}: distribuisce i \gls{ewt} iniziali
+\end{itemize}
 
 \section{Costi di transazione}
 Una transazione è una qualsiasi operazione che modifica lo stato della blockchain. Trasferire token fra account, creare un nuovo smart contract o modificarne lo stato sono esempi di transazioni. \\
@@ -92,44 +102,8 @@ Il costo monetario da pagare per poter effettuare una transazione lo si può cal
 Riassumendo con una formula \cite{wiki:ew-transaction-cost}: \\
 $ costo(\$) = costo\ gas(gas) * prezzo\ gas(token/gas) * valore\ token (\$/token) $.
 
-
-\section{Transazioni private}
-Una delle caratteristiche fondanti di ogni blockchain è la possibilità di tracciare e verificare ogni transazione che avviene sulla chain. \\
-Questa proprietà fondamentale, però, non è sempre desiderabile: anche per ottemperare alle regolamentazioni vigenti riguardanti la privacy, è necessario che ci sia la possibilità di nascondere informazioni sensibili a soggetti non autorizzati. \\
-Sono stati quindi individuati diversi approcci per risolvere il problema.
-Di seguito sono elencati i più promettenti e avanzati.
-Per una lista completa è possibile consultare la documentazione \cite{wiki:ew-privacy}.
-
-\subsection{Parity Secret Store}
-Un'implementazione promettente per risolvere il problema è il Secret Store del client Parity Ethereum. \\
-L'idea è quella di generare una coppia di chiavi, pubblica e privata.
-Quella pubblica è nota, ed è utilizzata per crittografare i messaggi.
-Tuttavia, per decriptare i messaggi, è necessaria la chiave privata.
-Questa viene distribuita fra $n$ nodi, in modo che per poter accedere alle informazioni protette sia necessario che un numero arbitrario $m$ su $n$ di questi sia favorevole. \\
-La tecnica crittografica utilizzata è la "elliptic curve threshold encryption" \cite{art:ecdkg}. \\
-L'implementazione è quella di un \gls{kms}, che invece di essere centralizzato è distribuito.
-La decentralizzazione elimina il \gls{spf}, in quanto nessun nodo singolo ha accesso all'intera chiave. \\
-Il sistema di consenso può sfruttare un sistema di votazione simile a quello usato per la governance. \\
-Vi sono, però, vari limiti all'uso di questa tecnica.
-Infatti, è richiesto una setup iniziale fra i nodi interessati, compresa una rete separata per i servizi e le API.
-Un numero di nodi attivi deve essere garantito in ogni momento per raggiungere il limite inferiore di votanti.
-Infine, attualmente l'implementazione è limitata al client Parity / OpenEthereum.
-
-\subsubsection{Parity Private Transactions}
-Continuando a costruire sopra il Parity Secret Store, si può immaginare di generare uno smart contract criptato (\autoref{lab:ew-privacy}).
-Questo verrebbe poi inserito dentro uno smart contract tradizionale pubblico sulla blockchain. \\
-A quel punto, solo gli account autorizzati, con le chiavi necessarie, sono in grado di leggere e modificare lo stato del contratto interno.
-La nuova transazione viene eseguita e firmata off-chain, e il nuovo stato, criptato, viene reinserito nella blockchain pubblica.
-
-\begin{figure}[ht]
-    \includegraphics[height=13cm,keepaspectratio]{ew-privacy}
-    \centering
-    \caption{Utilizzo di Parity Private Transaction \cite{img:ew-privacy}}
-    \label{lab:ew-privacy}
-\end{figure}
-
 \subsection{Precise Proofs}
-Precise Proofs è uno schema basato sugli alberi di Merkle, in grado di verificare l'autenticità della struttura dati rivelando solo un subset di dati. \\
+Precise Proofs è uno schema basato sugli alberi di Merkle (cfr. \autoref{sec:merkle-tree}), in grado di verificare l'autenticità della struttura dati rivelando solo un subset di dati. \\
 Si parte realizzando un albero di Merkle a partire dai dati interessati e si rende pubblica la radice. \\
 Un terzo ente, interessato a verificare la validità di un subset di dati, riceverà solo i dati effettivamente richiesti e le hash dei dati non necessari.
 In questo modo si hanno abbastanza informazioni da poter ricostruire la radice minimizzando i dati resi pubblici.
@@ -143,7 +117,6 @@ Sebbene sia il più maturo, presenta un tallone d'Achille non indifferente. \\
 Per poter utilizzare la Zero Knowledge Proof è necessario realizzare un circuito aritmetico che rappresenta la computazione da provare e generare da quello una coppia di chiavi prover/verifier.
 La creazione di questo setup deve essere sicura e pattuita a priori, perché se dovesse essere compromesso un avversario potrebbe approfittarne per realizzare prove false.
 
-
 \section{Storage}
 Il fatto che tutti i dati siano immagazzinati sulla blockchain per essere accessibili si traduce in un incremento della memoria necessaria per salvare l'intera blockchain su un dispositivo fisico,
 in una maggiore congestione della rete con conseguente calo di prestazione e in un aumento di costi possibilmente evitabili nelle esecuzione degli smart contract. \\
@@ -152,7 +125,7 @@ Nei casi in cui il salvataggio dei dati fosse necessario, si può provare ad opt
 Le principali soluzioni sono \gls{ipfs} e Storj.
 Per una lista completa è possibile consultare la documentazione \cite{wiki:ew-storage}
 
-\subsubsection{InterPlanetary File System (IPFS)}
+\subsection{InterPlanetary File System (IPFS)}
 \gls{ipfs} \cite{prod:ipfs} è un modello di filesystem distribuito.
 Invece di indirizzare i file con la loro locazione, li si identifica con un hash ottenuto dal loro contenuto.
 Se il file è troppo grande, lo si spezza in più parti con lo stesso risultato. \\
@@ -161,10 +134,16 @@ Se si vuole contribuire alla rete, una volta scaricato il file lo si tiene in ca
 Il fatto che un file sia identificato dal suo hash garantisce inoltre l'integrità del dato e la sua immutabilità.
 Per aggiornare un file, infatti, bisogna utilizzare il sistema di versioning previsto dal protocollo. \\ \\
 
-\subsubsection{Storj}
+\subsubsection{\gls{vc} su \gls{ipfs}}
+Nell'ecosistema di \gls{ew} le \gls{vc} sono memorizzate su \gls{ipfs} come hash. 
+Il riferimento viene mantenuto dal \gls{did} document corrispondente attraverso un service endpoint, previsto nello standard \cite{wiki:did}. 
+In altre parole, i service endpoint sono ciò che collega il \gls{did} document alle proprie \gls{vc}. \\
+Per poterle leggere, le \gls{vc} devono essere quindi ottenute da \gls{ipfs} e decodificate. \\
+\gls{ew} fornisce una libreria javascript, \href{https://github.com/energywebfoundation/ew-did-registry/tree/development/packages/claims}{\textit{claims}}, in grado di assolvere proprio questa funzione.
+
+\subsection{Storj}
 Storj \cite{prod:storj} è molto simile ad IPFS, con l'incentivo che i nodi sono pagati per svolgere la loro funzione di content-storage.
 Ovviamente il contratto prevede che l'host sia in grado fornire su richiesta in qualsiasi momento tutti i file che afferma di possedere.
-
 
 \section{Governance}
 La natura decentralizzata della blockchain rende un qualsiasi cambiamento che riguarda la sua infrastruttura un problema non banale. \\
@@ -179,7 +158,6 @@ Ciò non esclude che, in caso si renda necessario, alcune scelte troppo compless
     \caption{Passi per l'approvazione di una modifica all'infrastruttura di \gls{ewc} \cite{img:ew-governance}}
     \label{lab:ew-governance}
 \end{figure}
-
 
 \section{Staking}
 \label{sec:staking}

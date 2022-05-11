@@ -1,0 +1,112 @@
+\chapter{Concetti e tecnologie}
+
+%%%%%%%%%%%%
+% Content
+%%%%%%%%%%%%
+\section{Funzione hash}
+Le funzioni hash crittografiche sono una serie di algoritmi che, dato in input una stringa di lunghezza idealmente arbitraria,
+restituiscono in output una stringa di bit che rispetta le seguenti caratteristiche:
+
+\begin{itemize}
+    \item La lunghezza dell'output è costante
+    \item Input identici producono output identici
+    \item Un avversario con potenza di calcolo polinomiale che conosca l'output della funzione non è in grado di risalire l'input
+    \item L'output deve essere ben distribuito, ovvero deve essere indistinguibile da una distribuzione casuale uniforme
+    \item A piccole variazioni nell'input devono corrispondere grandi variazioni nell'output
+\end{itemize}
+
+Si noti che ottenere e verificare queste proprietà è un compito molto delicato,
+per cui si fa affidamento ad algoritmi e librerie preesistenti con implementazioni sicure, efficienti e testate.
+
+
+\section{Albero di Merkle}
+\label{sec:merkle-tree}
+Gli alberi di Merkle (\autoref{lab:merkle-tree}), inventati da Robert Bruce Merkle \cite{art:merkle}, sono un tipo di struttura dati con le seguenti caratteristiche:
+
+\begin{itemize}
+    \item Ogni foglia contiene l'hash dell'elemento associato
+    \item Risalendo l'albero, ogni nodo contiene l'hash dei due figli
+    \item La radice contiene l'hash dell'albero
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \begin{forest}
+        for tree={draw,inner sep=10pt,l=20pt,l sep=20pt}
+        [
+        H(ABCD EFGH)
+        [H(AB BC)
+                [H(A B)
+                        [H(A)]
+                            [H(B)]
+                    ]
+                    [H(C D)
+                        [H(c)]
+                            [H(D)]
+                    ]
+            ]
+            [H(EF GH)
+                [H(E F)
+                        [H(E)]
+                            [H(F)]
+                    ]
+                    [H(G H)
+                        [H(G)]
+                            [H(H)]
+                    ]
+            ]
+        ]
+    \end{forest}
+    \caption{Albero di Merkle \label{lab:merkle-tree}}
+\end{figure}
+
+Utilizzare un albero di Merkle per assicurare l'immutabilità dei dati è una soluzione molto efficace e sicura,
+ed rappresenta una strategia molto comune nella realizzazione di architetture distribuite come la blockchain. \\
+Un albero di Merkle, infatti, è in grado di provare l'immutabilità di un numero enorme di dati anche molto grandi
+mantenendo in memoria solo la radice dell'albero. \\
+Inoltre, è possibile verificare l'appartenenza all'albero di uno qualsiasi delle sue foglie rivelando unicamente
+il valore della foglia incriminata e gli hash necessari a ricostruire la radice (\autoref{lab:merkle-tree-verify}).
+Non è quindi necessario fornire informazioni sulle altre foglie.
+
+\begin{figure}[h]
+    \centering
+    \begin{forest}
+        for tree={draw,inner sep=10pt,l=20pt,l sep=20pt}
+        [
+        H(ABCD EFGH), fill=green!25
+        [H(AB BC), fill=blue!25
+        [H(A B)
+        [H(A)]
+            [H(B)]
+        ]
+        [H(C D)
+        [H(c)]
+            [H(D)]
+        ]
+        ]
+        [H(EF GH), fill=green!25
+        [H(E F), fill=green!25
+        [H(E), fill=red!25]
+        [H(F), fill=blue!25]
+        ]
+        [H(G H), fill=blue!25
+        [H(G)]
+        [H(H)]
+        ]
+        ]
+        ]
+    \end{forest}
+    \caption{Per verificare l'appartenenza della foglia \colorbox{red!25}{E} all'albero,
+        è necessario fornire unicamente gli \colorbox{blue!25}{hash} dei nodi fratelli.
+        Con quelli è possibile ricostruire la \colorbox{green!25}{radice} dell'albero \label{lab:merkle-tree-verify}}
+\end{figure}
+
+\section{Metamask}
+\label{sec:metamask}
+MetaMask è un portafoglio software pensato per interagire con blockchain basate su Ethereum.
+Permette a chiunque di partecipare molto comodamente alla blockchain attraverso un estensione browse o un'app mobile. \\
+Nel concreto, MetaMask permette agli utenti di memorizzare le proprie chiavi private direttamente nell'estensione,
+permettendo poi agli sviluppatori di interagire con le sue \gls{api}.
+Ciò consente, ad esempio, di creare in maniera sicura transazioni da inviare agli altri nodi della blockchain. \\
+Sebbene i più critici possano rimanere contrariati dalla fiducia riposta in questo tipo di software, la sua adozione
+è sempre più comune.

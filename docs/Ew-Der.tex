@@ -3,25 +3,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Imports
 %%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{hyperref} % Extensive support for hypertext in LATEX (https://ctan.org/pkg/hyperref)
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
+\usepackage{minted}
+\usepackage{hyperref} % Extensive support for hypertext in LATEX (https://ctan.org/pkg/hyperref)
 \usepackage{csquotes}
 \usepackage{graphicx} % Enhanced support for graphics (https://ctan.org/pkg/graphicx)
 \usepackage{framed} % Framed or shaded regions that can break across pages (https://ctan.org/pkg/framed)
 \usepackage[acronyms,style=altlist,nopostdot]{glossaries}
 \usepackage[font=small,labelfont=bf,tableposition=top]{caption}
 \usepackage[style=numeric,useprefix,hyperref,backend=bibtex,sorting=none]{biblatex} % Sophisticated Bibliographies in LATEX (https://ctan.org/pkg/biblatex)
-\usepackage{listings}
 \usepackage{subfig}
+\usepackage{forest} % Drat tree like data structures (https://ctan.org/pkg/forest)
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Settings
 %%%%%%%%%%%%%%%%%%%%%%%%
+\providecommand*{\listingname}{Cod.}
 \renewcommand*{\figureautorefname}{Fig.}
 \renewcommand*{\sectionautorefname}{sez.} 
 \renewcommand*{\chapterautorefname}{Cap.} 
+\renewcommand*{\listingscaption}{Codice}
 \graphicspath{ {./img/} } % Base image path
+\setminted{fontsize=\footnotesize,breaklines,tabsize=1}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % References
@@ -54,22 +58,25 @@
 \input{sections/abstract}
 
 % Introduction
-\input{sections/chapter_1}
+\input{sections/introduction}
 
 % Energy web
-\input{sections/chapter_2}
+\input{sections/ew}
 
 % Energy web chain
-\input{sections/chapter_3}
+\input{sections/ew_chain}
 
 % Energy web servizi
-\input{sections/chapter_4}
+\input{sections/ew_services}
 
-% Chapters
-\input{sections/conclusion}
+% Concetti e tecnologie
+\input{sections/concepts_and_technologies}
 
-% Chapters
+% Progetto
 \input{sections/project}
+
+% Conclusione
+\input{sections/conclusion}
 
 % Bibliografy
 \printglossary
