@@ -1,0 +1,28 @@
+name: Latex CI
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "docs/**"
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: xu-cheng/latex-action@v2
+        with:
+          working_directory: docs
+          root_file: Ew-Der.tex
+          extra_system_packages: py-pygments
+          latexmk_shell_escape: true
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Ew-Der
+          path: Ew-Der.pdf
