@@ -156,7 +156,7 @@ contract ReadingsNotary {
     }
 }
 \end{minted}
-    \caption{Smart contract \textbf{ReadingsNotary}, deployato su Volta all'indirizzo \textit{0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566}}\label{lab:readings-notary}
+    \caption{Smart contract \textbf{ReadingsNotary}, rilasciato su Volta all'indirizzo \textit{0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566}}\label{lab:readings-notary}
 \end{listing}
 
 L'\gls{aggregator} fornisce pubblicamente una interfaccia \gls{api} \gls{rest} che consente di accedere ai dati memorizzati al fine di consultarli.
@@ -188,8 +188,8 @@ Al fine di realizzare tutte le componenti di questa architettura sono state util
 \begin{itemize}
     \item \textbf{SQLite} \cite{sftw:sqlite}: implementazione di un SQL database engine piccolo, veloce ed affidabile
     \item \textbf{InbluxDB} \cite{sftw:influxdb}: database specializzato per immagazzinare dati sotto forma di serie storiche
-    \item \textbf{NestJS} \cite{sftw:nestjs}: framework javascript per la creazione backend web
-    \item \textbf{hardhat} \cite{sftw:hardhat}: framework javascript per la creazione e il deploy di smart contracts
+    \item \textbf{NestJS} \cite{sftw:nestjs}: framework javascript per la creazione di applicazioni web back-end
+    \item \textbf{hardhat} \cite{sftw:hardhat}: framework javascript per la creazione e il deploy di smart contracts su blockchain
     \item \textbf{iam-client-lib} \cite{sftw:iam-client-lib}: libreria javascript realizzata da \gls{ew} usata per interagire con il loro servizio di \gls{iam}
     \item \textbf{react} \cite{sftw:react}: framework javascript per la creazione di applicazioni web
     \item \textbf{ethers} \cite{sftw:ethers}: libreria javascript usata per interfacciarsi con la blockchain
@@ -221,12 +221,4 @@ services:
 
 Per avviare l'intero stack, eseguire il comando \mintinline{bash}{$ docker-compose up} nella directory \textit{docker}. \\
 Per fermare l'esecuzione, eseguire \mintinline{bash}{$ docker-compose down}. \\
-Per rimuovere i volumi di dati rimasti, eseguire \mintinline{bash}{$ docker volume prune}.
-
-\section{Demo}
-Ad affiancare questa relazione è stata realizzata una demo implementativa
-che è possibile provare navigando all'indirizzo \url{https://tendto.github.io/EW-showcase/}. \\
-VC
-Al fine di visionare tutte le funzioni, è necessario dotarsi dell'estensione browser \href{https://metamask.io/}{MetaMask},
-\href{https://energyweb.atlassian.net/wiki/spaces/EWF/pages/703201459/Volta+Connecting+to+Remote+RPC+and+Metamask}{connettersi alla rete Volta}
-e avere a disposizione qualche \href{https://voltafaucet.energyweb.org/}{Volta token}. \\
+Per rimuovere i volumi Docker rimasti, eseguire \mintinline{bash}{$ docker volume prune}.
