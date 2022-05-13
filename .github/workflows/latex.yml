@@ -25,4 +25,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: Ew-Der
-          path: Ew-Der.pdf
+          path: docs/Ew-Der.pdf
