@@ -20,18 +20,30 @@ export class ReadingsService implements OnModuleInit {
     this.logger.debug("Writing reading to InfluxDB:", newReading);
   }
 
-  public async findReading(
+  public async findOneReading(
     assetDID: string,
     { start, stop }: ReadingsFilterDTO,
   ): Promise<Reading> {
     this.logger.debug("Reading reading from InfluxDB:", assetDID);
-    return Reading.find(assetDID, { range: { start, stop } });
+    return Reading.findOne(assetDID, { range: { start, stop } });
   }
 
   public async findReadings(
     assetDID: string,
     { start, stop, limit = 100, offset = 0, order = Order.ASC }: ReadingsFilterDTO,
   ): Promise<Reading[]> {
+    this.logger.debug("Reading readings from InfluxDB:", assetDID);
+    return Reading.find(assetDID, {
+      range: { start, stop },
+      limit: { limit, offset },
+      order,
+    });
+  }
+
+  public async findManyReadings(
+    assetDID: string[],
+    { start, stop, limit = 100, offset = 0, order = Order.ASC }: ReadingsFilterDTO,
+  ): Promise<Reading[][]> {
     this.logger.debug("Reading readings from InfluxDB:", assetDID);
     return Reading.findMany(assetDID, {
       range: { start, stop },
@@ -51,6 +63,18 @@ export class ReadingsService implements OnModuleInit {
   ): Promise<Reading[]> {
     this.logger.debug("Reading reading from InfluxDB:", rootHash);
     return Reading.findByRootHash(rootHash, {
+      range: { start, stop },
+      limit: { limit, offset },
+      order,
+    });
+  }
+
+  public async findManyReadingsByRootHash(
+    rootHash: string[],
+    { start, stop, limit = 100, offset = 0, order = Order.ASC }: ReadingsFilterDTO,
+  ): Promise<Reading[][]> {
+    this.logger.debug("Reading readings from InfluxDB:", rootHash);
+    return Reading.findManyByRootHash(rootHash, {
       range: { start, stop },
       limit: { limit, offset },
       order,

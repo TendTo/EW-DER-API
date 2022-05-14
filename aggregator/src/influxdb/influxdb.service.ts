@@ -30,14 +30,14 @@ export type GetQueryOptionsFn = GetQueryOptions & {
 
 export type GetQueryOptionsAssetId = GetQueryOptions & {
   filterFn?: never;
-  assetDID?: string;
+  assetDID?: string | string[];
   rootHash?: never;
 };
 
 export type GetQueryOptionsRootHash = GetQueryOptions & {
   filterFn?: never;
   assetDID?: never;
-  rootHash?: string;
+  rootHash?: string | string[];
 };
 
 @Injectable()
@@ -75,6 +75,13 @@ export class InfluxdbService implements OnModuleInit {
     this.logger.debug(`Using InfluxDB instance on ${url}`);
   }
 
+  private buildFilterFn(field: "assetDID" | "rootHash", values: string | string[]) {
+    const condition = Array.isArray(values)
+      ? values.map((value) => `r.${field} == "${value}"`).join(" or ")
+      : `r.${field} == "${values}"`;
+    return `|> filter(fn: (r) => ${condition} and r._field == "reading")`;
+  }
+
   public getQuery({
     range,
     filterFn,
@@ -84,23 +91,15 @@ export class InfluxdbService implements OnModuleInit {
     rootHash,
     aggregateWindow,
     difference,
-    order: sort,
+    order = Order.ASC,
     group,
   }: GetQueryOptionsAssetId | GetQueryOptionsFn | GetQueryOptionsRootHash) {
     return `
     from(bucket: "${this.bucket}")
     ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
     ${filterFn ? `|> filter(fn: ${filterFn})` : ""}
-    ${
-      assetDID
-        ? `|> filter(fn: (r) => r.assetDID == "${assetDID}" and r._field == "reading")`
-        : ""
-    }
-    ${
-      rootHash
-        ? `|> filter(fn: (r) => r.rootHash == "${rootHash}" and r._field == "reading")`
-        : ""
-    }
+    ${assetDID ? this.buildFilterFn("assetDID", assetDID) : ""}
+    ${rootHash ? this.buildFilterFn("rootHash", rootHash) : ""}
     ${getLast ? "|> last()" : ""}
     ${difference ? `|> difference()` : ""}
     ${
@@ -109,7 +108,7 @@ export class InfluxdbService implements OnModuleInit {
         : ""
     }
     ${group && group.length > 0 ? `|> group(columns: ["${group.join('","')}"])` : ""}
-    ${sort && sort === Order.DESC ? `|> sort(columns: ["_time"], desc: true)` : ""}
+    |> sort(columns: ["_time"], desc: ${order === Order.DESC ? "true" : "false"})
     ${limit ? `|> limit(n: ${limit.limit}, offset: ${limit.offset})` : ""}
     `;
   }

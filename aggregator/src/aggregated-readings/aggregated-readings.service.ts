@@ -35,7 +35,7 @@ export class AggregatedReadingsService {
     }: AggregateReadingsFilterDTO,
   ): Promise<Reading[]> {
     this.logger.debug("Reading readings from InfluxDB:", assetDID);
-    return Reading.findMany(assetDID, {
+    return Reading.find(assetDID, {
       range: { start, stop },
       limit: { limit, offset },
       aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },

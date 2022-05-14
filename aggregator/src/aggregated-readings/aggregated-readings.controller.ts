@@ -40,7 +40,7 @@ export class AggregatedReadingsController {
       "The signature is invalid or the signer is not the owner of all the assets, the request is invalid or missing a required parameter",
   })
   @UseGuards(AggregatedGuard)
-  @Post("/")
+  @Post()
   public async storeAggregated(@Body() aggregated: AggregatedReadingsDTO) {
     this.logger.debug(`Storing aggregated readings: ${aggregated}`);
     await this.aggregatedReadingsService.store(aggregated);
@@ -58,7 +58,7 @@ export class AggregatedReadingsController {
   })
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
-  @Get("/:assetDID")
+  @Get("assetDID/:assetDID")
   public async getReadsAggregates(
     @Param() { assetDID }: DIDDTO,
     @Query() filter: AggregateReadingsFilterDTO,
@@ -78,7 +78,7 @@ export class AggregatedReadingsController {
   })
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
-  @Get("/roothash/:rootHash")
+  @Get("roothash/:rootHash")
   public async getAggregatedReadingsByRootHash(
     @Param("rootHash") rootHash: string,
     @Query() filter: AggregateReadingsFilterDTO,

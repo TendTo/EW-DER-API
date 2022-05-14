@@ -12,8 +12,22 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "src/auth/guards";
-import { DIDDTO, ReadingDTO, ReadingsFilterDTO, StartFilterDTO } from "./dto";
+import {
+  DIDDTO,
+  ReadingDTO,
+  ReadingsByDIDsFilterDTO,
+  ReadingsByRootHashesFilterDTO,
+  ReadingsFilterDTO,
+  StartFilterDTO,
+} from "./dto";
 import { ReadingsService } from "./readings.service";
+
+const ReadingListResponse = {
+  status: HttpStatus.OK,
+  description: "Lists of Readings",
+  type: ReadingDTO,
+  isArray: true,
+};
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -25,21 +39,26 @@ export class ReadingsController {
   constructor(private readonly readsService: ReadingsService) {}
 
   @ApiOperation({
+    summary: "Return the readings for all the specified DERs",
+  })
+  @ApiResponse(ReadingListResponse)
+  @Get("assetDID")
+  public async getReadsByAssetDIDs(
+    @Query() { assetDIDs, ...filter }: ReadingsByDIDsFilterDTO,
+  ) {
+    return await this.readsService.findManyReadings(assetDIDs, filter);
+  }
+
+  @ApiOperation({
     summary: "Return the readings for the specified DER",
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Readings",
-    type: ReadingDTO,
-    isArray: true,
-  })
-  @Get("/:assetDID")
+  @ApiResponse(ReadingListResponse)
+  @Get("assetDID/:assetDID")
   public async getReads(
     @Param() { assetDID }: DIDDTO,
     @Query() filter: ReadingsFilterDTO,
   ) {
-    const res = await this.readsService.findReadings(assetDID, filter);
-    return res;
+    return await this.readsService.findReadings(assetDID, filter);
   }
 
   @ApiOperation({
@@ -50,7 +69,7 @@ export class ReadingsController {
     description: "Readings",
     type: ReadingDTO,
   })
-  @Get("/:assetDID/latest")
+  @Get("assetDID/:assetDID/latest")
   public async getLatestRead(
     @Param("assetDID") assetDID: string,
     @Query() filter: StartFilterDTO,
@@ -59,15 +78,21 @@ export class ReadingsController {
   }
 
   @ApiOperation({
+    summary: "Return the readings for all the specified root hashes",
+  })
+  @ApiResponse(ReadingListResponse)
+  @Get("roothash")
+  public async getReadsByRootHashes(
+    @Query() { rootHashes, ...filter }: ReadingsByRootHashesFilterDTO,
+  ) {
+    return await this.readsService.findManyReadingsByRootHash(rootHashes, filter);
+  }
+
+  @ApiOperation({
     summary: "Return the readings with the specified root hash",
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Readings",
-    type: ReadingDTO,
-    isArray: true,
-  })
-  @Get("/roothash/:rootHash")
+  @ApiResponse(ReadingListResponse)
+  @Get("roothash/:rootHash")
   public async getReadingsByRootHash(
     @Param("rootHash") rootHash: string,
     @Query() filter: ReadingsFilterDTO,
