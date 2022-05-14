@@ -100,7 +100,6 @@ export class Reading {
       group: ["rootHash"],
       rootHash,
     });
-    console.log(query);
     const db = this.influxDBRepository.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
     return this.tablesToReadings(rows);
