@@ -15,14 +15,14 @@ sub run_makeglossaries {
         if ( "$^O" eq "MSWin32" ) {
             system "makeglossaries", "-q", "$base_name";
         } else {
-            system "makeglossaries -q -g $base_name";
+            system "makeglossaries -q $base_name";
         }
     }
     else {
         if ( "$^O" eq "MSWin32" ) {
             system "makeglossaries", "$base_name";
         } else {
-            system "makeglossaries -g $base_name";
+            system "makeglossaries $base_name";
         }
     };
 
