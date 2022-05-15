@@ -38,4 +38,13 @@ export class ReadingDTO {
     description: "Measurement value in Wh",
   })
   value: number;
+
+  public toString() {
+    return `ReadingDTO {
+      assetDID: ${this.assetDID},
+      rootHash: ${this.rootHash},
+      timestamp: ${this.timestamp},
+      value: ${this.value}
+    }`;
+  }
 }

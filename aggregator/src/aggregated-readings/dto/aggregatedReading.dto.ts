@@ -69,4 +69,16 @@ export class AggregatedReadingsDTO {
     description: "Signature of the rootHash",
   })
   signature: string;
+
+  public toString() {
+    return `AggregatedReadingsDTO {
+      start: ${this.start},
+      stop: ${this.stop},
+      rootHash: ${this.rootHash},
+      salts: ${this.salts},
+      readings: ${this.readings},
+      status: ${this.status},
+      signature: ${this.signature}
+    }`;
+  }
 }

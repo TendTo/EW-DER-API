@@ -67,7 +67,7 @@ export class BlockchainService {
   async isOwner(prosumer: string, readings: ReadingDTO[]): Promise<boolean>;
   async isOwner(prosumer: string, assetDID: string): Promise<boolean>;
   async isOwner(prosumer: string, DIDorReadings: string | ReadingDTO[]) {
-    this.logger.debug(`Check whether ${prosumer} isOwner of ${DIDorReadings}`);
+    this.logger.debug(`Check whether ${prosumer} isOwner of ${DIDorReadings.length} assets`);
     if (typeof DIDorReadings === "string") {
       return this.isOwnerAssetDID(prosumer, DIDorReadings);
     }
