@@ -1,6 +1,6 @@
 import { GitHub } from "@mui/icons-material";
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import gb from "../../asset/icon/gb.svg";
 import it from "../../asset/icon/it.svg";
@@ -10,11 +10,11 @@ import "./AppFooter.css";
 export function AppFooter() {
   const { t, i18n } = useTranslation();
 
-  const onChangeLanguage = () => {
+  const onChangeLanguage = useCallback(() => {
     if (i18n.language.startsWith("en")) i18n.changeLanguage("it");
     else if (i18n.language.startsWith("it")) i18n.changeLanguage("en");
     else console.warn("Language not supported");
-  };
+  }, [i18n]);
 
   return (
     <footer>

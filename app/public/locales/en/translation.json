@@ -205,5 +205,21 @@
     "CANCEL_DEMAND_CONFIRM": "Do you really want to cancel the offer?",
     "REJECT_MATCH": "Reject match",
     "REJECT_MATCH_CONFIRM": "Do you really want to reject the match?"
+  },
+  "ASSET": {
+    "FORM": {
+      "OFFSET": "Offset",
+      "LIMIT": "Limit",
+      "STOP": "Stop",
+      "START": "Start",
+      "ASSET_DID": "DER's DID",
+      "ASSET_OWNED": "List of DER owned",
+      "FORM_TITLE": "Readings' filter",
+      "VALIDATION": {
+        "TIME": "Invalid time. Must be a negative time-window or a date",
+        "DID": "Invalid DID. Must be like did:ethr:<eth-address>",
+        "REQUIRED": "Required field"
+      }
+    }
   }
 }

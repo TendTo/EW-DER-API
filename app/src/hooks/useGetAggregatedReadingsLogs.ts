@@ -1,5 +1,5 @@
 import { useEthers } from "@usedapp/core";
-import { useMemo } from "react";
+import { useCallback } from "react";
 import Addresses from "../config/contracts.config.json";
 import { ReadingsNotary__factory } from "../typechain/ReadingsNotary__factory";
 import { useAsync } from "./useAsync";
@@ -15,14 +15,14 @@ export function useGetAggregatedReadingsLogs(
   aggregator?: string | string[],
 ) {
   const { library } = useEthers();
-  const query = useMemo(() => {
-    if (!library) return undefined;
+  const query = useCallback(async () => {
+    if (!library) return [];
     const notary = ReadingsNotary__factory.connect(
       Addresses.readingsNotaryAddress,
       library,
     );
     const filter = notary.filters.NewMeterReading(aggregator, rootHash);
-    return () => notary.queryFilter(filter);
+    return await notary.queryFilter(filter);
   }, [library, rootHash, aggregator]);
   return useAsync(query);
 }

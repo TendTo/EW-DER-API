@@ -1,29 +1,26 @@
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import React from "react";
+import { useRouterContext } from "../context";
 import { useGetReadings } from "../hooks";
-import { ReadingList } from "./ReadingList";
-import { ReadingsForm } from "./ReadingsForm";
+import { ReadingsForm } from "./readings/ReadingsForm";
+import { ReadingList } from "./readings/ReadingsList";
 
 export function Aggregator() {
-  const { value, status, error, execute } = useGetReadings();
-  console.log("Aggregator", value, status, error);
-
-  // const logs = value?.map((log) => (
-  //   <li key={log.transactionHash}>
-  //     Aggregator: {log.args.operator} - RootHash (hashed): {(log.args.proof as any).hash}
-  //   </li>
-  // ));
-
-  // const readings = value?.map((reading) => (
-  //   <li key={`${reading.assetDID}-${reading.timestamp}`}>
-  //     DID: {reading.assetDID} - Volume: {reading.volume}
-  //   </li>
-  // ));
+  const { value, execute } = useGetReadings();
+  const { state: route } = useRouterContext();
 
   return (
-    <Container maxWidth="xl">
-      <ReadingsForm onSuccess={execute} />
-      <ReadingList data={value ?? []} />
+    <Container maxWidth="md">
+      {route === "home" || route === "readings" ? (
+        <Box mt={2} mb={2}>
+          <ReadingsForm onSuccess={execute} />
+          <ReadingList readings={value ?? [[]]} />
+        </Box>
+      ) : (
+        <Box mt={2} mb={2}>
+          <div>Fest</div>
+        </Box>
+      )}
     </Container>
   );
 }

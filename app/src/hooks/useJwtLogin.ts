@@ -20,5 +20,9 @@ export function useJwtLogin() {
     return jwt;
   }, [library, account]);
 
-  return { jwtLogin };
+  const jwtLogout = useCallback(async () => {
+    localStorage.removeItem("jwt");
+  }, []);
+
+  return { jwtLogin, jwtLogout };
 }

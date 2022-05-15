@@ -41,33 +41,51 @@ export class Reading {
     );
   }
 
-  public static async getAll() {
-    const json = await this.repository.fetchJson<ReadingsDTO[]>(`readings`);
+  public static async getByAssetDID(assetDID: string, options: ReadingsDTOOptions) {
+    const json = await this.repository.fetchJson<ReadingsDTO[]>(
+      `readings/assetDID/${encodeURIComponent(assetDID)}`,
+      {
+        queryParams: options,
+      },
+    );
     return json.map(this.dtoMapper);
   }
 
-  public static async getByAssetDID(assetDID: string, options: ReadingsDTOOptions) {
-    const json = await this.repository.fetchJson<ReadingsDTO[]>(`readings/${assetDID}`, {
-      queryParams: options,
+  public static async getManyByAssetDID(
+    assetDIDs: string[],
+    options: ReadingsDTOOptions,
+  ) {
+    const json = await this.repository.fetchJson<ReadingsDTO[][]>(`readings/assetDID`, {
+      queryParams: { ...options, assetDIDs },
     });
-    return json.map(this.dtoMapper);
+    return json.map((readings: ReadingsDTO[]) => readings.map(this.dtoMapper));
   }
 
   public static async getByRootHash(rootHash: string, options: ReadingsDTOOptions) {
     const json = await this.repository.fetchJson<ReadingsDTO[]>(
-      `/readings/roothash/${rootHash}`,
+      `/readings/roothash/${encodeURIComponent(rootHash)}`,
       { queryParams: options },
     );
     return json.map(this.dtoMapper);
+  }
+
+  public static async getManyByRootHash(rootHashes: string[], options: ReadingsDTOOptions) {
+    const json = await this.repository.fetchJson<ReadingsDTO[][]>(`readings/roothash`, {
+      queryParams: { ...options, rootHashes },
+    });
+    return json.map((readings: ReadingsDTO[]) => readings.map(this.dtoMapper));
   }
 
   public static async getLast(
     assetDID: string,
     options: Pick<ReadingsDTOOptions, "start">,
   ) {
-    const json = await this.repository.fetchJson<ReadingsDTO>(`readings/${assetDID}`, {
-      queryParams: options,
-    });
+    const json = await this.repository.fetchJson<ReadingsDTO>(
+      `readings/${encodeURIComponent(assetDID)}`,
+      {
+        queryParams: options,
+      },
+    );
     return this.dtoMapper(json);
   }
 
@@ -104,5 +122,9 @@ export class Reading {
 
   get timestamp(): Date {
     return this._timestamp;
+  }
+
+  get unixTimestamp(): number {
+    return this._timestamp.getTime();
   }
 }

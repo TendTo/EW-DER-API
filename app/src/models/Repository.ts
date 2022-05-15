@@ -1,6 +1,10 @@
+type QueryParamsType = Record<
+  string,
+  string | number | boolean | string[] | number[] | boolean[]
+>;
 type FetchOptions = {
   method?: string;
-  queryParams?: Record<string, string | number | boolean>;
+  queryParams?: QueryParamsType;
   body?: Record<string, string | number | boolean>;
 };
 
@@ -72,11 +76,18 @@ export class BaseRepository {
     throw Error(errMsg);
   }
 
-  protected queryStringify(obj: Record<string, string | number | boolean>) {
+  protected queryStringify(obj: QueryParamsType) {
     let str = [];
     for (let p in obj) {
-      if (obj.hasOwnProperty(p) && obj[p] !== null && obj[p] !== undefined) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+      const val = obj[p];
+      if (val !== null && val !== undefined) {
+        if (Array.isArray(val)) {
+          str.push(
+            val.map((v) => `${encodeURIComponent(p)}=${encodeURIComponent(v)}`).join("&"),
+          );
+        } else {
+          str.push(encodeURIComponent(p) + "=" + encodeURIComponent(val));
+        }
       }
     }
     return str.join("&");

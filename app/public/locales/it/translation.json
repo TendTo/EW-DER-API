@@ -205,5 +205,21 @@
     "CANCEL_DEMAND_CONFIRM": "Sei sicuro di voler annullare l'offerta?",
     "REJECT_MATCH_CONFIRM": "Sei sicuro di voler rifiutare l'abbinamento?",
     "REJECT_MATCH": "Rifiuta l'abbinamento"
+  },
+  "ASSET": {
+    "FORM": {
+      "ASSET_DID": "DID del DER",
+      "ASSET_OWNED": "Elenco dei DER posseduti",
+      "FORM_TITLE": "Filtro delle letture",
+      "LIMIT": "Limite",
+      "OFFSET": "Sfasamento",
+      "START": "Inizio",
+      "STOP": "Fine",
+      "VALIDATION": {
+        "DID": "DID non valido. \nDeve essere nel formato did:ethr:<indirizzo-eth>",
+        "TIME": "Valore temporale non valido. \nDeve essere una finestra temporale o una data",
+        "REQUIRED": "Campo richiesto"
+      }
+    }
   }
 }

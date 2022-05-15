@@ -13,20 +13,35 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useEtherBalance, useEthers, useLookupAddress } from "@usedapp/core";
+import { useEtherBalance, useLookupAddress } from "@usedapp/core";
 import { formatEther } from "ethers/lib/utils";
 import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { colorModeContext, useIamContext } from "../../context";
+import {
+  colorModeContext,
+  RouterContextType,
+  useIamContext,
+  useRouterContext,
+} from "../../context";
 import { useLogin } from "../../hooks";
 
-const pages = ["Products", "Pricing", "Blog"];
+type PagesType = { label: string; route: RouterContextType }[];
+const aggregatorPages: PagesType = [
+  { label: "Aggregator", route: "home" },
+  { label: "Readings", route: "readings" },
+  { label: "Aggregated", route: "aggregated" },
+];
+const prosumerPages: PagesType = [
+  { label: "Prosumer", route: "home" },
+  { label: "Readings", route: "readings" },
+  { label: "Aggregated", route: "aggregated" },
+];
 
-export function AppTopBar() {
+export function AppHeader() {
   const { t } = useTranslation();
+  const { update: setRouter } = useRouterContext();
   const theme = useTheme();
-  const { account, deactivate } = useEthers();
-  const { login } = useLogin();
+  const { login, isLogged, isAggregator, account, logout } = useLogin();
   const name = useLookupAddress();
   const balance = useEtherBalance(account);
   const { toggleColorMode } = useContext(colorModeContext);
@@ -65,7 +80,7 @@ export function AppTopBar() {
 
   const handleLogout = () => {
     setAnchorElUser(undefined);
-    deactivate();
+    logout();
   };
 
   const onClickAccount = () => {
@@ -74,6 +89,8 @@ export function AppTopBar() {
     }
     setAnchorElUser(undefined);
   };
+
+  const pages = isLogged ? (isAggregator ? aggregatorPages : prosumerPages) : [];
 
   return (
     <AppBar position="static">
@@ -118,8 +135,14 @@ export function AppTopBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.label}
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    setRouter(page.route);
+                  }}
+                >
+                  <Typography textAlign="center">{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -135,11 +158,14 @@ export function AppTopBar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.label}
+                onClick={() => {
+                  handleCloseNavMenu();
+                  setRouter(page.route);
+                }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.label}
               </Button>
             ))}
           </Box>

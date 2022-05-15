@@ -7,6 +7,7 @@ import config from "../config/useDAppconfig";
 import { getTheme } from "../theme/appTheme";
 import ColorModeContext from "./colorModeContext";
 import { IAMContextProvider } from "./IAMContext";
+import { RouterContextProvider } from "./routerContext";
 
 type ContextProviderProps = {
   children: React.ReactNode;
@@ -25,14 +26,16 @@ export default function ContextProvider({ children }: ContextProviderProps) {
   );
 
   return (
-    <IAMContextProvider>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <DAppProvider config={config}>{children}</DAppProvider>
-          <ToastContainer />
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-    </IAMContextProvider>
+    <RouterContextProvider>
+      <IAMContextProvider>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <DAppProvider config={config}>{children}</DAppProvider>
+            <ToastContainer />
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </IAMContextProvider>
+    </RouterContextProvider>
   );
 }
