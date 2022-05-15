@@ -6,7 +6,7 @@ import { utils, Wallet } from "ethers";
 import { AggregatedReadingsDTO } from "src/aggregated-readings/dto";
 import { Config, DID_REGEX, VOLTA_CHAIN } from "src/constants";
 import { ReadingDTO } from "src/readings/dto";
-import { getAddressFromDID } from "src/utility";
+import { getAddressFromDID, isTypeArray } from "src/utility";
 import {
   IdentityManager,
   IdentityManager__factory,
@@ -65,27 +65,47 @@ export class BlockchainService {
   }
 
   async isOwner(prosumer: string, readings: ReadingDTO[]): Promise<boolean>;
+  async isOwner(prosumer: string, readings: string[]): Promise<boolean>;
   async isOwner(prosumer: string, assetDID: string): Promise<boolean>;
-  async isOwner(prosumer: string, DIDorReadings: string | ReadingDTO[]) {
-    this.logger.debug(`Check whether ${prosumer} isOwner of ${DIDorReadings.length} assets`);
+  async isOwner(prosumer: string, DIDorReadings: string | string[] | ReadingDTO[]) {
+    this.logger.debug(`Check ownership of ${prosumer}`);
     if (typeof DIDorReadings === "string") {
       return this.isOwnerAssetDID(prosumer, DIDorReadings);
+    } else if (isTypeArray(DIDorReadings, "string")) {
+      return this.isOwnerAssetDIDs(prosumer, DIDorReadings);
     }
-    return this.isOwnerReadings(prosumer, DIDorReadings);
+    return this.isOwnerReadings(prosumer, DIDorReadings as ReadingDTO[]);
   }
 
-  private async isOwnerAssetDID(prosumer: string, addetDID: string) {
-    const addressDID = getAddressFromDID(addetDID);
-    const owner = await this.identityManager.identityOwner(addressDID);
-    return owner === prosumer;
+  private async isOwnerAssetDID(prosumer: string, assetDID: string) {
+    const addressDID = getAddressFromDID(assetDID);
+    return this.checkOwner(prosumer, addressDID);
+  }
+
+  private async isOwnerAssetDIDs(prosumer: string, assetDIDs: string[]) {
+    const addressDIDs = assetDIDs
+      .filter((assetDID, i, arr) => arr.indexOf(assetDID) === i)
+      .map((assetDID) => getAddressFromDID(assetDID));
+    return this.checkOwner(prosumer, addressDIDs);
   }
 
   private async isOwnerReadings(prosumer: string, readings: ReadingDTO[]) {
-    const assetDIDs = readings
+    const addressDIDs = readings
       .filter((assetDID, i, arr) => arr.indexOf(assetDID) === i)
       .map((reading) => getAddressFromDID(reading.assetDID));
+    return this.checkOwner(prosumer, addressDIDs);
+  }
+
+  private async checkOwner(
+    prosumer: string,
+    addressDID: string | string[],
+  ): Promise<boolean> {
+    if (typeof addressDID === "string") {
+      const owner = await this.identityManager.identityOwner(addressDID);
+      return owner === prosumer;
+    }
     const owner = await Promise.all(
-      assetDIDs.map(async (assetDID) => {
+      addressDID.map(async (assetDID) => {
         const owner = await this.identityManager.identityOwner(assetDID);
         return owner === prosumer;
       }),
