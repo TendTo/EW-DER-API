@@ -2,12 +2,28 @@ import { HttpService } from "@nestjs/axios";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { AxiosError } from "axios";
 import { catchError, lastValueFrom, map } from "rxjs";
 import { Config, Status } from "src/constants";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
+import { getConnection } from "typeorm";
 import { ReadingDTO } from "./dto";
 import { AggregatedReadings, Reading } from "./entities";
-import { OnReadingCreated, onReadingCreatedId } from "./events";
+import {
+  OnAggregatedReadingsCreated,
+  onAggregatedReadingsId,
+  OnReadingCreated,
+  onReadingCreatedId,
+} from "./events";
+
+type AggregatedReadingsResponse = {
+  status: number;
+  message: string;
+};
+type AggregatedReadingsErrorResponse = {
+  statusCode: number;
+  message: string;
+};
 
 @Injectable()
 export class ReadingsService implements OnModuleInit {
@@ -42,7 +58,7 @@ export class ReadingsService implements OnModuleInit {
   }
 
   findOne(id: number) {
-    return Reading.find({ id });
+    return Reading.findOne({ id });
   }
 
   remove(id: number) {
@@ -54,33 +70,57 @@ export class ReadingsService implements OnModuleInit {
   }
 
   async aggregateReadings() {
-    const readingsToSubmit = await Reading.find({
-      where: { aggregatedReadings: null },
+    getConnection().transaction(async (manager) => {
+      const readingsToSubmit = await manager.find(Reading, {
+        where: { aggregatedReadings: null },
+      });
+
+      const readingDTOs = readingsToSubmit.map((reading) => reading.dto);
+      const preciseProof = await this.preciseProof.generatePreciseProof(readingDTOs);
+
+      const aggregatedReadings = new AggregatedReadings(
+        preciseProof,
+        readingsToSubmit,
+        Status.NotSubmitted,
+      );
+      await manager.save(aggregatedReadings);
+      this.eventEmitter.emit(
+        onAggregatedReadingsId,
+        new OnAggregatedReadingsCreated(aggregatedReadings),
+      );
     });
+  }
 
-    const readingDTOs = readingsToSubmit.map((reading) => reading.dto);
-    const preciseProof = await this.preciseProof.generatePreciseProof(readingDTOs);
-
-    const aggregatedReadings = new AggregatedReadings(
-      preciseProof,
-      readingsToSubmit,
-      Status.Submitted,
-    );
-    this.logger.debug("Sending aggregated reading");
-    const { data } = await lastValueFrom(
+  async sendAggregateReadings(rootHash: string) {
+    const aggregatedReadings = await AggregatedReadings.findOne({
+      where: { status: Status.NotSubmitted, rootHash },
+      relations: ["readings"],
+    });
+    if (!aggregatedReadings) return;
+    aggregatedReadings.status = Status.Submitted;
+    const { status, message }: AggregatedReadingsResponse = await lastValueFrom(
       this.httpService
         .post(`${this.aggregatorUrl}/aggregated-readings`, aggregatedReadings.dto)
         .pipe(
-          map((res) => ({ data: res.data, status: res.status })),
-          catchError(async (err) => {
+          map((res) => ({ status: res.status, message: res.statusText })),
+          catchError(async (err: AxiosError<AggregatedReadingsErrorResponse>) => {
             aggregatedReadings.status = Status.Rejected;
-            aggregatedReadings.readings = [];
-            return { data: err };
+            try {
+              return { status: err.response.status, message: err.response.data.message };
+            } catch {
+              return { status: 500, message: err.message };
+            }
           }),
         ),
     );
 
-    this.logger.debug("On aggregated readings submitted: ", data);
+    if (status !== 201) {
+      aggregatedReadings.status = Status.Rejected;
+      this.logger.warn(`Aggregated readings rejected: ${message}`);
+    } else {
+      aggregatedReadings.status = Status.Confirmed;
+      this.logger.debug(`Aggregated readings submitted: ${rootHash}`);
+    }
     await aggregatedReadings.save();
   }
 

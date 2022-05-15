@@ -1,7 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { OnEvent } from "@nestjs/event-emitter";
-import { BlockchainService } from "src/blockchain/blockchain.service";
 import { Config } from "src/constants";
 import { OnReadingCreated, onReadingCreatedId } from "../events";
 import { ReadingsService } from "../readings.service";
@@ -14,7 +13,6 @@ export class ReadingCreatedListener {
   constructor(
     private readonly configService: ConfigService,
     private readonly readingsService: ReadingsService,
-    private readonly blockchainService: BlockchainService,
   ) {}
 
   public async onModuleInit() {

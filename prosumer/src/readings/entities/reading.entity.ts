@@ -45,4 +45,8 @@ export class Reading extends BaseEntity {
       timestamp: this.timestamp,
     };
   }
+
+  public toString() {
+    return `Reading { assetDID: ${this.assetDID}, value: ${this.value}, timestamp: ${this.timestamp} }`;
+  }
 }

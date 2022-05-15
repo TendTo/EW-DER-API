@@ -2,7 +2,7 @@ import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { BlockchainService } from "src/blockchain/blockchain.service";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
-import { ReadingCreatedListener } from "./listeners";
+import { AggregatedReadingsCreatedListener, ReadingCreatedListener } from "./listeners";
 import { ReadingsController } from "./readings.controller";
 import { ReadingsService } from "./readings.service";
 
@@ -12,6 +12,7 @@ import { ReadingsService } from "./readings.service";
   providers: [
     ReadingsService,
     ReadingCreatedListener,
+    AggregatedReadingsCreatedListener,
     PreciseProofsService,
     BlockchainService,
   ],

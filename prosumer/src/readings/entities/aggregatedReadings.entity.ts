@@ -39,7 +39,7 @@ export class AggregatedReadings extends BaseEntity {
   @Column()
   signature: string;
 
-  @Column("text", { array: true })
+  @Column("simple-array")
   salts: string[];
 
   @Column()
@@ -51,18 +51,22 @@ export class AggregatedReadings extends BaseEntity {
   @Column()
   stop: Date;
 
-  @OneToMany(() => Reading, (reading) => reading.aggregatedReadings)
+  @OneToMany(() => Reading, (reading) => reading.aggregatedReadings, { cascade: true })
   readings: Reading[];
 
   public get dto() {
     return {
       rootHash: this.rootHash,
-      salts: this.salts,
+      salts: Array.isArray(this.salts) ? this.salts : (this.salts as string).split(","),
       status: this.status,
       start: this.start,
       stop: this.stop,
       readings: this.readings.map((reading) => reading.dto),
       signature: this.signature,
     };
+  }
+
+  public toString() {
+    return `AggregatedReadings { rootHash: ${this.rootHash}, status: ${this.status}, start: ${this.start}, stop: ${this.stop} }`;
   }
 }
