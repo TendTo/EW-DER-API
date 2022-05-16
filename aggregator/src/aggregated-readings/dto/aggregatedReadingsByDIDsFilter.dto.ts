@@ -3,9 +3,9 @@ import { Type } from "class-transformer";
 import { ArrayNotEmpty, ArrayUnique, IsArray } from "class-validator";
 import { IsDID } from "src/utility";
 import { DID_REGEX } from "../../constants";
-import { ReadingsFilterDTO } from "./readingsFilter.dto";
+import { AggregateReadingFilterDTO } from "./aggregatedReadingsFilter.dto";
 
-export class ReadingsByDIDsFilterDTO extends ReadingsFilterDTO {
+export class AggregateReadingsByDIDsFilterDTO extends AggregateReadingFilterDTO {
   @IsArray()
   @ArrayNotEmpty()
   @ArrayUnique()

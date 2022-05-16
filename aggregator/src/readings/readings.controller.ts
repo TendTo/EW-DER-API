@@ -1,9 +1,11 @@
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
   HttpStatus,
   Param,
+  Post,
   Query,
   UseGuards,
   UseInterceptors,
@@ -42,9 +44,9 @@ export class ReadingsController {
     summary: "Return the readings for all the specified DERs",
   })
   @ApiResponse(ReadingListResponse)
-  @Get("assetDID")
+  @Post("assetDID")
   public async getReadsByAssetDIDs(
-    @Query() { assetDIDs, ...filter }: ReadingsByDIDsFilterDTO,
+    @Body() { assetDIDs, ...filter }: ReadingsByDIDsFilterDTO,
   ) {
     return await this.readsService.findManyReadings(assetDIDs, filter);
   }
@@ -81,9 +83,9 @@ export class ReadingsController {
     summary: "Return the readings for all the specified root hashes",
   })
   @ApiResponse(ReadingListResponse)
-  @Get("roothash")
+  @Post("roothash")
   public async getReadsByRootHashes(
-    @Query() { rootHashes, ...filter }: ReadingsByRootHashesFilterDTO,
+    @Body() { rootHashes, ...filter }: ReadingsByRootHashesFilterDTO,
   ) {
     return await this.readsService.findManyReadingsByRootHash(rootHashes, filter);
   }

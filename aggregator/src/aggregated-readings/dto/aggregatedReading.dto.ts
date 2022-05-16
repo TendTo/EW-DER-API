@@ -1,17 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import {
-  ArrayMinSize,
-  IsArray,
-  IsDate,
-  IsEnum,
-  IsOptional,
-  IsString,
-} from "class-validator";
-import { Status } from "../../constants";
-import { ReadingDTO } from "../../readings/dto";
+import { IsDate, IsNumber, IsString } from "class-validator";
 
-export class AggregatedReadingsDTO {
+export class AggregatedReadingDTO {
   @IsDate()
   @Type(() => Date)
   @ApiProperty({
@@ -32,53 +23,49 @@ export class AggregatedReadingsDTO {
   })
   stop: Date;
 
-  @IsString()
+  @IsDate()
+  @Type(() => Date)
   @ApiProperty({
+    type: String,
+    format: "date-time",
+    example: "2020-01-02T00:00:00Z",
+    description: "Average reading timestamp",
+  })
+  timestamp: Date;
+
+  @IsString()
+  @ApiPropertyOptional({
     type: String,
     example: "0x6a2d994fb3bfbb568f940a7fd3a2f43555858a001fb5f2783cc76335431b93c1",
     description:
       "Root hash calculated by the prosumer and to be confirmed by the validator, before being sent to the blockchain",
   })
-  rootHash: string;
-
-  @IsArray()
-  @Type(() => String)
-  @ApiProperty({
-    description: "Salts that have been used to generate the Merkle tree",
-    type: [String],
-  })
-  salts: string[];
-
-  @IsArray()
-  @ArrayMinSize(parseInt(process.env.AGGREGATION_THRESHOLD ?? "30"))
-  @Type(() => ReadingDTO)
-  @ApiProperty({
-    description: "List of readings that have been aggregated",
-    type: [ReadingDTO],
-  })
-  readings: ReadingDTO[];
-
-  @IsOptional()
-  @IsEnum(Status)
-  @ApiPropertyOptional({ enum: Status, enumName: "Status" })
-  status: Status = Status.Accepted;
+  rootHash?: string;
 
   @IsString()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
-    description: "Signature of the rootHash",
+    example: "did:ethr:0x1234567890123456789012345678901234567890",
+    description: "DID of the asset",
   })
-  signature: string;
+  assetDID?: string;
+
+  @IsNumber()
+  @ApiProperty({
+    type: "integer",
+    example: 10000000,
+    description: "Measurement value in Wh",
+  })
+  value: number;
 
   public toString() {
-    return `AggregatedReadingsDTO {
+    return `AggregatedReadingDTO {
       start: ${this.start},
       stop: ${this.stop},
+      timestamp: ${this.timestamp},
       rootHash: ${this.rootHash},
-      salts: ${this.salts},
-      readings: ${this.readings},
-      status: ${this.status},
-      signature: ${this.signature}
+      assetDID: ${this.assetDID},
+      value: ${this.value}
     }`;
   }
 }

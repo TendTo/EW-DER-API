@@ -15,9 +15,15 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "src/auth/guards";
-import { ReadingDTO } from "src/readings/dto";
 import { AggregatedReadingsService } from "./aggregated-readings.service";
-import { AggregatedReadingsDTO, AggregateReadingsFilterDTO, DIDDTO } from "./dto";
+import {
+  AggregatedReadingDTO,
+  AggregatedReadingsDTO,
+  AggregateReadingFilterDTO,
+  AggregateReadingsByDIDsFilterDTO,
+  AggregateReadingsByRootHashesFilterDTO,
+  DIDDTO,
+} from "./dto";
 import { AggregatedGuard } from "./guards";
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -53,17 +59,17 @@ export class AggregatedReadingsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Aggregated readings",
-    type: ReadingDTO,
+    type: AggregatedReadingDTO,
     isArray: true,
   })
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
   @Get("assetDID/:assetDID")
-  public async getReadsAggregates(
+  public async getAggregatedReading(
     @Param() { assetDID }: DIDDTO,
-    @Query() filter: AggregateReadingsFilterDTO,
+    @Query() filter: AggregateReadingFilterDTO,
   ) {
-    return this.aggregatedReadingsService.find(assetDID, filter);
+    return this.aggregatedReadingsService.find([assetDID], filter);
   }
 
   @ApiOperation({
@@ -73,16 +79,54 @@ export class AggregatedReadingsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Aggregated readings",
-    type: ReadingDTO,
+    type: AggregatedReadingDTO,
+    isArray: true,
+  })
+  @ApiBearerAuth("JWT")
+  @UseGuards(JwtGuard)
+  @Post("assetDID")
+  public async getManyAggregatedReadingByAssetDID(
+    @Body() { assetDIDs, ...options }: AggregateReadingsByDIDsFilterDTO,
+  ) {
+    return this.aggregatedReadingsService.find(assetDIDs, options);
+  }
+
+  @ApiOperation({
+    summary:
+      "Return the readings for the specified rootHash, aggregating the data with the provided query parameters",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Aggregated readings",
+    type: AggregatedReadingDTO,
     isArray: true,
   })
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
   @Get("roothash/:rootHash")
-  public async getAggregatedReadingsByRootHash(
+  public async getAggregatedReadingByRootHash(
     @Param("rootHash") rootHash: string,
-    @Query() filter: AggregateReadingsFilterDTO,
+    @Query() filter: AggregateReadingFilterDTO,
   ) {
-    return this.aggregatedReadingsService.findByRootHash(rootHash, filter);
+    return this.aggregatedReadingsService.findByRootHash([rootHash], filter);
+  }
+
+  @ApiOperation({
+    summary:
+      "Return the readings for the specified rootHash, aggregating the data with the provided query parameters",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Aggregated readings",
+    type: AggregatedReadingDTO,
+    isArray: true,
+  })
+  @ApiBearerAuth("JWT")
+  @UseGuards(JwtGuard)
+  @Post("rootHash")
+  public async getManyAggregatedReadingByRootHash(
+    @Body() { rootHashes, ...options }: AggregateReadingsByRootHashesFilterDTO,
+  ) {
+    return this.aggregatedReadingsService.findByRootHash(rootHashes, options);
   }
 }

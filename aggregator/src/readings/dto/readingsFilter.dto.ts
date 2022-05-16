@@ -1,7 +1,22 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsEnum, IsInt, IsOptional, IsPositive, Max, Min } from "class-validator";
-import { DEFAULT_LIMIT, DEFAULT_OFFSET, Order } from "../../constants";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { Transform, Type } from "class-transformer";
+import {
+  IsBoolean,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  Max,
+  Min,
+} from "class-validator";
+import { IsInfluxDuration } from "src/utility";
+import {
+  AggregationFunction,
+  DEFAULT_LIMIT,
+  DEFAULT_OFFSET,
+  INFLUX_DURATION_REGEX,
+  Order,
+} from "../../constants";
 import { RangeFilterDTO } from "./rangeFilter.dto";
 
 export class ReadingsFilterDTO extends RangeFilterDTO {
@@ -24,7 +39,7 @@ export class ReadingsFilterDTO extends RangeFilterDTO {
   @Min(0)
   @Type(() => Number)
   @ApiPropertyOptional({
-    description: "Offset of the sliding window applyed to the list of readings",
+    description: "Offset of the sliding window applied to the list of readings",
     type: "integer",
     default: DEFAULT_OFFSET,
     minimum: 0,
@@ -39,4 +54,35 @@ export class ReadingsFilterDTO extends RangeFilterDTO {
     default: Order.ASC,
   })
   order: Order = Order.ASC;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === "true")
+  @ApiProperty({
+    type: Boolean,
+    description:
+      'When "true" it will calculate the difference between reads before applying aggregation functions',
+    default: false,
+  })
+  difference: boolean = false;
+
+  @IsOptional()
+  @IsInfluxDuration()
+  @ApiPropertyOptional({
+    description: "Aggregation time window. Examples: 1d, 3mo, 4h5m1s",
+    type: String,
+    default: "1h",
+    pattern: INFLUX_DURATION_REGEX,
+  })
+  aggregationWindow: string = "1h";
+
+  @IsOptional()
+  @IsEnum(AggregationFunction)
+  @ApiPropertyOptional({
+    description:
+      "Aggregation function to apply to the readings. aggregationWindow must be set",
+    enum: AggregationFunction,
+    default: AggregationFunction.mean,
+  })
+  aggregationFunction: AggregationFunction = AggregationFunction.mean;
 }

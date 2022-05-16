@@ -1,3 +1,7 @@
-export { AggregatedReadingsDTO } from "./aggregatedReading.dto";
-export { AggregateReadingsFilterDTO } from "./aggregatedReadingsFilter.dto";
-export { DIDDTO } from "./did.dto";
+export * from "./aggregatedReading.dto";
+export * from "./aggregatedReadings.dto";
+export * from "./aggregatedReadingsByDIDsFilter.dto";
+export * from "./aggregatedReadingsByRootHashsFilter.dto";
+export * from "./aggregatedReadingsFilter.dto";
+export * from "./did.dto";
+export * from "./influxDbAggregatedReading.dto";

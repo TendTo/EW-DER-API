@@ -3,7 +3,7 @@ import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AggregationFunction, Order } from "../constants";
 
-export type GetQueryOptions = {
+export type ListingsQueryOptions = {
   range?: {
     start: string;
     stop: string;
@@ -12,6 +12,8 @@ export type GetQueryOptions = {
     limit: number;
     offset: number;
   };
+};
+export type ReadingsQueryOptions = ListingsQueryOptions & {
   aggregateWindow?: {
     every: string;
     fn: AggregationFunction;
@@ -21,24 +23,26 @@ export type GetQueryOptions = {
   order?: Order;
   group?: string[];
 };
-
-export type GetQueryOptionsFn = GetQueryOptions & {
+export type AggregationQueryOptions = Omit<ReadingsQueryOptions, "getLast" | "group">;
+type GetQueryOptionsFn<Options> = Options & {
   filterFn?: string;
   assetDID: never;
   rootHash: never;
 };
-
-export type GetQueryOptionsAssetId = GetQueryOptions & {
+type GetQueryOptionsAssetId<Options> = Options & {
   filterFn?: never;
   assetDID?: string | string[];
   rootHash?: never;
 };
-
-export type GetQueryOptionsRootHash = GetQueryOptions & {
+type GetQueryOptionsRootHash<Options> = Options & {
   filterFn?: never;
   assetDID?: never;
   rootHash?: string | string[];
 };
+type GetQueryOptions<Options> =
+  | GetQueryOptionsFn<Options>
+  | GetQueryOptionsAssetId<Options>
+  | GetQueryOptionsRootHash<Options>;
 
 @Injectable()
 export class InfluxdbService implements OnModuleInit {
@@ -82,7 +86,26 @@ export class InfluxdbService implements OnModuleInit {
     return `|> filter(fn: (r) => ${condition} and r._field == "reading")`;
   }
 
-  public getQuery({
+  private get fromClause() {
+    return `from(bucket: "${this.bucket}")`;
+  }
+
+  public listingQuery(
+    identifier: "assetDID" | "rootHash",
+    { range, limit }: ListingsQueryOptions,
+  ) {
+    return `
+    ${this.fromClause}
+    ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
+    |> sort(columns: ["_time"])
+    |> group()
+    |> keep(columns: ["${identifier}"])
+    |> unique(column: "${identifier}")
+    ${limit ? `|> limit(n: ${limit.limit}, offset: ${limit.offset})` : ""}
+    `;
+  }
+
+  public readingsQuery({
     range,
     filterFn,
     getLast,
@@ -93,9 +116,9 @@ export class InfluxdbService implements OnModuleInit {
     difference,
     order = Order.ASC,
     group,
-  }: GetQueryOptionsAssetId | GetQueryOptionsFn | GetQueryOptionsRootHash) {
+  }: GetQueryOptions<ReadingsQueryOptions>) {
     return `
-    from(bucket: "${this.bucket}")
+    ${this.fromClause}
     ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
     ${filterFn ? `|> filter(fn: ${filterFn})` : ""}
     ${assetDID ? this.buildFilterFn("assetDID", assetDID) : ""}
@@ -109,6 +132,34 @@ export class InfluxdbService implements OnModuleInit {
     }
     ${group && group.length > 0 ? `|> group(columns: ["${group.join('","')}"])` : ""}
     |> sort(columns: ["_time"], desc: ${order === Order.DESC ? "true" : "false"})
+    ${limit ? `|> limit(n: ${limit.limit}, offset: ${limit.offset})` : ""}
+    `;
+  }
+
+  public aggregationQuery({
+    range,
+    filterFn,
+    limit,
+    assetDID,
+    rootHash,
+    aggregateWindow,
+    difference,
+    order = Order.ASC,
+  }: GetQueryOptions<AggregationQueryOptions>) {
+    return `
+    ${this.fromClause}
+    ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
+    ${filterFn ? `|> filter(fn: ${filterFn})` : ""}
+    ${assetDID ? this.buildFilterFn("assetDID", assetDID) : ""}
+    ${rootHash ? this.buildFilterFn("rootHash", rootHash) : ""}
+    |> sort(columns: ["_time"], desc: ${order === Order.DESC ? "true" : "false"})
+    |> group()
+    ${
+      aggregateWindow
+        ? `|> aggregateWindow(every: ${aggregateWindow.every}, fn: ${aggregateWindow.fn}, createEmpty: false)`
+        : ""
+    }
+    ${difference ? `|> difference()` : ""}
     ${limit ? `|> limit(n: ${limit.limit}, offset: ${limit.offset})` : ""}
     `;
   }

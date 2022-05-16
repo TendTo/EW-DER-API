@@ -1,5 +1,9 @@
 import { Point } from "@influxdata/influxdb-client";
-import { GetQueryOptions, InfluxdbService } from "src/influxdb/influxdb.service";
+import {
+  AggregationQueryOptions,
+  InfluxdbService,
+  ReadingsQueryOptions,
+} from "src/influxdb/influxdb.service";
 import { InfluxDbReadingDTO, ReadingDTO } from "../dto";
 
 export class Reading {
@@ -36,9 +40,9 @@ export class Reading {
     await db.close();
   }
 
-  static async findOne(assetDID: string, options: GetQueryOptions) {
+  static async findOne(assetDID: string, options: ReadingsQueryOptions) {
     const db = this.influxDBRepository.dbReader;
-    const query = this.influxDBRepository.getQuery({
+    const query = this.influxDBRepository.readingsQuery({
       ...options,
       assetDID,
       limit: { limit: 1, offset: 0 },
@@ -48,9 +52,9 @@ export class Reading {
     return rows.map(this.rowToReading).find((r) => r.assetDID === assetDID);
   }
 
-  static async find(assetDID: string, options: GetQueryOptions) {
+  static async find(assetDID: string, options: ReadingsQueryOptions) {
     const db = this.influxDBRepository.dbReader;
-    const query = this.influxDBRepository.getQuery({
+    const query = this.influxDBRepository.readingsQuery({
       ...options,
       group: ["assetDID"],
       assetDID,
@@ -59,9 +63,9 @@ export class Reading {
     return rows.map(this.rowToReading);
   }
 
-  static async findMany(assetDID: string[], options: GetQueryOptions) {
+  static async findMany(assetDID: string[], options: ReadingsQueryOptions) {
     const db = this.influxDBRepository.dbReader;
-    const query = this.influxDBRepository.getQuery({
+    const query = this.influxDBRepository.readingsQuery({
       ...options,
       group: ["assetDID"],
       assetDID,
@@ -71,7 +75,7 @@ export class Reading {
   }
 
   static async findLast(assetDID: string, start = "-1d") {
-    const query = this.influxDBRepository.getQuery({
+    const query = this.influxDBRepository.readingsQuery({
       group: ["assetDID"],
       assetDID: assetDID,
       range: { start, stop: "now()" },
@@ -83,8 +87,8 @@ export class Reading {
     return this.rowToReading(rest);
   }
 
-  static async findByRootHash(rootHash: string, options: GetQueryOptions) {
-    const query = this.influxDBRepository.getQuery({
+  static async findByRootHash(rootHash: string, options: ReadingsQueryOptions) {
+    const query = this.influxDBRepository.readingsQuery({
       ...options,
       group: ["rootHash"],
       rootHash,
@@ -94,8 +98,8 @@ export class Reading {
     return rows.map(this.rowToReading);
   }
 
-  static async findManyByRootHash(rootHash: string[], options: GetQueryOptions) {
-    const query = this.influxDBRepository.getQuery({
+  static async findManyByRootHash(rootHash: string[], options: ReadingsQueryOptions) {
+    const query = this.influxDBRepository.readingsQuery({
       ...options,
       group: ["rootHash"],
       rootHash,
@@ -103,6 +107,29 @@ export class Reading {
     const db = this.influxDBRepository.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
     return this.tablesToReadings(rows);
+  }
+
+  static async aggregate(assetDIDs: string[], options: AggregationQueryOptions) {
+    const db = this.influxDBRepository.dbReader;
+    const query = this.influxDBRepository.aggregationQuery({
+      ...options,
+      assetDID: assetDIDs,
+    });
+    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
+    return rows.map(this.rowToReading);
+  }
+
+  static async aggregateByRootHash(
+    assetDIDs: string[],
+    options: AggregationQueryOptions,
+  ) {
+    const db = this.influxDBRepository.dbReader;
+    const query = this.influxDBRepository.aggregationQuery({
+      ...options,
+      assetDID: assetDIDs,
+    });
+    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
+    return rows.map(this.rowToReading);
   }
 
   private static tablesToReadings(rows: InfluxDbReadingDTO[]): Reading[][] {

@@ -30,15 +30,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(
     {
       params: { assetDID },
-      query: { assetDIDs },
-    }: Request<{ assetDID?: string }, {}, { assetDIDs?: string[] }>,
+      body: { assetDIDs },
+    }: Request<{ assetDID?: string }, undefined, { assetDIDs?: string[] }>,
     { address, exp }: ParsedJwt,
   ) {
-    const isArrayQuery = isTypeArray(assetDIDs, "string");
-
     if (assetDID && !this.blockchainService.isDID(assetDID))
       throw new HttpException("Invalid assetDID", HttpStatus.BAD_REQUEST);
-    if (isArrayQuery && !assetDIDs.every(this.blockchainService.isDID))
+    if (assetDIDs && !assetDIDs.every(this.blockchainService.isDID))
       throw new HttpException("Invalid assetDIDs", HttpStatus.BAD_REQUEST);
 
     // Is the aggregator
@@ -46,7 +44,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     if (assetDID && (await this.blockchainService.isOwner(address, assetDID)))
       return { address, exp };
-    if (isArrayQuery && (await this.blockchainService.isOwner(address, assetDIDs)))
+    if (assetDIDs && (await this.blockchainService.isOwner(address, assetDIDs)))
       return { address, exp };
 
     throw new HttpException(

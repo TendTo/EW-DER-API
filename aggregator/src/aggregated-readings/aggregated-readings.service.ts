@@ -2,7 +2,8 @@ import { Injectable, Logger } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Order } from "../constants";
 import { Reading } from "../readings/entities";
-import { AggregatedReadingsDTO, AggregateReadingsFilterDTO } from "./dto";
+import { AggregatedReadingsDTO, AggregateReadingFilterDTO } from "./dto";
+import { AggregatedReading } from "./entities";
 import { OnReadingsCreated, onReadingsCreatedId } from "./events";
 
 @Injectable()
@@ -22,7 +23,7 @@ export class AggregatedReadingsService {
   }
 
   public async find(
-    assetDID: string,
+    assetDIDs: string[],
     {
       start,
       stop,
@@ -32,10 +33,10 @@ export class AggregatedReadingsService {
       aggregationWindow,
       aggregationFunction,
       difference,
-    }: AggregateReadingsFilterDTO,
-  ): Promise<Reading[]> {
-    this.logger.debug("Reading readings from InfluxDB:", assetDID);
-    return Reading.find(assetDID, {
+    }: AggregateReadingFilterDTO,
+  ): Promise<AggregatedReading[]> {
+    this.logger.debug("Reading readings from InfluxDB with DID:", assetDIDs);
+    return AggregatedReading.find(assetDIDs, {
       range: { start, stop },
       limit: { limit, offset },
       aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },
@@ -45,7 +46,7 @@ export class AggregatedReadingsService {
   }
 
   public async findByRootHash(
-    rootHash: string,
+    rootHashes: string[],
     {
       start,
       stop,
@@ -55,10 +56,10 @@ export class AggregatedReadingsService {
       aggregationWindow,
       aggregationFunction,
       difference,
-    }: AggregateReadingsFilterDTO,
-  ): Promise<Reading[]> {
-    this.logger.debug("Reading reading from InfluxDB:", rootHash);
-    return Reading.findByRootHash(rootHash, {
+    }: AggregateReadingFilterDTO,
+  ): Promise<AggregatedReading[]> {
+    this.logger.debug("Reading reading from InfluxDB with rootHash:", rootHashes);
+    return AggregatedReading.findByRootHash(rootHashes, {
       range: { start, stop },
       limit: { limit, offset },
       aggregateWindow: { every: aggregationWindow, fn: aggregationFunction },
