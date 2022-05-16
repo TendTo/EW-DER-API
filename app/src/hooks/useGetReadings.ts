@@ -14,16 +14,8 @@ type UseGetReadingsArgs = ReadingsDTOOptions & {
 export function useGetReadings() {
   const getReadings = useCallback(
     async ({ assetDID, rootHash, ...options }: UseGetReadingsArgs) => {
-      if (assetDID) {
-        if (assetDID.length > 1) return Reading.getManyByAssetDID(assetDID, options);
-        else if (assetDID.length === 1)
-          return [await Reading.getByAssetDID(assetDID[0], options)];
-      }
-      if (rootHash) {
-        if (rootHash.length > 1) return Reading.getManyByRootHash(rootHash, options);
-        else if (rootHash.length === 1)
-          return [await Reading.getByRootHash(rootHash[0], options)];
-      }
+      if (assetDID) return Reading.getManyByAssetDID(assetDID, options);
+      if (rootHash) return Reading.getManyByRootHash(rootHash, options);
       return [[]];
     },
     [],

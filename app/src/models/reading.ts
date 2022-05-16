@@ -56,7 +56,8 @@ export class Reading {
     options: ReadingsDTOOptions,
   ) {
     const json = await this.repository.fetchJson<ReadingsDTO[][]>(`readings/assetDID`, {
-      queryParams: { ...options, assetDIDs },
+      method: "POST",
+      body: { ...options, assetDIDs },
     });
     return json.map((readings: ReadingsDTO[]) => readings.map(this.dtoMapper));
   }
@@ -69,9 +70,13 @@ export class Reading {
     return json.map(this.dtoMapper);
   }
 
-  public static async getManyByRootHash(rootHashes: string[], options: ReadingsDTOOptions) {
+  public static async getManyByRootHash(
+    rootHashes: string[],
+    options: ReadingsDTOOptions,
+  ) {
     const json = await this.repository.fetchJson<ReadingsDTO[][]>(`readings/roothash`, {
-      queryParams: { ...options, rootHashes },
+      method: "POST",
+      body: { ...options, rootHashes },
     });
     return json.map((readings: ReadingsDTO[]) => readings.map(this.dtoMapper));
   }
@@ -81,7 +86,7 @@ export class Reading {
     options: Pick<ReadingsDTOOptions, "start">,
   ) {
     const json = await this.repository.fetchJson<ReadingsDTO>(
-      `readings/${encodeURIComponent(assetDID)}`,
+      `readings/${encodeURIComponent(assetDID)}/latest`,
       {
         queryParams: options,
       },

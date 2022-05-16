@@ -1,11 +1,9 @@
-type QueryParamsType = Record<
-  string,
-  string | number | boolean | string[] | number[] | boolean[]
->;
+type Stringifiable = string | number | boolean | string[] | number[] | boolean[];
+type QueryParamsType = Record<string, Stringifiable>;
 type FetchOptions = {
   method?: string;
   queryParams?: QueryParamsType;
-  body?: Record<string, string | number | boolean>;
+  body?: Record<string, Stringifiable>;
 };
 
 export class BaseRepository {
@@ -50,7 +48,7 @@ export class BaseRepository {
   protected httpRequest(
     url: string,
     method: string = "GET",
-    body?: Record<string, string | number | boolean>,
+    body?: Record<string, Stringifiable>,
   ) {
     const jwt = localStorage.getItem("jwt");
     const headers = new Headers();
