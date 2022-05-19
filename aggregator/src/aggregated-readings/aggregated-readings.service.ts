@@ -1,5 +1,6 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { InfluxdbService } from "src/influxdb/influxdb.service";
 import { Order } from "../constants";
 import { Reading } from "../readings/entities";
 import { AggregatedReadingsDTO, AggregateReadingFilterDTO } from "./dto";
@@ -7,10 +8,17 @@ import { AggregatedReading } from "./entities";
 import { OnReadingsCreated, onReadingsCreatedId } from "./events";
 
 @Injectable()
-export class AggregatedReadingsService {
+export class AggregatedReadingsService implements OnModuleInit {
   private readonly logger = new Logger(AggregatedReadingsService.name);
 
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(
+    private readonly eventEmitter: EventEmitter2,
+    private readonly influxDBRepository: InfluxdbService,
+  ) {}
+
+  onModuleInit() {
+    AggregatedReading.influxDBRepository = this.influxDBRepository;
+  }
 
   public async store(aggregated: AggregatedReadingsDTO) {
     const readings = aggregated.readings.map(

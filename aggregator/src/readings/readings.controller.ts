@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagg
 import { JwtGuard } from "src/auth/guards";
 import {
   DIDDTO,
+  ListingFilterDTO,
   ReadingDTO,
   ReadingsByDIDsFilterDTO,
   ReadingsByRootHashesFilterDTO,
@@ -39,6 +40,15 @@ const ReadingListResponse = {
 @Controller("readings")
 export class ReadingsController {
   constructor(private readonly readsService: ReadingsService) {}
+
+  @ApiOperation({
+    summary: "Return the list of available assetDIDs",
+  })
+  @ApiResponse({ isArray: true, type: String })
+  @Post("assetDIDs")
+  public async getAssetDIDs(@Body() filter: ListingFilterDTO) {
+    return await this.readsService.findAssetDIDs(filter);
+  }
 
   @ApiOperation({
     summary: "Return the readings for all the specified DERs",
@@ -77,6 +87,15 @@ export class ReadingsController {
     @Query() filter: StartFilterDTO,
   ) {
     return this.readsService.findLastReading(assetDID, filter.start);
+  }
+
+  @ApiOperation({
+    summary: "Return the list of available rootHashes",
+  })
+  @ApiResponse({ isArray: true, type: String })
+  @Post("rootHashes")
+  public async getRootHashes(@Body() filter: ListingFilterDTO) {
+    return await this.readsService.findRootHashes(filter);
   }
 
   @ApiOperation({

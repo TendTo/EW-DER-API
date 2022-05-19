@@ -49,7 +49,7 @@ export class Reading {
       group: ["assetDID"],
     });
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowToReading).find((r) => r.assetDID === assetDID);
+    return rows.map(this.rowMapper).find((r) => r.assetDID === assetDID);
   }
 
   static async find(assetDID: string, options: ReadingsQueryOptions) {
@@ -60,7 +60,7 @@ export class Reading {
       assetDID,
     });
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowToReading);
+    return rows.map(this.rowMapper);
   }
 
   static async findMany(assetDID: string[], options: ReadingsQueryOptions) {
@@ -84,7 +84,7 @@ export class Reading {
     const db = this.influxDBRepository.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
     const rest = rows.find((r) => r.assetDID === assetDID);
-    return this.rowToReading(rest);
+    return this.rowMapper(rest);
   }
 
   static async findByRootHash(rootHash: string, options: ReadingsQueryOptions) {
@@ -95,7 +95,7 @@ export class Reading {
     });
     const db = this.influxDBRepository.dbReader;
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowToReading);
+    return rows.map(this.rowMapper);
   }
 
   static async findManyByRootHash(rootHash: string[], options: ReadingsQueryOptions) {
@@ -116,7 +116,7 @@ export class Reading {
       assetDID: assetDIDs,
     });
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowToReading);
+    return rows.map(this.rowMapper);
   }
 
   static async aggregateByRootHash(
@@ -129,7 +129,7 @@ export class Reading {
       assetDID: assetDIDs,
     });
     const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowToReading);
+    return rows.map(this.rowMapper);
   }
 
   private static tablesToReadings(rows: InfluxDbReadingDTO[]): Reading[][] {
@@ -138,13 +138,13 @@ export class Reading {
       if (!acc[table]) {
         acc[table] = [];
       }
-      acc[table].push(this.rowToReading(row));
+      acc[table].push(this.rowMapper(row));
       return acc;
     }, {});
     return Object.values(tables).map((readings) => readings);
   }
 
-  private static rowToReading({
+  private static rowMapper({
     assetDID,
     rootHash,
     _value,

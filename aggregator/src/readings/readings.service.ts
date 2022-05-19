@@ -1,8 +1,8 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { InfluxdbService } from "src/influxdb/influxdb.service";
 import { Order } from "../constants";
-import { ReadingDTO, ReadingsFilterDTO } from "./dto";
-import { Reading } from "./entities";
+import { ListingFilterDTO, ReadingDTO, ReadingsFilterDTO } from "./dto";
+import { AssetDID, Reading, RootHash } from "./entities";
 
 @Injectable()
 export class ReadingsService implements OnModuleInit {
@@ -12,6 +12,8 @@ export class ReadingsService implements OnModuleInit {
 
   public async onModuleInit() {
     Reading.influxDBRepository = this.influxDbService;
+    RootHash.influxDBRepository = this.influxDbService;
+    AssetDID.influxDBRepository = this.influxDbService;
   }
 
   public async storeReading(reading: ReadingDTO) {
@@ -78,6 +80,36 @@ export class ReadingsService implements OnModuleInit {
       range: { start, stop },
       limit: { limit, offset },
       order,
+    });
+  }
+
+  public async findRootHashes({
+    assetDIDs,
+    limit,
+    offset,
+    start,
+    stop,
+  }: ListingFilterDTO): Promise<string[]> {
+    this.logger.debug("Reading available rootHashes for assetDIDs:", assetDIDs);
+    return RootHash.find({
+      assetDID: assetDIDs,
+      limit: { limit, offset },
+      range: { start, stop },
+    });
+  }
+
+  public async findAssetDIDs({
+    assetDIDs,
+    limit,
+    offset,
+    start,
+    stop,
+  }: ListingFilterDTO): Promise<string[]> {
+    this.logger.debug("Reading available rootHashes for assetDIDs:", assetDIDs);
+    return AssetDID.find({
+      assetDID: assetDIDs,
+      limit: { limit, offset },
+      range: { start, stop },
     });
   }
 }

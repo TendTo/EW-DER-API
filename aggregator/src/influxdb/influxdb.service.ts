@@ -3,7 +3,7 @@ import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AggregationFunction, Order } from "../constants";
 
-export type ListingsQueryOptions = {
+export type BaseQueryOptions = {
   range?: {
     start: string;
     stop: string;
@@ -13,7 +13,10 @@ export type ListingsQueryOptions = {
     offset: number;
   };
 };
-export type ReadingsQueryOptions = ListingsQueryOptions & {
+export type ListingsQueryOptions = BaseQueryOptions & {
+  assetDID?: string | string[];
+};
+export type ReadingsQueryOptions = BaseQueryOptions & {
   aggregateWindow?: {
     every: string;
     fn: AggregationFunction;
@@ -92,11 +95,12 @@ export class InfluxdbService implements OnModuleInit {
 
   public listingQuery(
     identifier: "assetDID" | "rootHash",
-    { range, limit }: ListingsQueryOptions,
+    { assetDID, range, limit }: ListingsQueryOptions,
   ) {
     return `
     ${this.fromClause}
     ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
+    ${assetDID ? this.buildFilterFn("assetDID", assetDID) : ""}
     |> sort(columns: ["_time"])
     |> group()
     |> keep(columns: ["${identifier}"])

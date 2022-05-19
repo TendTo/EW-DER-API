@@ -2,8 +2,9 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsDate, IsNumber, IsString } from "class-validator";
 import { IsDID } from "src/utility";
+import { InfluxDbRowDTO } from "./influxDbRow.dto";
 
-export class InfluxDbReadingDTO {
+export class InfluxDbReadingDTO extends InfluxDbRowDTO {
   @IsString()
   @ApiProperty({
     type: String,
@@ -38,22 +39,6 @@ export class InfluxDbReadingDTO {
     description: "Measurement value in Wh",
   })
   _value: number;
-
-  @IsString()
-  @ApiProperty({
-    type: String,
-    example: "_result",
-    description: "Sucessful query",
-  })
-  result: "_result";
-
-  @IsNumber()
-  @ApiProperty({
-    type: "integer",
-    example: 0,
-    description: "Table query index",
-  })
-  table: number;
 
   @IsDate()
   @Type(() => Date)
