@@ -1,11 +1,36 @@
 import { Provider } from "@ethersproject/providers";
+import { CacheClient } from "iam-client-lib";
 import Addresses from "../config/contracts.config.json";
 import { IdentityManager__factory } from "../typechain";
+import { BaseRepository } from "./repository";
+
+type AssetDTO = string;
+type AssetQueryOptions = {
+  assetDIDs?: string[];
+  limit?: number;
+  offset?: number;
+  start: string;
+  stop?: string;
+};
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
 export class Asset {
-  constructor(private _asset: string, private _owner: string = zeroAddress) {}
+  static readonly repository = new BaseRepository();
+
+  constructor(public readonly assetDID: string, private _owner: string = zeroAddress) {}
+
+  public static async get(options: AssetQueryOptions) {
+    const json = await this.repository.fetchJson<AssetDTO[]>(`readings/assetDIDs`, {
+      body: { ...options },
+    });
+    return json.map((asset) => new this(asset));
+  }
+
+  public static async getByIAM(cache: CacheClient, owner: string) {
+    const json = await cache.getOwnedAssets(owner);
+    return json.map((asset) => new this(asset.id.replace("volta:", ""), owner));
+  }
 
   public static async getByOwner(owners: string[], provider: Provider) {
     const identityManager = IdentityManager__factory.connect(
@@ -47,19 +72,15 @@ export class Asset {
       Addresses.identityManagerAddress,
       provider,
     );
-    this._owner = await identityManager.identityOwner(this.asset);
+    this._owner = await identityManager.identityOwner(this.assetDID);
     return this._owner;
   }
 
   public clone() {
-    return new Asset(this._asset, this._owner);
+    return new Asset(this.assetDID, this._owner);
   }
 
-  get asset(): string {
-    return this._asset;
-  }
-
-  get owner(): string {
+  get ownerDID(): string {
     return this._owner;
   }
 }

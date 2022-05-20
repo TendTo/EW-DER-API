@@ -23,12 +23,12 @@ export class Reading {
   static readonly repository = new BaseRepository();
 
   constructor(
-    private _assetDID: DID,
-    private _assetOwner: Address,
-    private _rootHash: Address,
-    private _volume: number,
-    private _timestamp: Date,
-    private _verified: boolean = false,
+    public readonly assetDID: DID,
+    public readonly assetOwner: Address,
+    public readonly rootHash: Address,
+    public readonly volume: number,
+    public readonly timestamp: Date,
+    public readonly verified: boolean = false, // TODO: verified shall check logs
   ) {}
 
   private static dtoMapper(dto: ReadingsDTO) {
@@ -96,40 +96,15 @@ export class Reading {
 
   public clone(): Reading {
     return new Reading(
-      this._assetDID,
-      this._assetOwner,
-      this._rootHash,
-      this._volume,
-      this._timestamp,
+      this.assetDID,
+      this.assetOwner,
+      this.rootHash,
+      this.volume,
+      this.timestamp,
     );
   }
 
-  get verified(): boolean {
-    //TODO: verify reading by calling contract
-    return this._verified;
-  }
-
-  get assetDID(): DID {
-    return this._assetDID;
-  }
-
-  get rootHash(): Address {
-    return this._rootHash;
-  }
-
-  get assetOwner(): Address {
-    return this._assetOwner;
-  }
-
-  get volume(): number {
-    return this._volume;
-  }
-
-  get timestamp(): Date {
-    return this._timestamp;
-  }
-
   get unixTimestamp(): number {
-    return this._timestamp.getTime();
+    return this.timestamp.getTime();
   }
 }

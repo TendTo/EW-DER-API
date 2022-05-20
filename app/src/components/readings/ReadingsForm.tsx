@@ -1,7 +1,6 @@
 import { Send } from "@mui/icons-material";
 import { Button, Card, CardContent, CardHeader, Grid } from "@mui/material";
-import { useEthers } from "@usedapp/core";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import {
   CheckboxButtonGroup,
   FormContainer,
@@ -29,9 +28,8 @@ export const defaultValues: ReadingsFormValuesType = {
 
 export function ReadingsForm({ onSuccess }: ReadingsFormProps) {
   const { t } = useTranslation();
-  const { account } = useEthers();
-  const { value, execute } = useGetAssets();
-
+  const { value: assets } = useGetAssets();
+  console.log(assets);
   const DIDValidation = {
     value: /^did:ethr:0x[0-9a-fA-F]{40}$/,
     message: t("ASSET.FORM.VALIDATION.DID"),
@@ -55,12 +53,6 @@ export function ReadingsForm({ onSuccess }: ReadingsFormProps) {
     [onSuccess],
   );
 
-  useEffect(() => {
-    if (account) {
-      execute([account]);
-    }
-  }, [account, execute]);
-
   return (
     <Card variant="outlined">
       <CardHeader title={t("ASSET.FORM.FORM_TITLE")} />
@@ -68,22 +60,14 @@ export function ReadingsForm({ onSuccess }: ReadingsFormProps) {
         <FormContainer defaultValues={defaultValues} onSuccess={onSuccessHandler}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              {value && value.length > 0 ? (
+              {assets && assets.length > 0 && (
                 <CheckboxButtonGroup
                   label={t("ASSET.FORM.ASSET_OWNED")}
                   name="assetDID"
-                  options={value.map(({ asset }) => ({
-                    id: `did:ethr:${asset}`,
-                    label: `did:ethr:${asset}`,
+                  options={assets.map((asset) => ({
+                    id: asset.assetDID,
+                    label: asset.assetDID,
                   }))}
-                />
-              ) : (
-                <TextFieldElement
-                  fullWidth
-                  name="assetDID"
-                  label={t("ASSET.FORM.ASSET_DID")}
-                  required
-                  validation={{ pattern: DIDValidation }}
                 />
               )}
             </Grid>

@@ -39,7 +39,7 @@ export function AppFooter() {
           </a>
           <img
             onClick={onChangeLanguage}
-            className="language-icon"
+            className="language-icon clickable"
             src={i18n.language?.startsWith("it") ? gb : it}
             alt={i18n.language?.startsWith("it") ? gb : it + "flag"}
           />

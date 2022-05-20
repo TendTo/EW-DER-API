@@ -10,7 +10,7 @@ export function Aggregator() {
   const { state: route } = useRouterContext();
 
   return (
-    <Container maxWidth="md">
+    <Container sx={{ maxWidth: { xs: "100vw", md: "md" } }}>
       {route === "home" || route === "readings" ? (
         <Box mt={2} mb={2}>
           <ReadingsForm onSuccess={execute} />

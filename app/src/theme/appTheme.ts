@@ -1,5 +1,5 @@
 import { createTheme, PaletteMode, Theme, ThemeOptions } from "@mui/material";
-import { cyan, deepOrange } from "@mui/material/colors";
+import { deepPurple, purple } from "@mui/material/colors";
 
 export function getTheme(mode: PaletteMode): Theme {
   const theme: ThemeOptions = {
@@ -8,7 +8,7 @@ export function getTheme(mode: PaletteMode): Theme {
       ...(mode === "light"
         ? {
             // palette values for light mode
-            primary: cyan,
+            primary: purple,
             divider: "rgba(0, 0, 0, 0.12)",
             background: {
               default: "#fff",
@@ -29,7 +29,7 @@ export function getTheme(mode: PaletteMode): Theme {
           }
         : {
             // palette values for dark mode
-            primary: deepOrange,
+            primary: deepPurple,
             divider: "rgba(255, 255, 255, 0.12)",
             background: {
               default: "#121212",

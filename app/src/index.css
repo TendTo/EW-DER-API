@@ -35,6 +35,10 @@ body::-webkit-scrollbar-corner {
   background-color: #181a1b;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .text-center {
   text-align: center;
 }

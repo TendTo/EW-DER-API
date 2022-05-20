@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useEtherBalance, useLookupAddress } from "@usedapp/core";
 import { formatEther } from "ethers/lib/utils";
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   colorModeContext,
@@ -51,12 +51,12 @@ export function AppHeader() {
 
   const loggedIn = iam && iam.connected && account;
 
-  const getBalance = () => {
+  const ethBalance = useMemo(() => {
     if (!balance) return "0 VT";
     const vt = formatEther(balance);
     const decimals = vt.indexOf(".");
     return `${vt.slice(0, decimals + 3)} VT`;
-  };
+  }, [balance]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -91,9 +91,14 @@ export function AppHeader() {
   };
 
   const pages = isLogged ? (isAggregator ? aggregatorPages : prosumerPages) : [];
+  const title = isLogged
+    ? isAggregator
+      ? "EW-DER manager - Aggregator"
+      : "EW-DER manager - Prosumer"
+    : "EW-DER manager";
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" enableColorOnDark>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -102,51 +107,53 @@ export function AppHeader() {
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
           >
-            EW-DER manager
+            {title}
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem
-                  key={page.label}
-                  onClick={() => {
-                    handleCloseNavMenu();
-                    setRouter(page.route);
-                  }}
-                >
-                  <Typography textAlign="center">{page.label}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {pages.length > 0 && (
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                {pages.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    onClick={() => {
+                      handleCloseNavMenu();
+                      setRouter(page.route);
+                    }}
+                  >
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
           <Typography
             variant="h6"
             noWrap
@@ -198,7 +205,7 @@ export function AppHeader() {
                     <Typography textAlign="center">{name ?? account}</Typography>
                   </MenuItem>,
                   <MenuItem key="bar-balance" onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{getBalance()}</Typography>
+                    <Typography textAlign="center">{ethBalance}</Typography>
                   </MenuItem>,
                   <MenuItem key="bar-logout" onClick={handleLogout}>
                     <Typography textAlign="center">{t("GENERAL.LOGOUT")}</Typography>

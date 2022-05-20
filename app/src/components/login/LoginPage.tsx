@@ -1,4 +1,4 @@
-import { Stack, Container, Typography, Box } from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import metamaskLogo from "../../asset/icon/metamask.svg";
@@ -10,21 +10,11 @@ export function LoginPage() {
     <Container maxWidth="sm">
       <Stack justifyContent="center" marginTop={4}>
         <Box textAlign="center">
-          <Typography
-            variant="h4"
-            gutterBottom
-            component="div"
-            textAlign="center"
-          >
+          <Typography variant="h4" gutterBottom component="div" textAlign="center">
             {t("LOGIN.TITLE")}
           </Typography>
         </Box>
-        <Stack
-          justifyContent="center"
-          alignItems="center"
-          direction="row"
-          spacing={2}
-        >
+        <Stack justifyContent="center" alignItems="center" direction="row" spacing={2}>
           <Box width="36px" height="36px">
             <img alt="metamask logo" src={metamaskLogo} />
           </Box>
@@ -38,26 +28,27 @@ export function LoginPage() {
           flexWrap="wrap"
           spacing={1}
         >
-          <Stack alignItems="center">
+          <Stack alignItems="center" gap={1.5}>
             {t("LOGIN.NO_METAMASK")}
-            <a href="https://metamask.io/download.html" className="ml-2">
+            <Button variant="contained" href="https://metamask.io/download.html" target="_blank">
               Download
-            </a>
+            </Button>
           </Stack>
-          <Stack alignItems="center">
+          <Stack alignItems="center" gap={1.5}>
             {t("LOGIN.CONNECT_TO_VOLTA")}
-            <a
+            <Button
+              variant="contained"
               href="https://energyweb.atlassian.net/wiki/spaces/EWF/pages/703201459/Volta+Connecting+to+Remote+RPC+and+Metamask"
-              className="ml-2"
+              target="_blank"
             >
               {t("LOGIN.CONNECT")}
-            </a>
+            </Button>
           </Stack>
-          <Stack alignItems="center">
+          <Stack alignItems="center" gap={1.5}>
             {t("LOGIN.WHAT_IS_EW")}
-            <a href="https://www.energyweb.org/" className="ml-2">
+            <Button variant="contained" href="https://www.energyweb.org" target="_blank">
               Energy Web
-            </a>
+            </Button>
           </Stack>
         </Stack>
       </Stack>
