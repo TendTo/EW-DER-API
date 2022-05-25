@@ -4,6 +4,7 @@ services:
   influxdb:
     image: influxdb:latest
     container_name: influxdb
+    restart: on-failure
     volumes:
       - influxdbVolume:/var/lib/influxdb2
     environment:
@@ -21,6 +22,7 @@ services:
   aggregator:
     image: tendto/ew-der-api:aggregator
     container_name: aggregator
+    restart: on-failure
     environment:
       INFLUXDB_HOST: http://influxdb:8086
       INFLUXDB_TOKEN: universal_api_token
@@ -44,6 +46,7 @@ services:
   prosumer:
     image: tendto/ew-der-api:prosumer
     container_name: prosumer
+    restart: on-failure
     environment:
       AGGREGATION_THRESHOLD: "30"
       AGGREGATOR_URL: http://aggregator:3000
