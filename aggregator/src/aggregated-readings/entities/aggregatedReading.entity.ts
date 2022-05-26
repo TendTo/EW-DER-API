@@ -31,6 +31,7 @@ export class AggregatedReading {
       this.stop = _stop;
       this.timestamp = _time;
       this.value = _value;
+      console.log(this.timestamp);
     }
     if (!AggregatedReading.influxDBRepository)
       throw new Error("InfluxDBRepository not set");
@@ -38,9 +39,8 @@ export class AggregatedReading {
 
   static async find(assetDID: string[], options: AggregationQueryOptions) {
     const db = this.influxDBRepository.dbReader;
-    const query = this.influxDBRepository.readingsQuery({
+    const query = this.influxDBRepository.aggregationQuery({
       ...options,
-      group: ["assetDID"],
       assetDID,
     });
     const rows = await db.collectRows<InfluxDbAggregatedReadingDTO>(query);
