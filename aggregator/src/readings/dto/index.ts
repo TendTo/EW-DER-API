@@ -1,3 +1,4 @@
+export * from "./baseReadingFilter.dto";
 export * from "./did.dto";
 export * from "./influxDbReading.dto";
 export * from "./influxDbRow.dto";

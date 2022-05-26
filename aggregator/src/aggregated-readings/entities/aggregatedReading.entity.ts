@@ -31,7 +31,6 @@ export class AggregatedReading {
       this.stop = _stop;
       this.timestamp = _time;
       this.value = _value;
-      console.log(this.timestamp);
     }
     if (!AggregatedReading.influxDBRepository)
       throw new Error("InfluxDBRepository not set");
