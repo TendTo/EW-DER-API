@@ -8,20 +8,19 @@ export class AssetDID {
     if (!AssetDID.influxDBRepository) throw new Error("InfluxDBRepository not set");
   }
 
+  private static rowToObject = (row: InfluxDbRowDTO) => new AssetDID(row.assetDID);
+  private static rowToString = (row: InfluxDbRowDTO) => row.assetDID;
+
   static async findOne(options: ListingsQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.listingQuery("assetDID", {
       ...options,
       limit: { limit: 1, offset: options.limit.offset },
     });
-    const rows = await db.collectRows<InfluxDbRowDTO>(query);
-    return rows.map((row) => row.assetDID).shift();
+    return (await this.influxDBRepository.getRows(query, this.rowToString)).shift();
   }
 
   static async find(options: ListingsQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.listingQuery("assetDID", options);
-    const rows = await db.collectRows<InfluxDbRowDTO>(query);
-    return rows.map((row) => row.assetDID);
+    return this.influxDBRepository.getRows(query, this.rowToString);
   }
 }

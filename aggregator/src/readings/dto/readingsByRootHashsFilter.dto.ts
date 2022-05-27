@@ -1,9 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { ArrayNotEmpty, ArrayUnique, IsArray, IsBoolean, IsOptional } from "class-validator";
-import { ReadingsFilterDTO } from "./readingsFilter.dto";
+import {
+  ArrayNotEmpty,
+  ArrayUnique,
+  IsArray,
+  IsBoolean,
+  IsOptional,
+} from "class-validator";
+import { BaseReadingFilter } from "./baseReadingFilter.dto";
 
-export class ReadingsByRootHashesFilterDTO extends ReadingsFilterDTO {
+export class ReadingsByRootHashesFilterDTO extends BaseReadingFilter {
   @IsArray()
   @ArrayNotEmpty()
   @ArrayUnique()

@@ -36,14 +36,15 @@ export class AggregatedReading {
       throw new Error("InfluxDBRepository not set");
   }
 
+  private static rowToObject = (row: InfluxDbAggregatedReadingDTO) =>
+    new AggregatedReading(row);
+
   static async find(assetDID: string[], options: AggregationQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.aggregationQuery({
       ...options,
       assetDID,
     });
-    const rows = await db.collectRows<InfluxDbAggregatedReadingDTO>(query);
-    return rows.map((row) => new this(row));
+    return this.influxDBRepository.getRows(query, this.rowToObject);
   }
 
   static async findByRootHash(rootHash: string[], options: AggregationQueryOptions) {
@@ -51,8 +52,6 @@ export class AggregatedReading {
       ...options,
       rootHash,
     });
-    const db = this.influxDBRepository.dbReader;
-    const rows = await db.collectRows<InfluxDbAggregatedReadingDTO>(query);
-    return rows.map((row) => new this(row));
+    return this.influxDBRepository.getRows(query, this.rowToObject);
   }
 }

@@ -8,20 +8,19 @@ export class RootHash {
     if (!RootHash.influxDBRepository) throw new Error("InfluxDBRepository not set");
   }
 
+  private static rowToObject = (row: InfluxDbRowDTO) => new RootHash(row.rootHash);
+  private static rowToString = (row: InfluxDbRowDTO) => row.rootHash;
+
   static async findOne(options: ListingsQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.listingQuery("rootHash", {
       ...options,
       limit: { limit: 1, offset: options?.limit?.offset },
     });
-    const rows = await db.collectRows<InfluxDbRowDTO>(query);
-    return rows.map((row) => row.rootHash).shift();
+    return (await this.influxDBRepository.getRows(query, this.rowToString)).shift();
   }
 
   static async find(options: ListingsQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.listingQuery("rootHash", options);
-    const rows = await db.collectRows<InfluxDbRowDTO>(query);
-    return rows.map((row) => row.rootHash);
+    return this.influxDBRepository.getRows(query, this.rowToString);
   }
 }

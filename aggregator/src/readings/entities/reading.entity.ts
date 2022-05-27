@@ -26,6 +26,14 @@ export class Reading {
     if (!Reading.influxDBRepository) throw new Error("InfluxDBRepository not set");
   }
 
+  private static rowToObject = ({
+    assetDID,
+    rootHash,
+    _value,
+    _time,
+  }: InfluxDbReadingDTO) =>
+    new Reading({ assetDID, rootHash, value: _value, timestamp: _time });
+
   static async saveMany(readings: Reading[]) {
     const points = readings.map((r) => this.buildPoint(r));
     const db = this.influxDBRepository.dbWriter;
@@ -41,37 +49,31 @@ export class Reading {
   }
 
   static async findOne(assetDID: string, options: ReadingsQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.readingsQuery({
       ...options,
       assetDID,
       limit: { limit: 1, offset: 0 },
       group: ["assetDID"],
     });
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowMapper).find((r) => r.assetDID === assetDID);
+    return (await this.influxDBRepository.getRows(query, this.rowToObject)).shift();
   }
 
   static async find(assetDID: string, options: ReadingsQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.readingsQuery({
       ...options,
       group: ["assetDID"],
       assetDID,
     });
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowMapper);
+    return this.influxDBRepository.getRows(query, this.rowToObject);
   }
 
   static async findMany(assetDID: string[], options: ReadingsQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.readingsQuery({
       ...options,
       group: ["assetDID"],
       assetDID,
     });
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return this.tablesToReadings(rows);
+    return this.influxDBRepository.getTables(query, this.rowToObject);
   }
 
   static async findLast(assetDID: string, start = "-1d") {
@@ -81,10 +83,7 @@ export class Reading {
       range: { start, stop: "now()" },
       getLast: true,
     });
-    const db = this.influxDBRepository.dbReader;
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    const rest = rows.find((r) => r.assetDID === assetDID);
-    return this.rowMapper(rest);
+    return (await this.influxDBRepository.getRows(query, this.rowToObject)).shift();
   }
 
   static async findByRootHash(rootHash: string, options: ReadingsQueryOptions) {
@@ -93,9 +92,7 @@ export class Reading {
       group: ["rootHash"],
       rootHash,
     });
-    const db = this.influxDBRepository.dbReader;
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowMapper);
+    return this.influxDBRepository.getRows(query, this.rowToObject);
   }
 
   static async findManyByRootHash(rootHash: string[], options: ReadingsQueryOptions) {
@@ -104,53 +101,26 @@ export class Reading {
       group: ["rootHash"],
       rootHash,
     });
-    const db = this.influxDBRepository.dbReader;
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return this.tablesToReadings(rows);
+    return this.influxDBRepository.getTables(query, this.rowToObject);
   }
 
   static async aggregate(assetDIDs: string[], options: AggregationQueryOptions) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.aggregationQuery({
       ...options,
       assetDID: assetDIDs,
     });
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowMapper);
+    return this.influxDBRepository.getRows(query, this.rowToObject);
   }
 
   static async aggregateByRootHash(
     assetDIDs: string[],
     options: AggregationQueryOptions,
   ) {
-    const db = this.influxDBRepository.dbReader;
     const query = this.influxDBRepository.aggregationQuery({
       ...options,
       assetDID: assetDIDs,
     });
-    const rows = await db.collectRows<InfluxDbReadingDTO>(query);
-    return rows.map(this.rowMapper);
-  }
-
-  private static tablesToReadings(rows: InfluxDbReadingDTO[]): Reading[][] {
-    const tables: Record<number, Reading[]> = rows.reduce((acc, row) => {
-      const { table } = row;
-      if (!acc[table]) {
-        acc[table] = [];
-      }
-      acc[table].push(this.rowMapper(row));
-      return acc;
-    }, {});
-    return Object.values(tables).map((readings) => readings);
-  }
-
-  private static rowMapper({
-    assetDID,
-    rootHash,
-    _value,
-    _time,
-  }: InfluxDbReadingDTO): Reading {
-    return new Reading({ assetDID, rootHash, value: _value, timestamp: _time });
+    return this.influxDBRepository.getRows(query, this.rowToObject);
   }
 
   private static buildPoint(reading: Reading) {
