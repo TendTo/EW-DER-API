@@ -1,6 +1,12 @@
 import createCtx from "./createCtx";
 
-export type RouterContextType = "home" | "readings" | "aggregated" | "about";
+export type RouterContextType =
+  | "home"
+  | "readings"
+  | "rootHashes"
+  | "aggregatedRedings"
+  | "match"
+  | "about";
 
 const [ctx, provider, useContext] = createCtx<RouterContextType>("home");
 

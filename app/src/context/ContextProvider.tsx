@@ -14,12 +14,18 @@ type ContextProviderProps = {
 };
 
 export default function ContextProvider({ children }: ContextProviderProps) {
-  const [mode, setMode] = useState<"light" | "dark">("light");
+  const [mode, setMode] = useState<"light" | "dark">(
+    localStorage.getItem("theme") === "light" ? "light" : "dark",
+  );
   const theme = useMemo(() => getTheme(mode), [mode]);
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+        setMode((prevMode) => {
+          const newMode = prevMode === "light" ? "dark" : "light";
+          localStorage.setItem("theme", newMode);
+          return newMode;
+        });
       },
     }),
     [],

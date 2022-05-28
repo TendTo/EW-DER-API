@@ -45,7 +45,8 @@
     "MAX_LENGTH": "Il campo non può essere più lungo di {{max}} caratteri",
     "NOT_POSITIVE": "Il valore deve essere un numero positivo",
     "ONLY_INT": "Sono consentiti solo numeri interi",
-    "IAM_CONNECTION": "Si è verificato un errore nella connessione con il server IAM"
+    "IAM_CONNECTION": "Si è verificato un errore nella connessione con il server IAM",
+    "AGGREGATOR_CONNECTION": "Errore durante la connessione al server dell'aggregatore"
   },
   "ENS": {
     "TITLE": "Energy Web Name Service (EWNS)",
@@ -147,7 +148,10 @@
     "NO_UNDO_ACTION": "Questa azione non può essere annullata",
     "CONTRACTS_USED": "Contratti utilizzati:",
     "LOGIN": "Login",
-    "LOGOUT": "Logout"
+    "LOGOUT": "Logout",
+    "AGGREGATED_READINGS": "Letture aggregate",
+    "PRECISE_PROOFS": "Precise proof",
+    "READINGS": "Letture"
   },
   "REFERENCES": {
     "TITLE": "Bibliografia",
@@ -218,8 +222,25 @@
       "VALIDATION": {
         "DID": "DID non valido. \nDeve essere nel formato did:ethr:<indirizzo-eth>",
         "TIME": "Valore temporale non valido. \nDeve essere una finestra temporale o una data",
-        "REQUIRED": "Campo richiesto"
-      }
+        "REQUIRED": "Campo richiesto",
+        "INTERVAL": "Intervallo non valido. Deve essere una finestra temporale"
+      },
+      "ROOT_HASH_PRODUCED": "Precise proof sulla blockchain",
+      "AGGRETATION_FUNCTION": {
+        "COUNT": "Contare",
+        "MAX": "Massimo",
+        "MEAN": "Media",
+        "MIN": "Minimo",
+        "SUM": "Somma",
+        "LAST": "Ultima"
+      },
+      "AGGREGATIO_WINDOW": "Finestra temporale di aggregazione",
+      "DIFFERENCE": "Differenza",
+      "AGGREGATION_FUNCTION": "Funzione di aggregazione"
     }
+  },
+  "AGGREGATOR": {
+    "CONNECTION_PROGRESS": "Connessione al server dell'aggregatore...",
+    "CONNECTION_SUCCESS": "Connesso al server dell'aggregatore!"
   }
 }

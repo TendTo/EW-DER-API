@@ -27,14 +27,15 @@ import { useLogin } from "../../hooks";
 
 type PagesType = { label: string; route: RouterContextType }[];
 const aggregatorPages: PagesType = [
-  { label: "Aggregator", route: "home" },
-  { label: "Readings", route: "readings" },
-  { label: "Aggregated", route: "aggregated" },
+  { label: "GENERAL.READINGS", route: "readings" },
+  { label: "GENERAL.PRECISE_PROOFS", route: "rootHashes" },
+  { label: "GENERAL.AGGREGATED_READINGS", route: "aggregatedRedings" },
+  { label: "GENERAL.MATCH", route: "match" },
 ];
 const prosumerPages: PagesType = [
-  { label: "Prosumer", route: "home" },
-  { label: "Readings", route: "readings" },
-  { label: "Aggregated", route: "aggregated" },
+  { label: "GENERAL.READINGS", route: "readings" },
+  { label: "GENERAL.PRECISE_PROOFS", route: "rootHashes" },
+  { label: "GENERAL.AGGREGATED_READINGS", route: "aggregatedRedings" },
 ];
 
 export function AppHeader() {
@@ -148,7 +149,7 @@ export function AppHeader() {
                       setRouter(page.route);
                     }}
                   >
-                    <Typography textAlign="center">{page.label}</Typography>
+                    <Typography textAlign="center">{t(page.label)}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -172,7 +173,7 @@ export function AppHeader() {
                 }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page.label}
+                {t(page.label)}
               </Button>
             ))}
           </Box>

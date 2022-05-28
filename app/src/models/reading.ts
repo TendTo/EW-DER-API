@@ -1,8 +1,18 @@
 import { BaseRepository } from "./repository";
 
+export const aggregationFunctions = [
+  "mean",
+  "sum",
+  "last",
+  "max",
+  "min",
+  "count",
+] as const;
+
 type DID = `did:ethr:0x${string}`;
 type Address = `0x${string}`;
 type Order = "ASC" | "DESC";
+export type AggregationFunction = typeof aggregationFunctions[number];
 
 type ReadingsDTO = {
   assetDID: DID;
@@ -17,6 +27,22 @@ export type ReadingsDTOOptions = {
   limit?: number;
   offset?: number;
   order?: Order;
+};
+
+type AggregatedReadingsDTO = ReadingsDTO & {
+  start: string;
+  stop: string;
+};
+
+export type AggregatedReadingsDTOOptions = {
+  start: string;
+  stop?: string;
+  limit?: number;
+  offset?: number;
+  order?: Order;
+  difference: boolean;
+  aggregationWindow?: string;
+  aggregationFunction?: AggregationFunction;
 };
 
 export class Reading {
@@ -64,7 +90,7 @@ export class Reading {
 
   public static async getByRootHash(rootHash: string, options: ReadingsDTOOptions) {
     const json = await this.repository.fetchJson<ReadingsDTO[]>(
-      `/readings/roothash/${encodeURIComponent(rootHash)}`,
+      `readings/roothash/${encodeURIComponent(rootHash)}`,
       { queryParams: options },
     );
     return json.map(this.dtoMapper);
@@ -92,6 +118,60 @@ export class Reading {
       },
     );
     return this.dtoMapper(json);
+  }
+
+  public static async getAggregatedReadingsByAssetDID(
+    assetDID: string,
+    options: AggregatedReadingsDTOOptions,
+  ) {
+    const json = await this.repository.fetchJson<AggregatedReadingsDTO[]>(
+      `aggregated-readings/assetDID/${encodeURIComponent(assetDID)}`,
+      {
+        queryParams: options,
+      },
+    );
+    return json.map(this.dtoMapper);
+  }
+
+  public static async getManyAggregatedReadingsByAssetDID(
+    assetDIDs: string[],
+    options: AggregatedReadingsDTOOptions,
+  ) {
+    const json = await this.repository.fetchJson<AggregatedReadingsDTO[]>(
+      `aggregated-readings/assetDID`,
+      {
+        method: "POST",
+        body: { ...options, assetDIDs },
+      },
+    );
+    return json.map(this.dtoMapper);
+  }
+
+  public static async getAggregatedReadingsByRootHash(
+    rootHash: string,
+    options: AggregatedReadingsDTOOptions,
+  ) {
+    const json = await this.repository.fetchJson<AggregatedReadingsDTO[]>(
+      `aggregated-readings/roothash/${encodeURIComponent(rootHash)}`,
+      {
+        queryParams: options,
+      },
+    );
+    return json.map(this.dtoMapper);
+  }
+
+  public static async getManyAggregatedReadingsByRootHash(
+    rootHashes: string[],
+    options: AggregatedReadingsDTOOptions,
+  ) {
+    const json = await this.repository.fetchJson<AggregatedReadingsDTO[]>(
+      `aggregated-readings/roothash`,
+      {
+        method: "POST",
+        body: { ...options, rootHashes },
+      },
+    );
+    return json.map(this.dtoMapper);
   }
 
   public clone(): Reading {

@@ -1,82 +1,33 @@
-import { Container } from "@mui/material";
-import {
-  CategoryScale,
-  Chart as ChartJS,
-  ChartData,
-  ChartTypeRegistry,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  TooltipItem,
-} from "chart.js";
-import React, { useMemo } from "react";
-import { Line } from "react-chartjs-2";
-import { Reading } from "../../models";
-import { getRandomColor } from "../../utils";
+import React, { useEffect } from "react";
+import { useRouterContext } from "../../context";
+import { useGetAssets, useGetReadings, useGetRootHashes } from "../../hooks";
+import { AggregatedReadingsForm } from "./AggregatedReadingsForm";
+import { ReadingsChart } from "./ReadingsChart";
+import { ReadingsForm } from "./ReadingsForm";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+export function ReadingsList() {
+  const { value: assets } = useGetAssets();
+  const { value: rootHashes, execute: getRootHashes } = useGetRootHashes();
+  const { value: readings, execute: getReadings } = useGetReadings();
+  const { state: route } = useRouterContext();
 
-type ChartDataType = { x: number; y: number; xLabel: string };
-type ChartTooltipItem<T extends keyof ChartTypeRegistry, R = unknown> = TooltipItem<T> & {
-  raw: R;
-};
-type ReadingListProps = {
-  readings: Reading[][];
-};
+  const source = route === "rootHashes" ? "rootHash" : "assetDID";
+  const input = route === "rootHashes" ? rootHashes : assets;
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    tooltip: {
-      callbacks: {
-        title: (inputs: ChartTooltipItem<"line", ChartDataType>[]) =>
-          inputs.map((input) => input.raw.xLabel),
-      },
-    },
-  },
-  scales: {
-    x: {
-      type: "linear",
-      ticks: {
-        callback: (time: number) => new Date(time).toLocaleString(navigator.language),
-      },
-    },
-  },
-};
+  useEffect(() => {
+    if (assets) {
+      getRootHashes(assets.map(({ singleValue: value }) => value));
+    }
+  }, [getRootHashes, assets]);
 
-export function ReadingList({ readings }: ReadingListProps) {
-  const data = useMemo<ChartData<"line", ChartDataType[]>>(
-    () => ({
-      datasets: readings.map((reading, idx) => ({
-        label: reading.find(() => true)?.assetDID ?? "AssetDID",
-        data: reading.map((reading) => ({
-          y: reading.volume,
-          x: reading.unixTimestamp,
-          xLabel: reading.timestamp.toLocaleString(navigator.language),
-        })),
-        borderColor: getRandomColor(idx),
-        backgroundColor: getRandomColor(idx, 0.5),
-      })),
-    }),
-    [readings],
-  );
   return (
-    <Container>
-      <Line options={options as any} data={data} />
-    </Container>
+    <>
+      {route === "aggregatedRedings" ? (
+        <AggregatedReadingsForm source={source} onSuccess={getReadings} assets={input} />
+      ) : (
+        <ReadingsForm source={source} onSuccess={getReadings} assets={input} />
+      )}
+      <ReadingsChart source={source} readings={readings ?? [[]]} />
+    </>
   );
 }

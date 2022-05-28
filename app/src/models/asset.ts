@@ -2,6 +2,8 @@ import { Provider } from "@ethersproject/providers";
 import { CacheClient } from "iam-client-lib";
 import Addresses from "../config/contracts.config.json";
 import { IdentityManager__factory } from "../typechain";
+import { ISingleValueModel } from "./ISingleValueModel";
+import { AggregationFunction } from "./reading";
 import { BaseRepository } from "./repository";
 
 type AssetDTO = string;
@@ -12,19 +14,56 @@ type AssetQueryOptions = {
   start: string;
   stop?: string;
 };
+type AssetMatchDTO = {
+  assetDID: string;
+  value: number;
+};
+export type AssetMatchQueryOptions = {
+  compatibleValue?: number;
+  aggregationWindow: string;
+  aggregationFunction: AggregationFunction;
+};
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
-export class Asset {
+export class Asset implements ISingleValueModel<string> {
   static readonly repository = new BaseRepository();
+  readonly value: number;
+  _owner: string;
 
-  constructor(public readonly assetDID: string, private _owner: string = zeroAddress) {}
+  constructor(assetDID: string);
+  constructor(assetDID: string, _owner: string);
+  constructor(assetDID: string, value: number);
+  constructor(assetDID: string, _owner: string, value: number);
+  constructor(
+    public readonly assetDID: string,
+    _ownerOrValue?: string | number,
+    value: number = 0,
+  ) {
+    this._owner = typeof _ownerOrValue === "string" ? _ownerOrValue : zeroAddress;
+    this.value = typeof _ownerOrValue === "number" ? _ownerOrValue : value;
+  }
+
+  get singleValue(): string {
+    return this.assetDID;
+  }
 
   public static async get(options: AssetQueryOptions) {
     const json = await this.repository.fetchJson<AssetDTO[]>(`readings/assetDIDs`, {
-      body: { ...options },
+      body: options,
     });
     return json.map((asset) => new this(asset));
+  }
+
+  public static async getMatches(options: AssetMatchQueryOptions) {
+    const json = await this.repository.fetchJson<[AssetMatchDTO[], AssetMatchDTO[]]>(
+      `assets`,
+      { queryParams: options },
+    );
+    return [
+      json[0].map(({ assetDID, value }) => new this(assetDID, value)),
+      json[1].map(({ assetDID, value }) => new this(assetDID, value)),
+    ] as const;
   }
 
   public static async getByIAM(cache: CacheClient, owner: string) {
@@ -78,6 +117,18 @@ export class Asset {
 
   public clone() {
     return new Asset(this.assetDID, this._owner);
+  }
+
+  get isConsumer() {
+    return this.value <= 0;
+  }
+
+  get hasOwner() {
+    return this._owner !== zeroAddress;
+  }
+
+  get hasValue() {
+    return this.value !== 0;
   }
 
   get ownerDID(): string {

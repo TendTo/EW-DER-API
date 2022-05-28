@@ -7,13 +7,16 @@ type FetchOptions = {
 };
 
 export class BaseRepository {
+  readonly baseUrl: string;
   constructor(
-    readonly baseUrl: string = process.env.REACT_API_URL ?? "http://localhost:3000",
+    baseUrl: string = process.env.REACT_APP_API_URL ?? "http://localhost:3000",
+    // baseUrl: string = "http://localhost:3000",
     readonly apiVersion = "v1",
   ) {
     if (baseUrl === "") {
       throw new Error("baseUrl is required");
     }
+    this.baseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
   }
 
   public async fetchText(

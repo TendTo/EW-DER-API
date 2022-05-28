@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { RootHash } from "../models";
+import { formatDate } from "../utils";
 import { useAsync } from "./useAsync";
 
 /**
@@ -8,7 +9,12 @@ import { useAsync } from "./useAsync";
  */
 export function useGetRootHashes(assetDIDs?: string[]) {
   const query = useCallback(async (assetDIDs?: string[]) => {
-    return await RootHash.get({ assetDIDs, start: "-1y" });
+    const res = await RootHash.get({
+      assetDIDs,
+      start: "-1y",
+      stop: formatDate(),
+    });
+    return res;
   }, []);
   return useAsync(query, true, assetDIDs);
 }

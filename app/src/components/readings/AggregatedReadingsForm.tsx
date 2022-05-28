@@ -1,23 +1,34 @@
 import { Send } from "@mui/icons-material";
 import { Button, Card, CardContent, CardHeader, Grid } from "@mui/material";
 import { useCallback } from "react";
-import { FormContainer, MultiSelectElement, TextFieldElement } from "react-hook-form-mui";
+import {
+  FormContainer,
+  MultiSelectElement,
+  RadioButtonGroup,
+  SwitchElement,
+  TextFieldElement,
+} from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
-import { Asset, ReadingsDTOOptions, RootHash } from "../../models";
+import {
+  AggregatedReadingsDTOOptions,
+  aggregationFunctions,
+  Asset,
+  RootHash,
+} from "../../models";
 import { formatDate, getRegexValidation } from "../../utils";
 
-export type ReadingsFormValuesType = ReadingsDTOOptions & {
+export type AggregatedReadingsFormValuesType = AggregatedReadingsDTOOptions & {
   assetDID?: string[];
   rootHash?: string[];
 };
 type Source = "assetDID" | "rootHash";
-type ReadingsFormProps<T extends Source> = {
+type AggregatedReadingsFormProps<T extends Source> = {
   source: T;
   assets: (T extends "assetDID" ? Asset[] : RootHash[]) | null;
-  onSuccess: (values: ReadingsFormValuesType) => void;
+  onSuccess: (values: AggregatedReadingsFormValuesType) => void;
 };
 
-const defaultValues: ReadingsFormValuesType = {
+const defaultValues: AggregatedReadingsFormValuesType = {
   assetDID: [],
   rootHash: [],
   limit: 10,
@@ -25,17 +36,20 @@ const defaultValues: ReadingsFormValuesType = {
   stop: formatDate(),
   offset: 0,
   order: "ASC",
+  difference: false,
+  aggregationFunction: "mean",
+  aggregationWindow: "5m",
 };
 
-export function ReadingsForm<T extends Source>({
+export function AggregatedReadingsForm<T extends Source>({
   onSuccess,
   assets,
   source,
-}: ReadingsFormProps<T>) {
+}: AggregatedReadingsFormProps<T>) {
   const { t } = useTranslation();
 
   const onSuccessHandler = useCallback(
-    (values: ReadingsFormValuesType) => {
+    (values: AggregatedReadingsFormValuesType) => {
       const { limit = "", offset = "", stop = "" } = values;
       onSuccess({
         ...values,
@@ -124,6 +138,28 @@ export function ReadingsForm<T extends Source>({
                 name="offset"
                 label={t("ASSET.FORM.OFFSET")}
                 validation={{ min: 0, max: 200, pattern: /^\d+$/ }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextFieldElement
+                fullWidth
+                name="aggregationWindow"
+                label={t("ASSET.FORM.AGGREGATIO_WINDOW")}
+                validation={{ pattern: getRegexValidation("INTERVAL", t) }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <SwitchElement label={t("ASSET.FORM.DIFFERENCE")} name="difference" />
+            </Grid>
+            <Grid item xs={12}>
+              <RadioButtonGroup
+                label={t("ASSET.FORM.AGGREGATION_FUNCTION")}
+                name="aggregationFunction"
+                options={aggregationFunctions.map((func) => ({
+                  id: func,
+                  label: t(`ASSET.FORM.AGGRETATION_FUNCTION.${func.toUpperCase()}`),
+                }))}
+                row
               />
             </Grid>
             <Grid item xs={8}></Grid>

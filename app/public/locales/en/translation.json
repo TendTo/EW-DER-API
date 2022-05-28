@@ -45,7 +45,8 @@
     "MAX_LENGTH": "The field cannot be more than {{max}} characters long",
     "NOT_POSITIVE": "The value must be a positive number",
     "ONLY_INT": "Only integers are allowed",
-    "IAM_CONNECTION": "Error connecting to IAM server"
+    "IAM_CONNECTION": "Error connecting to IAM server",
+    "AGGREGATOR_CONNECTION": "Error connecting to the Aggregator's server"
   },
   "ENS": {
     "TITLE": "Energy web Name Service (EWNS)",
@@ -147,7 +148,10 @@
     "NO_UNDO_ACTION": "This action cannot be undone",
     "CONTRACTS_USED": "Contracts used:",
     "LOGOUT": "Logout",
-    "LOGIN": "Login"
+    "LOGIN": "Login",
+    "READINGS": "Readings",
+    "PRECISE_PROOFS": "Precise proof",
+    "AGGREGATED_READINGS": "Aggregated readings"
   },
   "REFERENCES": {
     "TITLE": "References",
@@ -218,8 +222,25 @@
       "VALIDATION": {
         "TIME": "Invalid time. Must be a negative time-window or a date",
         "DID": "Invalid DID. Must be like did:ethr:<eth-address>",
-        "REQUIRED": "Required field"
-      }
+        "REQUIRED": "Required field",
+        "INTERVAL": "Invalid interval. Must be a time window"
+      },
+      "ROOT_HASH_PRODUCED": "Precise proofs on Blockchain",
+      "AGGRETATION_FUNCTION": {
+        "MEAN": "Mean",
+        "SUM": "Sum",
+        "MAX": "Max",
+        "MIN": "Min",
+        "COUNT": "Count",
+        "LAST": "Last"
+      },
+      "AGGREGATIO_WINDOW": "Aggregation time window",
+      "DIFFERENCE": "Difference",
+      "AGGREGATION_FUNCTION": "Aggregation function"
     }
+  },
+  "AGGREGATOR": {
+    "CONNECTION_PROGRESS": "Connecting to the Aggregator's server...",
+    "CONNECTION_SUCCESS": "Connetcted to the Aggregator's server!"
   }
 }

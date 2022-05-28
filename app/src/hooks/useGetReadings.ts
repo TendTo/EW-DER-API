@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import { Reading, ReadingsDTOOptions } from "../models";
+import { AggregatedReadingsDTOOptions, Reading, ReadingsDTOOptions } from "../models";
 import { useAsync } from "./useAsync";
 
-type UseGetReadingsArgs = ReadingsDTOOptions & {
+type UseGetReadingsArgs = (ReadingsDTOOptions | AggregatedReadingsDTOOptions) & {
   assetDID?: string[];
   rootHash?: string[];
 };
@@ -14,8 +14,17 @@ type UseGetReadingsArgs = ReadingsDTOOptions & {
 export function useGetReadings() {
   const getReadings = useCallback(
     async ({ assetDID, rootHash, ...options }: UseGetReadingsArgs) => {
-      if (assetDID) return Reading.getManyByAssetDID(assetDID, options);
-      if (rootHash) return Reading.getManyByRootHash(rootHash, options);
+      if ("difference" in options) {
+        if (assetDID && assetDID.length > 0)
+          return [await Reading.getManyAggregatedReadingsByAssetDID(assetDID, options)];
+        if (rootHash && rootHash.length > 0)
+          return [await Reading.getManyAggregatedReadingsByRootHash(rootHash, options)];
+        return [[]];
+      }
+      if (assetDID && assetDID.length > 0)
+        return Reading.getManyByAssetDID(assetDID, options);
+      if (rootHash && rootHash.length > 0)
+        return Reading.getManyByRootHash(rootHash, options);
       return [[]];
     },
     [],

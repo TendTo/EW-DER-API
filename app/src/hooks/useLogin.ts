@@ -17,7 +17,11 @@ export function useLogin() {
 
   const login = useCallback(async () => {
     activateBrowserWallet();
-    await jwtLogin();
+    await toast.promise(jwtLogin, {
+      pending: t("AGGREGATOR.CONNECTION_PROGRESS"),
+      success: t("AGGREGATOR.CONNECTION_SUCCESS"),
+      error: t("ERROR.AGGREGATOR_CONNECTION"),
+    });
     toast.promise(
       async () => {
         const res = await initWithMetamask();
