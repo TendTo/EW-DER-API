@@ -1,4 +1,3 @@
-import { logger } from "ethers";
 import { InfluxdbService, MatchQueryOptions } from "src/influxdb/influxdb.service";
 import { AssetDTO, InfluxDbAssetDTO } from "../dto";
 
@@ -20,8 +19,14 @@ export class Asset {
 
   static async find(options: MatchQueryOptions) {
     const query = this.influxDBRepository.matchingQuery(options);
-    return this.influxDBRepository.getTables(query, this.rowToObject, ({ _value }) =>
-      _value > 0 ? "positive" : "negative",
+    const assets = await this.influxDBRepository.getTables(
+      query,
+      this.rowToObject,
+      ({ _value }) => (_value > 0 ? "positive" : "negative"),
     );
+    if (assets.length === 2) return assets;
+    else if (assets.length === 1)
+      return assets[0][0].value < 0 ? [assets[0], []] : [[], assets[0]];
+    return [[], []];
   }
 }
