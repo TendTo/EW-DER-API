@@ -7,9 +7,10 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
-import { Status } from "../../constants";
-import { ReadingDTO } from "../../readings/dto";
+import { Status } from "src/constants";
+import { ReducedReadingDTO } from "./reducedReading.dto";
 
 export class AggregatedReadingsDTO {
   @IsDate()
@@ -42,6 +43,7 @@ export class AggregatedReadingsDTO {
   rootHash: string;
 
   @IsArray()
+  @IsString({ each: true })
   @Type(() => String)
   @ApiProperty({
     description: "Salts that have been used to generate the Merkle tree",
@@ -51,12 +53,13 @@ export class AggregatedReadingsDTO {
 
   @IsArray()
   @ArrayMinSize(parseInt(process.env.AGGREGATION_THRESHOLD ?? "30"))
-  @Type(() => ReadingDTO)
+  @ValidateNested({ each: true })
+  @Type(() => ReducedReadingDTO)
   @ApiProperty({
     description: "List of readings that have been aggregated",
-    type: [ReadingDTO],
+    type: [ReducedReadingDTO],
   })
-  readings: ReadingDTO[];
+  readings: ReducedReadingDTO[];
 
   @IsOptional()
   @IsEnum(Status)

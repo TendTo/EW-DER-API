@@ -4,8 +4,8 @@ import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { utils, Wallet } from "ethers";
 import { AggregatedReadingsDTO } from "src/aggregated-readings/dto";
+import { ReducedReadingDTO } from "src/aggregated-readings/dto/reducedReading.dto";
 import { Config, DID_REGEX, VOLTA_CHAIN } from "src/constants";
-import { ReadingDTO } from "src/readings/dto";
 import { getAddressFromDID, isTypeArray } from "src/utility";
 import {
   IdentityManager,
@@ -68,17 +68,20 @@ export class BlockchainService {
     return this.notary.queryFilter(filter);
   }
 
-  async isOwner(prosumer: string, readings: ReadingDTO[]): Promise<boolean>;
+  async isOwner(prosumer: string, readings: ReducedReadingDTO[]): Promise<boolean>;
   async isOwner(prosumer: string, readings: string[]): Promise<boolean>;
   async isOwner(prosumer: string, assetDID: string): Promise<boolean>;
-  async isOwner(prosumer: string, DIDorReadings: string | string[] | ReadingDTO[]) {
+  async isOwner(
+    prosumer: string,
+    DIDorReadings: string | string[] | ReducedReadingDTO[],
+  ) {
     this.logger.debug(`Check ownership of ${prosumer}`);
     if (typeof DIDorReadings === "string") {
       return this.isOwnerAssetDID(prosumer, DIDorReadings);
     } else if (isTypeArray(DIDorReadings, "string")) {
       return this.isOwnerAssetDIDs(prosumer, DIDorReadings);
     }
-    return this.isOwnerReadings(prosumer, DIDorReadings as ReadingDTO[]);
+    return this.isOwnerReadings(prosumer, DIDorReadings as ReducedReadingDTO[]);
   }
 
   private async isOwnerAssetDID(prosumer: string, assetDID: string) {
@@ -87,16 +90,16 @@ export class BlockchainService {
   }
 
   private async isOwnerAssetDIDs(prosumer: string, assetDIDs: string[]) {
-    const addressDIDs = assetDIDs
-      .filter((assetDID, i, arr) => arr.indexOf(assetDID) === i)
-      .map((assetDID) => getAddressFromDID(assetDID));
+    const addressDIDs = [...new Set(assetDIDs)].map((assetDID) =>
+      getAddressFromDID(assetDID),
+    );
     return this.checkOwner(prosumer, addressDIDs);
   }
 
-  private async isOwnerReadings(prosumer: string, readings: ReadingDTO[]) {
-    const addressDIDs = readings
-      .filter((assetDID, i, arr) => arr.indexOf(assetDID) === i)
-      .map((reading) => getAddressFromDID(reading.assetDID));
+  private async isOwnerReadings(prosumer: string, readings: ReducedReadingDTO[]) {
+    const addressDIDs = [...new Set(readings.map(({ assetDID }) => assetDID))].map(
+      (assetDID) => getAddressFromDID(assetDID),
+    );
     return this.checkOwner(prosumer, addressDIDs);
   }
 

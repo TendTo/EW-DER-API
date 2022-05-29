@@ -1,4 +1,5 @@
 import { Point } from "@influxdata/influxdb-client";
+import { ReducedReadingDTO } from "src/aggregated-readings/dto/reducedReading.dto";
 import {
   AggregationQueryOptions,
   InfluxdbService,
@@ -14,7 +15,7 @@ export class Reading {
   rootHash: string;
 
   constructor(reading: ReadingDTO);
-  constructor(reading: ReadingDTO, rootHash: string);
+  constructor(reading: ReducedReadingDTO, rootHash: string);
   constructor(
     { assetDID, timestamp, value, rootHash: readingRootHash }: ReadingDTO,
     rootHash: string = "",

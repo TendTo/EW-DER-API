@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { PreciseProofs } from "precise-proofs-js";
 import { AggregatedReadingsDTO } from "src/aggregated-readings/dto";
-import { ReadingDTO } from "src/readings/dto";
+import { ReducedReadingDTO } from "src/aggregated-readings/dto/reducedReading.dto";
 import { PreciseProofDTO } from "./dto";
 
 @Injectable()
 export class PreciseProofsService {
-  generatePreciseProof(readings: ReadingDTO[], salts?: string[]): PreciseProofDTO {
+  generatePreciseProof(readings: ReducedReadingDTO[], salts?: string[]): PreciseProofDTO {
     const sanitizedReading = readings.map(({ assetDID, timestamp, value }) => ({
       assetDID,
       timestamp,
@@ -35,10 +35,5 @@ export class PreciseProofsService {
       aggregatedReadings.salts,
     );
     return preciseProof.rootHash === aggregatedReadings.rootHash;
-  }
-
-  async sendPreciseProof(preciseProof: PreciseProofDTO) {
-    //TODO: send precise proof to the EW-chain
-    return "fest";
   }
 }
