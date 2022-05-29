@@ -1,8 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsDate, IsNumber, IsString } from "class-validator";
-import { IsDID } from "src/utility";
-import { InfluxDbRowDTO } from "./influxDbRow.dto";
+import { InfluxDbRowDTO, IsDID } from "src/utility";
 
 export class InfluxDbReadingDTO extends InfluxDbRowDTO {
   @IsString()

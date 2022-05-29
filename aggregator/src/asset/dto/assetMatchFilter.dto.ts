@@ -1,17 +1,19 @@
-import { ApiPropertyOptional, IntersectionType } from "@nestjs/swagger";
-import { IsEnum, IsOptional } from "class-validator";
-import { IsInfluxDuration, LimitFilterDTO, RangeFilterDTO } from "src/utility";
-import { AggregationFunction, INFLUX_DURATION_REGEX, Order } from "../../constants";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { Type } from "class-transformer";
+import { IsEnum, IsNumber, IsOptional } from "class-validator";
+import { AggregationFunction, INFLUX_DURATION_REGEX } from "src/constants";
+import { IsInfluxDuration } from "src/utility";
 
-export class BaseReadingFilter extends IntersectionType(RangeFilterDTO, LimitFilterDTO) {
+export class AssetMatchFilterDTO {
   @IsOptional()
-  @IsEnum(Order)
+  @IsNumber({ maxDecimalPlaces: 10 })
+  @Type(() => Number)
   @ApiPropertyOptional({
-    description: "Order of the readings, based on the timestamp",
-    enum: Order,
-    default: Order.ASC,
+    description: "Assets compatible with the provided value requirement in Wh",
+    type: Number,
+    default: 1000,
   })
-  order: Order = Order.ASC;
+  compatibleValue?: number;
 
   @IsOptional()
   @IsInfluxDuration()

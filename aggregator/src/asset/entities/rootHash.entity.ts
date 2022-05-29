@@ -1,5 +1,5 @@
 import { InfluxdbService, ListingsQueryOptions } from "src/influxdb/influxdb.service";
-import { InfluxDbRowDTO } from "../dto";
+import { InfluxDbRowDTO } from "src/utility";
 
 export class RootHash {
   public static influxDBRepository: InfluxdbService;

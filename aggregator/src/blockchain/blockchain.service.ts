@@ -43,6 +43,10 @@ export class BlockchainService {
     );
   }
 
+  isAggregator(address: string) {
+    return address === this.aggregatorAddress;
+  }
+
   get aggregatorAddress() {
     return this.wallet.address;
   }

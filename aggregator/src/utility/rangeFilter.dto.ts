@@ -1,8 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsOptional, Validate } from "class-validator";
 import { INFLUX_TIME_REGEX } from "src/constants";
-import { IsInfluxTime } from "src/utility";
-import { IsBeforeConstraint } from "../validators";
+import { IsBeforeConstraint, IsInfluxTime } from "./validators";
 
 export class RangeFilterDTO {
   @IsInfluxTime()

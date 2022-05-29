@@ -1,37 +1,21 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, IntersectionType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsEnum, IsNumber, IsOptional } from "class-validator";
-import { AggregationFunction, INFLUX_DURATION_REGEX } from "src/constants";
-import { IsInfluxDuration } from "src/utility";
+import { ArrayNotEmpty, ArrayUnique, IsArray } from "class-validator";
+import { DID_REGEX } from "src/constants";
+import { IsDID, LimitFilterDTO, RangeFilterDTO } from "src/utility";
 
-export class AssetFilterDTO {
-  @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 10 })
-  @Type(() => Number)
-  @ApiPropertyOptional({
-    description: "Assets compatible with the provided value requirement in Wh",
-    type: Number,
-    default: 1000,
-  })
-  compatibleValue?: number;
-
-  @IsOptional()
-  @IsInfluxDuration()
-  @ApiPropertyOptional({
-    description: "Aggregation time window. Examples: 1d, 3mo, 4h5m1s",
+export class AssetFilterDTO extends IntersectionType(RangeFilterDTO, LimitFilterDTO) {
+  @IsArray()
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  @Type(() => String)
+  @IsDID({ each: true })
+  @ApiProperty({
     type: String,
-    default: "1h",
-    pattern: INFLUX_DURATION_REGEX,
+    example: ["did:ethr:0x1234567890123456789012345678901234567890"],
+    description: "DID of the asset",
+    isArray: true,
+    items: { pattern: DID_REGEX },
   })
-  aggregationWindow: string = "1h";
-
-  @IsOptional()
-  @IsEnum(AggregationFunction)
-  @ApiPropertyOptional({
-    description:
-      "Aggregation function to apply to the readings. aggregationWindow must be set",
-    enum: AggregationFunction,
-    default: AggregationFunction.mean,
-  })
-  aggregationFunction: AggregationFunction = AggregationFunction.mean;
+  assetDIDs: string[];
 }

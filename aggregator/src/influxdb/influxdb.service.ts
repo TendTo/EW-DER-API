@@ -189,7 +189,6 @@ export class InfluxdbService implements OnModuleInit {
     ${this.fromClause}
     ${range ? `|> range(start: ${range.start}, stop: ${range.stop})` : ""}
     ${assetDID ? this.buildFilterFn("assetDID", assetDID) : ""}
-    |> sort(columns: ["_time"])
     |> group()
     |> keep(columns: ["${identifier}"])
     |> unique(column: "${identifier}")

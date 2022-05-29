@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsOptional, IsString } from "class-validator";
-import { IsDID } from "src/utility";
+import { IsDID } from "./validators";
 
 export class InfluxDbRowDTO {
   @IsOptional()

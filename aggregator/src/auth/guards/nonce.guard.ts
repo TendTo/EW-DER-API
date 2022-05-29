@@ -8,6 +8,7 @@ import {
   Injectable,
 } from "@nestjs/common";
 import { Cache } from "cache-manager";
+import { Request } from "express";
 import { Observable } from "rxjs";
 import { BlockchainService } from "src/blockchain/blockchain.service";
 import { JWTRequestDTO } from "../dto";
@@ -21,7 +22,7 @@ export class NonceGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request: Request = context.switchToHttp().getRequest();
     return this.validateRequest(request.body);
   }
 

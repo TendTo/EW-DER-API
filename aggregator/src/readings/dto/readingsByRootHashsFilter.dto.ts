@@ -1,15 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import {
-  ArrayNotEmpty,
-  ArrayUnique,
-  IsArray,
-  IsBoolean,
-  IsOptional,
-} from "class-validator";
-import { BaseReadingFilter } from "./baseReadingFilter.dto";
+import { ArrayNotEmpty, ArrayUnique, IsArray } from "class-validator";
+import { ReadingsFilterDTO } from "./readingsFilter.dto";
 
-export class ReadingsByRootHashesFilterDTO extends BaseReadingFilter {
+export class ReadingsByRootHashesFilterDTO extends ReadingsFilterDTO {
   @IsArray()
   @ArrayNotEmpty()
   @ArrayUnique()
@@ -21,14 +15,4 @@ export class ReadingsByRootHashesFilterDTO extends BaseReadingFilter {
     isArray: true,
   })
   rootHashes: string[];
-
-  @IsOptional()
-  @IsBoolean()
-  @ApiProperty({
-    type: Boolean,
-    description:
-      'When "true" it will calculate the difference between reads before applying aggregation functions',
-    default: false,
-  })
-  difference: boolean = false;
 }
