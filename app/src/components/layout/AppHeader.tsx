@@ -33,6 +33,7 @@ const aggregatorPages: PagesType = [
   { label: "GENERAL.MATCH", route: "match" },
 ];
 const prosumerPages: PagesType = [
+  { label: "GENERAL.CREATE_READINGS", route: "createReadings" },
   { label: "GENERAL.READINGS", route: "readings" },
   { label: "GENERAL.PRECISE_PROOFS", route: "rootHashes" },
   { label: "GENERAL.AGGREGATED_READINGS", route: "aggregatedRedings" },
@@ -43,7 +44,7 @@ export function AppHeader() {
   const { update: setRouter } = useRouterContext();
   const theme = useTheme();
   const { login, isLogged, isAggregator, account, logout } = useLogin();
-  const name = useLookupAddress();
+  const { ens } = useLookupAddress(account);
   const balance = useEtherBalance(account);
   const { toggleColorMode } = useContext(colorModeContext);
   const { state: iam } = useIamContext();
@@ -203,7 +204,7 @@ export function AppHeader() {
               {loggedIn ? (
                 [
                   <MenuItem key="bar-account" onClick={onClickAccount}>
-                    <Typography textAlign="center">{name ?? account}</Typography>
+                    <Typography textAlign="center">{ens ?? account}</Typography>
                   </MenuItem>,
                   <MenuItem key="bar-balance" onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">{ethBalance}</Typography>

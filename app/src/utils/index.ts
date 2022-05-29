@@ -9,7 +9,7 @@ const CHART_COLORS = [
 ];
 const MAX_BRIGHTNESS = 230;
 
-type ValidationKeys = "DID" | "TIME" | "INTERVAL";
+type ValidationKeys = "DID" | "TIME" | "TIME_OR_NOW" | "INTERVAL";
 
 export function getRegexValidation(key: ValidationKeys, t: (key: string) => string) {
   switch (key) {
@@ -21,13 +21,18 @@ export function getRegexValidation(key: ValidationKeys, t: (key: string) => stri
     case "TIME":
       return {
         value:
-          /^(?:-(?:\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\d?\1\d.*)(?!.*\d\1\d?)|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)$/,
+          /^(?:-(?:\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\d?\1\d.*)(?!.*\d\1\d?)|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z)$/,
+        message: t("ASSET.FORM.VALIDATION.TIME"),
+      };
+    case "TIME_OR_NOW":
+      return {
+        value:
+          /^(?:-(?:\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\d?\1\d.*)(?!.*\d\1\d?)|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z|now\(\))$/,
         message: t("ASSET.FORM.VALIDATION.TIME"),
       };
     case "INTERVAL":
       return {
-        value:
-          /^(?:\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\d?\1\d.*)(?!.*\d\1\d?)$/,
+        value: /^(?:\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\d?\1\d.*)(?!.*\d\1\d?)$/,
         message: t("ASSET.FORM.VALIDATION.INTERVAL"),
       };
     default:
@@ -50,13 +55,4 @@ export function getRandomColor(idx?: number, alpha: number = 1) {
     return `rgb(${colorComponent()}, ${colorComponent()}, ${colorComponent()}, ${alpha})`;
   }
   return CHART_COLORS[idx].replace("alpha", `${alpha}`);
-}
-
-/**
- * Convert a date object to a string with the format "yyyy-MM-ddTHH:mm:ssZ"
- * @param date date to convert
- * @returns time string expected by the backend
- */
-export function formatDate(date: Date = new Date()) {
-  return date.toISOString().split(".")[0] + "Z";
 }

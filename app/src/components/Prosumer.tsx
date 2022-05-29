@@ -1,28 +1,25 @@
 import { Box, Container } from "@mui/material";
-import React from "react";
 import { useRouterContext } from "../context";
-import { MatchList } from "./match";
-import { ReadingsList } from "./readings";
+import { CreateReadings, ReadingsList } from "./readings";
 
-export function Aggregator() {
+export function Prosumer() {
   const { state: route } = useRouterContext();
 
   let content;
   switch (route) {
+    case "createReadings":
+      content = <CreateReadings />;
+      break;
     case "readings":
     case "aggregatedRedings":
     case "rootHashes":
       content = <ReadingsList />;
       break;
-    case "match":
-      content = <MatchList />;
-      break;
     default:
-      content = <div>Aggregator HOME</div>;
+      content = <div>Prosumer HOME</div>;
   }
-
   return (
-    <Container sx={{ maxWidth: { xs: "95vw", lg: "lg" } }}>
+    <Container sx={{ maxWidth: { xs: "99vw", lg: "lg" } }}>
       <Box mt={2} mb={2}>
         {content}
       </Box>

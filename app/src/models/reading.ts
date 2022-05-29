@@ -9,14 +9,12 @@ export const aggregationFunctions = [
   "count",
 ] as const;
 
-type DID = `did:ethr:0x${string}`;
-type Address = `0x${string}`;
 type Order = "ASC" | "DESC";
 export type AggregationFunction = typeof aggregationFunctions[number];
 
-type ReadingsDTO = {
-  assetDID: DID;
-  rootHash: Address;
+export type ReadingDTO = {
+  assetDID: string;
+  rootHash: string;
   timestamp: string;
   value: number;
 };
@@ -29,7 +27,7 @@ export type ReadingsDTOOptions = {
   order?: Order;
 };
 
-type AggregatedReadingsDTO = ReadingsDTO & {
+type AggregatedReadingsDTO = ReadingDTO & {
   start: string;
   stop: string;
 };
@@ -49,15 +47,15 @@ export class Reading {
   static readonly repository = new BaseRepository();
 
   constructor(
-    public readonly assetDID: DID,
-    public readonly assetOwner: Address,
-    public readonly rootHash: Address,
+    public readonly assetDID: string,
+    public readonly assetOwner: string,
+    public readonly rootHash: string,
     public readonly volume: number,
     public readonly timestamp: Date,
     public readonly verified: boolean = false, // TODO: verified shall check logs
   ) {}
 
-  private static dtoMapper(dto: ReadingsDTO) {
+  private static dtoMapper(dto: ReadingDTO) {
     return new Reading(
       dto.assetDID,
       "0x",
@@ -68,7 +66,7 @@ export class Reading {
   }
 
   public static async getByAssetDID(assetDID: string, options: ReadingsDTOOptions) {
-    const json = await this.repository.fetchJson<ReadingsDTO[]>(
+    const json = await this.repository.fetchJson<ReadingDTO[]>(
       `readings/assetDID/${encodeURIComponent(assetDID)}`,
       {
         queryParams: options,
@@ -81,15 +79,15 @@ export class Reading {
     assetDIDs: string[],
     options: ReadingsDTOOptions,
   ) {
-    const json = await this.repository.fetchJson<ReadingsDTO[][]>(`readings/assetDID`, {
+    const json = await this.repository.fetchJson<ReadingDTO[][]>(`readings/assetDID`, {
       method: "POST",
       body: { ...options, assetDIDs },
     });
-    return json.map((readings: ReadingsDTO[]) => readings.map(this.dtoMapper));
+    return json.map((readings: ReadingDTO[]) => readings.map(this.dtoMapper));
   }
 
   public static async getByRootHash(rootHash: string, options: ReadingsDTOOptions) {
-    const json = await this.repository.fetchJson<ReadingsDTO[]>(
+    const json = await this.repository.fetchJson<ReadingDTO[]>(
       `readings/roothash/${encodeURIComponent(rootHash)}`,
       { queryParams: options },
     );
@@ -100,18 +98,18 @@ export class Reading {
     rootHashes: string[],
     options: ReadingsDTOOptions,
   ) {
-    const json = await this.repository.fetchJson<ReadingsDTO[][]>(`readings/roothash`, {
+    const json = await this.repository.fetchJson<ReadingDTO[][]>(`readings/roothash`, {
       method: "POST",
       body: { ...options, rootHashes },
     });
-    return json.map((readings: ReadingsDTO[]) => readings.map(this.dtoMapper));
+    return json.map((readings: ReadingDTO[]) => readings.map(this.dtoMapper));
   }
 
   public static async getLast(
     assetDID: string,
     options: Pick<ReadingsDTOOptions, "start">,
   ) {
-    const json = await this.repository.fetchJson<ReadingsDTO>(
+    const json = await this.repository.fetchJson<ReadingDTO>(
       `readings/${encodeURIComponent(assetDID)}/latest`,
       {
         queryParams: options,

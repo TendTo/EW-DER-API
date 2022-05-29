@@ -1,5 +1,5 @@
 import React from "react";
-import { Aggregator, LoginPage, User } from "./components";
+import { Aggregator, LoginPage, Prosumer } from "./components";
 import { useLogin } from "./hooks";
 
 function DApp() {
@@ -7,7 +7,7 @@ function DApp() {
 
   if (!isLogged) return <LoginPage />;
 
-  return isAggregator ? <Aggregator /> : <User />;
+  return isAggregator ? <Aggregator /> : <Prosumer />;
 }
 
 export default DApp;

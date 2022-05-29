@@ -1,8 +1,8 @@
-import { useCallback, useEffect } from "react";
-import { toast } from "react-toastify";
+import { useCallback } from "react";
 import { useIamContext } from "../context";
 import { Asset } from "../models";
 import { useAsync } from "./useAsync";
+import { useLogin } from "./useLogin";
 
 /**
  * Fetch the aggregated readings logs using the ReadingsNotary contract.
@@ -10,15 +10,14 @@ import { useAsync } from "./useAsync";
  */
 export function useGetAssets() {
   const { state } = useIamContext();
+  const { isAggregator } = useLogin();
+
   const query = useCallback(async () => {
     if (!state) return [];
-    return await Asset.getByIAM(state.cacheClient, state.iamConnection.signerService.did);
-  }, [state]);
-  const res = useAsync(query, true, undefined);
-  useEffect(() => {
-    if (res.error) {
-      toast.error(res.error);
-    }
-  }, [res.error]);
-  return res;
+    return isAggregator
+      ? Asset.get({ start: "-1y", stop: "now()" })
+      : Asset.getByIAM(state.cacheClient, state.iamConnection.signerService.did);
+  }, [state, isAggregator]);
+
+  return useAsync(query, true, undefined);
 }

@@ -50,6 +50,7 @@ export class Asset implements ISingleValueModel<string> {
 
   public static async get(options: AssetQueryOptions) {
     const json = await this.repository.fetchJson<AssetDTO[]>(`readings/assetDIDs`, {
+      method: "POST",
       body: options,
     });
     return json.map((asset) => new this(asset));

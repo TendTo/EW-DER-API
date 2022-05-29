@@ -1,6 +1,14 @@
 import { Send } from "@mui/icons-material";
-import { Button, Card, CardContent, CardHeader, Grid } from "@mui/material";
-import { useCallback } from "react";
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+} from "@mui/material";
+import { useCallback, useMemo } from "react";
 import {
   FormContainer,
   MultiSelectElement,
@@ -15,7 +23,7 @@ import {
   Asset,
   RootHash,
 } from "../../models";
-import { formatDate, getRegexValidation } from "../../utils";
+import { getRegexValidation } from "../../utils";
 
 export type AggregatedReadingsFormValuesType = AggregatedReadingsDTOOptions & {
   assetDID?: string[];
@@ -33,7 +41,7 @@ const defaultValues: AggregatedReadingsFormValuesType = {
   rootHash: [],
   limit: 10,
   start: "-1d",
-  stop: formatDate(),
+  stop: "now()",
   offset: 0,
   order: "ASC",
   difference: false,
@@ -62,6 +70,47 @@ export function AggregatedReadingsForm<T extends Source>({
     [onSuccess, source],
   );
 
+  const selectElement = useMemo(() => {
+    if (!assets || assets.length === 0)
+      return (
+        <Alert severity="warning">
+          <AlertTitle>{t("GENERAL.WARNING")}</AlertTitle>
+          {t("ASSET.FORM.NO_ASSETS")}{" "}
+        </Alert>
+      );
+    return source === "assetDID" ? (
+      <MultiSelectElement
+        key="assetDID"
+        label={t("ASSET.FORM.ASSET_OWNED")}
+        menuItems={assets.map(({ singleValue: value }) => value)}
+        name="assetDID"
+        showChips
+        fullWidth
+        validation={{
+          required: {
+            message: t("ASSET.FORM.VALIDATION.REQUIRED"),
+            value: true,
+          },
+        }}
+      />
+    ) : (
+      <MultiSelectElement
+        key="rootHash"
+        label={t("ASSET.FORM.ROOT_HASH_PRODUCED")}
+        menuItems={assets.map(({ singleValue: value }) => value)}
+        name="rootHash"
+        showChips
+        fullWidth
+        validation={{
+          required: {
+            message: t("ASSET.FORM.VALIDATION.REQUIRED"),
+            value: true,
+          },
+        }}
+      />
+    );
+  }, [assets, t, source]);
+
   return (
     <Card variant="outlined">
       <CardHeader title={t("ASSET.FORM.FORM_TITLE")} />
@@ -69,39 +118,7 @@ export function AggregatedReadingsForm<T extends Source>({
         <FormContainer defaultValues={defaultValues} onSuccess={onSuccessHandler}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              {assets &&
-                assets.length > 0 &&
-                (source === "assetDID" ? (
-                  <MultiSelectElement
-                    key="assetDID"
-                    label={t("ASSET.FORM.ASSET_OWNED")}
-                    menuItems={assets.map(({ singleValue: value }) => value)}
-                    name="assetDID"
-                    showChips
-                    fullWidth
-                    validation={{
-                      required: {
-                        message: t("ASSET.FORM.VALIDATION.REQUIRED"),
-                        value: true,
-                      },
-                    }}
-                  />
-                ) : (
-                  <MultiSelectElement
-                    key="rootHash"
-                    label={t("ASSET.FORM.ROOT_HASH_PRODUCED")}
-                    menuItems={assets.map(({ singleValue: value }) => value)}
-                    name="rootHash"
-                    showChips
-                    fullWidth
-                    validation={{
-                      required: {
-                        message: t("ASSET.FORM.VALIDATION.REQUIRED"),
-                        value: true,
-                      },
-                    }}
-                  />
-                ))}
+              {selectElement}
             </Grid>
             <Grid item xs={6}>
               <TextFieldElement
@@ -119,7 +136,7 @@ export function AggregatedReadingsForm<T extends Source>({
                 fullWidth
                 name="stop"
                 label={t("ASSET.FORM.STOP")}
-                validation={{ pattern: getRegexValidation("TIME", t) }}
+                validation={{ pattern: getRegexValidation("TIME_OR_NOW", t) }}
               />
             </Grid>
             <Grid item xs={6}>

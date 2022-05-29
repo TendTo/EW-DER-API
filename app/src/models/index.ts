@@ -1,3 +1,4 @@
+export * from "./aggregatedReadings";
 export * from "./asset";
 export * from "./reading";
 export * from "./repository";

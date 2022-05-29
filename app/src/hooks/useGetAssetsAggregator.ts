@@ -7,7 +7,7 @@ import { useAsync } from "./useAsync";
  * Fetch the aggregated readings logs using the ReadingsNotary contract.
  * @returns aggregated readings logs
  */
-export function useGetAssets(assetDIDs?: string[]) {
+export function useGetAssetsAggregator(assetDIDs?: string[]) {
   const { state } = useIamContext();
   const query = useCallback(
     async (assetDIDs?: string[]) => {

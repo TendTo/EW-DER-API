@@ -46,7 +46,8 @@
     "NOT_POSITIVE": "The value must be a positive number",
     "ONLY_INT": "Only integers are allowed",
     "IAM_CONNECTION": "Error connecting to IAM server",
-    "AGGREGATOR_CONNECTION": "Error connecting to the Aggregator's server"
+    "AGGREGATOR_CONNECTION": "Error connecting to the Aggregator's server",
+    "SENDING_READINGS": "Error sending readings"
   },
   "ENS": {
     "TITLE": "Energy web Name Service (EWNS)",
@@ -151,7 +152,9 @@
     "LOGIN": "Login",
     "READINGS": "Readings",
     "PRECISE_PROOFS": "Precise proof",
-    "AGGREGATED_READINGS": "Aggregated readings"
+    "AGGREGATED_READINGS": "Aggregated readings",
+    "WARNING": "Warning",
+    "CREATE_READINGS": "Send readings"
   },
   "REFERENCES": {
     "TITLE": "References",
@@ -236,11 +239,24 @@
       },
       "AGGREGATIO_WINDOW": "Aggregation time window",
       "DIFFERENCE": "Difference",
-      "AGGREGATION_FUNCTION": "Aggregation function"
+      "AGGREGATION_FUNCTION": "Aggregation function",
+      "NO_ASSETS": "No DERs have been found in the aggregator's database. Make sure to have registered at least a reading."
     }
   },
   "AGGREGATOR": {
     "CONNECTION_PROGRESS": "Connecting to the Aggregator's server...",
     "CONNECTION_SUCCESS": "Connetcted to the Aggregator's server!"
+  },
+  "READINGS": {
+    "FORM": {
+      "FORM_TITLE": "Generate mock readings",
+      "INTERVAL": "Interval between readings (sec)",
+      "N_READINGS": "Number of readings",
+      "MIN_VALUE": "Min value",
+      "MAX_VALUE": "Max value"
+    },
+    "SENDING_PROGRESS": "Sending readings...",
+    "SENDING_SUCCESS": "Readings sent",
+    "SENDING_ERROR": "Error sending readings"
   }
 }

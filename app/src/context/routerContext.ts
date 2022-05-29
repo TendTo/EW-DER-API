@@ -2,6 +2,7 @@ import createCtx from "./createCtx";
 
 export type RouterContextType =
   | "home"
+  | "createReadings"
   | "readings"
   | "rootHashes"
   | "aggregatedRedings"

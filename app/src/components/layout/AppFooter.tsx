@@ -1,11 +1,10 @@
 import { GitHub } from "@mui/icons-material";
-import { Box } from "@mui/material";
-import React, { useCallback } from "react";
+import { Box, Grid, IconButton, Typography } from "@mui/material";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import ew_logo from "../../asset/icon/ew-logo.svg";
 import gb from "../../asset/icon/gb.svg";
 import it from "../../asset/icon/it.svg";
-import ew_logo from "../../asset/img/ew-logo-small.png";
-import "./AppFooter.css";
 
 export function AppFooter() {
   const { t, i18n } = useTranslation();
@@ -17,34 +16,55 @@ export function AppFooter() {
   }, [i18n]);
 
   return (
-    <footer>
-      <Box
-        sx={{
-          width: "100%",
-          bgcolor: "primary.main",
-          color: "text.primary",
-        }}
-      >
-        <div className="footer-container">
-          <a href="https://www.energyweb.org">
-            <img src={ew_logo} alt="EW logo" />
-          </a>
-          <div className="text-center">{t("FOOTER.LEGAL")}</div>
-          <div>©2021</div>
-          <a className="mr-2" href="https://github.com/TendTo">
-            TendTo
-          </a>
-          <a href="https://github.com/TendTo/EW-showcase">
+    <Box
+      component="footer"
+      sx={{
+        py: 1,
+        px: 2,
+        bgcolor: "primary.main",
+        color: "text.primary",
+        mt: "auto",
+      }}
+    >
+      <Grid container spacing={1} justifyContent="space-around" alignItems="center">
+        <Grid item xs={12} sm={1} textAlign="center">
+          <IconButton
+            href="https://www.energyweb.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={ew_logo} alt="EW logo" style={{ width: "1em" }} />
+          </IconButton>
+        </Grid>
+        <Grid item xs={12} sm={11} md={8}>
+          <Typography textAlign="center" variant="body1">
+            {t("FOOTER.LEGAL")}
+          </Typography>
+        </Grid>
+        <Grid item xs={4} sm={1}>
+          <Typography textAlign="center" variant="body1">
+            ©2021
+          </Typography>
+        </Grid>
+        <Grid item xs={4} sm={1} textAlign="center">
+          <IconButton
+            href="https://github.com/TendTo/EW-DER-API"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <GitHub />
-          </a>
-          <img
-            onClick={onChangeLanguage}
-            className="language-icon clickable"
-            src={i18n.language?.startsWith("it") ? gb : it}
-            alt={i18n.language?.startsWith("it") ? gb : it + "flag"}
-          />
-        </div>
-      </Box>
-    </footer>
+          </IconButton>
+        </Grid>
+        <Grid item xs={4} sm={1} textAlign="center">
+          <IconButton onClick={onChangeLanguage}>
+            <img
+              src={i18n.language?.startsWith("it") ? gb : it}
+              alt={i18n.language?.startsWith("it") ? gb : it + "flag"}
+              style={{ width: "1em" }}
+            />
+          </IconButton>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
