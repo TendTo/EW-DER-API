@@ -108,11 +108,13 @@ export class BlockchainService {
     addressDID: string | string[],
   ): Promise<boolean> {
     if (typeof addressDID === "string") {
+      if (!this.isAddress(addressDID)) return false;
       const owner = await this.identityManager.identityOwner(addressDID);
       return owner === prosumer;
     }
     const owner = await Promise.all(
       addressDID.map(async (assetDID) => {
+        if (!this.isAddress(assetDID)) return false;
         const owner = await this.identityManager.identityOwner(assetDID);
         return owner === prosumer;
       }),
