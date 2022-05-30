@@ -155,7 +155,9 @@
     "READINGS": "Letture",
     "WARNING": "Attenzione",
     "CREATE_READINGS": "Invia letture",
-    "PROSUMER": "Prosumer"
+    "PROSUMER": "Prosumer",
+    "INFO": "Info",
+    "SEARCH": "Cerca"
   },
   "REFERENCES": {
     "TITLE": "Bibliografia",
@@ -241,7 +243,8 @@
       "AGGREGATIO_WINDOW": "Finestra temporale di aggregazione",
       "DIFFERENCE": "Differenza",
       "AGGREGATION_FUNCTION": "Funzione di aggregazione",
-      "NO_ASSETS": "Non sono stati trovati DER nel database dell'aggregatore. Assicurati di aver registrato almeno una lettura."
+      "NO_ASSETS": "Non sono stati trovati DER nel database dell'aggregatore. Assicurati di aver registrato almeno una lettura.",
+      "NO_READINGS": "Non è stata trovata nessuna lettura che soddisfa i requisiti richiesti"
     }
   },
   "AGGREGATOR": {
@@ -263,5 +266,11 @@
   },
   "PROSUMER": {
     "HOME": "Invia le letture che hai raccolto dai tuoi DER all'aggregatore della tua rete elettrica. \nControlla lo stato attuale della produzione dei tuoi DER"
+  },
+  "MATCH": {
+    "FORM": {
+      "NO_CONSUMERS": "Non è stato trovato nessun consumatore che soddisfa i requisiti richiesti",
+      "NO_PRODUCER": "Non è stato trovato nessun produttore che soddisfa i requisiti richiesti"
+    }
   }
 }

@@ -155,7 +155,9 @@
     "AGGREGATED_READINGS": "Aggregated readings",
     "WARNING": "Warning",
     "CREATE_READINGS": "Send readings",
-    "PROSUMER": "Prosumer"
+    "PROSUMER": "Prosumer",
+    "INFO": "Info",
+    "SEARCH": "Search"
   },
   "REFERENCES": {
     "TITLE": "References",
@@ -241,7 +243,8 @@
       "AGGREGATIO_WINDOW": "Aggregation time window",
       "DIFFERENCE": "Difference",
       "AGGREGATION_FUNCTION": "Aggregation function",
-      "NO_ASSETS": "No DERs have been found in the aggregator's database. Make sure to have registered at least a reading."
+      "NO_ASSETS": "No DERs have been found in the aggregator's database. Make sure to have registered at least a reading.",
+      "NO_READINGS": "No reading matches the constraints"
     }
   },
   "AGGREGATOR": {
@@ -263,5 +266,11 @@
   },
   "PROSUMER": {
     "HOME": "Send the readings you collected from your DER to your grid's aggregator. Check the current status of your DERs"
+  },
+  "MATCH": {
+    "FORM": {
+      "NO_CONSUMERS": "No consumer matches the constraints",
+      "NO_PRODUCER": "No producer matches the constraints"
+    }
   }
 }
