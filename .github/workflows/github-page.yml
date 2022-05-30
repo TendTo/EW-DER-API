@@ -41,8 +41,9 @@ jobs:
       #   uses: codecov/codecov-action@v2
 
       - name: Build
-        run: CI='' npm run build
+        run: npm run build
         env:
+          NODE_PATH: ./src
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: Deploy
