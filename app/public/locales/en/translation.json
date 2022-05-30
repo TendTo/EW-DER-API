@@ -154,7 +154,8 @@
     "PRECISE_PROOFS": "Precise proof",
     "AGGREGATED_READINGS": "Aggregated readings",
     "WARNING": "Warning",
-    "CREATE_READINGS": "Send readings"
+    "CREATE_READINGS": "Send readings",
+    "PROSUMER": "Prosumer"
   },
   "REFERENCES": {
     "TITLE": "References",
@@ -245,7 +246,8 @@
   },
   "AGGREGATOR": {
     "CONNECTION_PROGRESS": "Connecting to the Aggregator's server...",
-    "CONNECTION_SUCCESS": "Connetcted to the Aggregator's server!"
+    "CONNECTION_SUCCESS": "Connetcted to the Aggregator's server!",
+    "HOME": "Check the production and consume of all the DERs under your control. Match the energy consume with the appropriate energy production."
   },
   "READINGS": {
     "FORM": {
@@ -258,5 +260,8 @@
     "SENDING_PROGRESS": "Sending readings...",
     "SENDING_SUCCESS": "Readings sent",
     "SENDING_ERROR": "Error sending readings"
+  },
+  "PROSUMER": {
+    "HOME": "Send the readings you collected from your DER to your grid's aggregator. Check the current status of your DERs"
   }
 }

@@ -1,8 +1,8 @@
 import { Box, Container } from "@mui/material";
-import React from "react";
-import { useRouterContext } from "../context";
-import { MatchList } from "./match";
-import { ReadingsList } from "./readings";
+import { useRouterContext } from "../../context";
+import { MatchList } from "../match";
+import { ReadingsList } from "../readings";
+import { AggregatorHome } from "./AggregatorHome";
 
 export function Aggregator() {
   const { state: route } = useRouterContext();
@@ -18,7 +18,7 @@ export function Aggregator() {
       content = <MatchList />;
       break;
     default:
-      content = <div>Aggregator HOME</div>;
+      content = <AggregatorHome />;
   }
 
   return (

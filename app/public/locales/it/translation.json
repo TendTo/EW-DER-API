@@ -154,7 +154,8 @@
     "PRECISE_PROOFS": "Precise proof",
     "READINGS": "Letture",
     "WARNING": "Attenzione",
-    "CREATE_READINGS": "Invia letture"
+    "CREATE_READINGS": "Invia letture",
+    "PROSUMER": "Prosumer"
   },
   "REFERENCES": {
     "TITLE": "Bibliografia",
@@ -245,7 +246,8 @@
   },
   "AGGREGATOR": {
     "CONNECTION_PROGRESS": "Connessione al server dell'aggregatore...",
-    "CONNECTION_SUCCESS": "Connesso al server dell'aggregatore!"
+    "CONNECTION_SUCCESS": "Connesso al server dell'aggregatore!",
+    "HOME": "Controlla la produzione e il consumo di tutti i DER sotto il tuo controllo. \nAbbina i consumatori con i produttori in grado di soddisfare il loro fabbisogno"
   },
   "READINGS": {
     "FORM": {
@@ -254,6 +256,12 @@
       "N_READINGS": "Numero di letture",
       "MIN_VALUE": "Valore minimo",
       "MAX_VALUE": "Valore massimo"
-    }
+    },
+    "SENDING_ERROR": "Si è verificato un errore inviando le letture",
+    "SENDING_PROGRESS": "Invio delle letture...",
+    "SENDING_SUCCESS": "Letture inviate!"
+  },
+  "PROSUMER": {
+    "HOME": "Invia le letture che hai raccolto dai tuoi DER all'aggregatore della tua rete elettrica. \nControlla lo stato attuale della produzione dei tuoi DER"
   }
 }

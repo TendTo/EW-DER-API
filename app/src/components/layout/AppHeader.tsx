@@ -104,10 +104,12 @@ export function AppHeader() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
+            className="clickable"
             variant="h6"
             noWrap
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            onClick={() => setRouter("home")}
           >
             {title}
           </Typography>

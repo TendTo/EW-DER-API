@@ -49,7 +49,15 @@ export class Asset implements ISingleValueModel<string> {
   }
 
   public static async get(options: AssetQueryOptions) {
-    const json = await this.repository.fetchJson<AssetDTO[]>(`readings/assetDIDs`, {
+    const json = await this.repository.fetchJson<AssetDTO[]>(`assets`, {
+      method: "POST",
+      body: options,
+    });
+    return json.map((asset) => new this(asset));
+  }
+
+  public static async getAll(options: AssetQueryOptions) {
+    const json = await this.repository.fetchJson<AssetDTO[]>(`assets/getAll`, {
       method: "POST",
       body: options,
     });
@@ -58,7 +66,7 @@ export class Asset implements ISingleValueModel<string> {
 
   public static async getMatches(options: AssetMatchQueryOptions) {
     const json = await this.repository.fetchJson<[AssetMatchDTO[], AssetMatchDTO[]]>(
-      `assets`,
+      `assets/matches`,
       { queryParams: options },
     );
     return [

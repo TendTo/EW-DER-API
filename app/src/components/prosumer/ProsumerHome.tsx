@@ -1,13 +1,13 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-export function AggregatorHome() {
+export function ProsumerHome() {
   const { t } = useTranslation();
   return (
     <Card variant="outlined">
-      <CardHeader title={t("GENERAL.AGGREGATOR")} />
+      <CardHeader title={t("GENERAL.PROSUMER")} />
       <CardContent>
-        <Typography>{t("AGGREGATOR.HOME")}</Typography>
+        <Typography>{t("PROSUMER.HOME")}</Typography>
       </CardContent>
     </Card>
   );

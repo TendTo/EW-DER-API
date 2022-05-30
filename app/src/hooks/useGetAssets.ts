@@ -15,7 +15,7 @@ export function useGetAssets() {
   const query = useCallback(async () => {
     if (!state) return [];
     return isAggregator
-      ? Asset.get({ start: "-1y", stop: "now()" })
+      ? Asset.getAll({ start: "-1y", stop: "now()" })
       : Asset.getByIAM(state.cacheClient, state.iamConnection.signerService.did);
   }, [state, isAggregator]);
 
