@@ -27,7 +27,7 @@ export function useSendReadings() {
         },
       );
     },
-    [library],
+    [library, t],
   );
   return getReadings;
 }

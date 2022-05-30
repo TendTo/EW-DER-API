@@ -9,9 +9,7 @@ type FetchOptions = {
 export class BaseRepository {
   readonly baseUrl: string;
   constructor(
-    // baseUrl: string = process.env.REACT_APP_API_URL ?? "http://localhost:3000",
-    // TODO: REMOVE THIS
-    baseUrl: string = "http://localhost:3000",
+    baseUrl: string = process.env.REACT_APP_API_URL ?? "http://localhost:3000",
     readonly apiVersion = "v1",
   ) {
     if (baseUrl === "") {

@@ -3,12 +3,11 @@ name: Docker CI
 on:
   push:
     branches: [master]
-    paths-ignore:
-      - LICENSE
-      - .git*
-      - "**.md"
-      - "**.puml"
-      - "docs/**"
+    paths:
+      - "aggregator/**"
+      - "der/**"
+      - "docker/**"
+      - "prosumer/**"
 
   workflow_dispatch:
 
