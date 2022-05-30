@@ -17,8 +17,8 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     backend: {
-      loadPath: "/locales/{{lng}}/{{ns}}.json",
-      addPath: "/locales/add/{{lng}}/{{ns}}.missing.json",
+      loadPath: "/EW-DER-API/locales/{{lng}}/{{ns}}.json",
+      addPath: "/EW-DER-API/locales/add/{{lng}}/{{ns}}.missing.json",
     },
     debug: false,
     fallbackLng: "en",
