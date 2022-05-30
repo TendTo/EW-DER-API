@@ -31,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Patch web3
-        run: npx patch-package
+      # - name: Patch web3
+      #   run: npx patch-package
 
       # - name: Run the tests and generate coverage report
       #   run: npm test -- --coverage
