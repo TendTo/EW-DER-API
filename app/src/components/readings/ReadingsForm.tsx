@@ -1,4 +1,4 @@
-import { Send } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import {
   Alert,
   AlertTitle,
@@ -11,6 +11,7 @@ import {
 import { useCallback, useMemo } from "react";
 import { FormContainer, MultiSelectElement, TextFieldElement } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
+import { AsyncState } from "../../hooks";
 import { Asset, ReadingsDTOOptions, RootHash } from "../../models";
 import { getRegexValidation } from "../../utils";
 
@@ -23,6 +24,7 @@ type ReadingsFormProps<T extends Source> = {
   source: T;
   assets: (T extends "assetDID" ? Asset[] : RootHash[]) | null;
   onSuccess: (values: ReadingsFormValuesType) => void;
+  status: AsyncState;
 };
 
 const defaultValues: ReadingsFormValuesType = {
@@ -39,6 +41,7 @@ export function ReadingsForm<T extends Source>({
   onSuccess,
   assets,
   source,
+  status,
 }: ReadingsFormProps<T>) {
   const { t } = useTranslation();
 
@@ -145,8 +148,13 @@ export function ReadingsForm<T extends Source>({
             </Grid>
             <Grid item xs={8}></Grid>
             <Grid item xs={4} justifyContent="flex-end" container>
-              <Button type={"submit"} variant="contained" endIcon={<Send />}>
-                {t("GENERAL.SUBMIT")}
+              <Button
+                type={"submit"}
+                variant="contained"
+                startIcon={<Search />}
+                disabled={status === "pending"}
+              >
+                {t("GENERAL.SEARCH")}
               </Button>
             </Grid>
           </Grid>

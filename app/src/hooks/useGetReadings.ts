@@ -15,17 +15,27 @@ export function useGetReadings() {
   const getReadings = useCallback(
     async ({ assetDID, rootHash, ...options }: UseGetReadingsArgs) => {
       if ("difference" in options) {
-        if (assetDID && assetDID.length > 0)
-          return [await Reading.getManyAggregatedReadingsByAssetDID(assetDID, options)];
-        if (rootHash && rootHash.length > 0)
-          return [await Reading.getManyAggregatedReadingsByRootHash(rootHash, options)];
-        return [[]];
+        if (assetDID && assetDID.length > 0) {
+          const res = await Reading.getManyAggregatedReadingsByAssetDID(
+            assetDID,
+            options,
+          );
+          return res.length > 0 ? [res] : [];
+        }
+        if (rootHash && rootHash.length > 0) {
+          const res = await Reading.getManyAggregatedReadingsByRootHash(
+            rootHash,
+            options,
+          );
+          return res.length > 0 ? [res] : [];
+        }
+        return [];
       }
       if (assetDID && assetDID.length > 0)
         return Reading.getManyByAssetDID(assetDID, options);
       if (rootHash && rootHash.length > 0)
         return Reading.getManyByRootHash(rootHash, options);
-      return [[]];
+      return [];
     },
     [],
   );

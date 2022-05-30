@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Alert, AlertTitle, Container } from "@mui/material";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -14,6 +14,7 @@ import {
 } from "chart.js";
 import React, { useMemo } from "react";
 import { Line } from "react-chartjs-2";
+import { useTranslation } from "react-i18next";
 import { Reading } from "../../models";
 import { getRandomColor } from "../../utils";
 
@@ -62,11 +63,14 @@ const options = {
 
 function getChartTitle(readings: Reading[], source: Source) {
   const reading = readings.find(() => true);
-  if (!reading) return source === "assetDID" ? "AssetDID" : "Precise Proof";
-  return reading[source] ?? source === "assetDID" ? "AssetDID" : "Precise Proof";
+  const defaultLabel = source === "rootHash" ? "Precise Proof" : "AssetDID";
+  if (!reading) return defaultLabel;
+  return reading[source] ?? defaultLabel;
 }
 
 export function ReadingsChart({ readings, source }: ReadingListProps) {
+  const { t } = useTranslation();
+
   const data = useMemo<ChartData<"line", ChartDataType[]>>(
     () => ({
       datasets: readings.map((reading, idx) => ({
@@ -83,8 +87,15 @@ export function ReadingsChart({ readings, source }: ReadingListProps) {
     [readings, source],
   );
   return (
-    <Container>
-      <Line options={options as any} data={data} />
+    <Container sx={{ marginTop: 2 }}>
+      {readings.length > 0 ? (
+        <Line options={options as any} data={data} />
+      ) : (
+        <Alert severity="info">
+          <AlertTitle>{t("GENERAL.INFO")}</AlertTitle>
+          {t("ASSET.FORM.NO_READINGS")}
+        </Alert>
+      )}
     </Container>
   );
 }

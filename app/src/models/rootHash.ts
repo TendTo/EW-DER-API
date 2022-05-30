@@ -20,7 +20,6 @@ export class RootHash implements ISingleValueModel<string> {
   }
 
   public static async get(options: RootHashQueryOptions) {
-    console.log(options);
     const json = await this.repository.fetchJson<RootHashDTO[]>(`assets/rootHashes`, {
       method: "POST",
       body: { ...options },

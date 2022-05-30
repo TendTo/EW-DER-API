@@ -1,5 +1,8 @@
-import { Divider, Grid, List } from "@mui/material";
+import { Send } from "@mui/icons-material";
+import { Alert, AlertTitle, Button, Divider, Grid, List } from "@mui/material";
 import React, { useEffect, useReducer } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import { Asset } from "../../models";
 import { MatchItem } from "./MatchItem";
 
@@ -53,7 +56,15 @@ function reducer(
   }
 }
 
+function sendMatch(isSufficient: boolean, valid: boolean) {
+  if (!valid) toast.error("At least one producer and one consumer must be selected!");
+  else if (!isSufficient) toast.error("Insufficient match!");
+  else toast.success("Match sent! 🎉 (WORK IN PROGRESS)");
+}
+
 export function MatchChart({ consumers, producers }: ReadingListProps) {
+  const { t } = useTranslation();
+
   const [
     {
       consumers: selectedConsumers,
@@ -74,21 +85,29 @@ export function MatchChart({ consumers, producers }: ReadingListProps) {
   }, [consumers, producers]);
 
   const sufficient = producedValue >= consumedValue;
+  const valid = consumedValue > 0 && producedValue > 0;
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item xs={12} md={6}>
         <List component="nav">
-          {consumers.map((asset) => (
-            <MatchItem
-              key={asset.assetDID}
-              sufficient={sufficient}
-              selected={!!selectedConsumers.find((a) => a.assetDID === asset.assetDID)}
-              asset={asset}
-              onClick={(asset: Asset) =>
-                dispatcher({ type: "SELECT_CONSUMER", payload: asset })
-              }
-            />
-          ))}
+          {consumers.length > 0 ? (
+            consumers.map((asset) => (
+              <MatchItem
+                key={asset.assetDID}
+                sufficient={sufficient}
+                selected={!!selectedConsumers.find((a) => a.assetDID === asset.assetDID)}
+                asset={asset}
+                onClick={(asset: Asset) =>
+                  dispatcher({ type: "SELECT_CONSUMER", payload: asset })
+                }
+              />
+            ))
+          ) : (
+            <Alert severity="info">
+              <AlertTitle>{t("GENERAL.INFO")}</AlertTitle>
+              {t("MATCH.FORM.NO_CONSUMERS")}
+            </Alert>
+          )}
         </List>
       </Grid>
       <Grid item xs={12} sx={{ display: { md: "none" } }}>
@@ -96,18 +115,35 @@ export function MatchChart({ consumers, producers }: ReadingListProps) {
       </Grid>
       <Grid item xs={12} md={6}>
         <List component="nav">
-          {producers.map((asset) => (
-            <MatchItem
-              key={asset.assetDID}
-              sufficient={sufficient}
-              selected={!!selectedProducers.find((a) => a.assetDID === asset.assetDID)}
-              asset={asset}
-              onClick={(asset: Asset) =>
-                dispatcher({ type: "SELECT_PRODUCER", payload: asset })
-              }
-            />
-          ))}
+          {producers.length > 0 ? (
+            producers.map((asset) => (
+              <MatchItem
+                key={asset.assetDID}
+                sufficient={sufficient}
+                selected={!!selectedProducers.find((a) => a.assetDID === asset.assetDID)}
+                asset={asset}
+                onClick={(asset: Asset) =>
+                  dispatcher({ type: "SELECT_PRODUCER", payload: asset })
+                }
+              />
+            ))
+          ) : (
+            <Alert severity="info">
+              <AlertTitle>{t("GENERAL.INFO")}</AlertTitle>
+              {t("MATCH.FORM.NO_PRODUCER")}
+            </Alert>
+          )}
         </List>
+      </Grid>
+      <Grid item xs={8} />
+      <Grid item xs={4} textAlign="end">
+        <Button
+          variant="contained"
+          startIcon={<Send />}
+          onClick={() => sendMatch(sufficient, valid)}
+        >
+          {t("GENERAL.SUBMIT")}
+        </Button>
       </Grid>
     </Grid>
   );

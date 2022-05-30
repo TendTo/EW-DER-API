@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-type AsyncState = "idle" | "pending" | "success" | "error";
+export type AsyncState = "idle" | "pending" | "success" | "error";
 type AsyncResponse<T, A, E = string> = {
   execute: (args: A) => Promise<void>;
   status: AsyncState;

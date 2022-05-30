@@ -1,4 +1,4 @@
-import { Send } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import {
   Alert,
   AlertTitle,
@@ -17,6 +17,7 @@ import {
   TextFieldElement,
 } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
+import { AsyncState } from "../../hooks";
 import {
   AggregatedReadingsDTOOptions,
   aggregationFunctions,
@@ -34,6 +35,7 @@ type AggregatedReadingsFormProps<T extends Source> = {
   source: T;
   assets: (T extends "assetDID" ? Asset[] : RootHash[]) | null;
   onSuccess: (values: AggregatedReadingsFormValuesType) => void;
+  status: AsyncState;
 };
 
 const defaultValues: AggregatedReadingsFormValuesType = {
@@ -53,6 +55,7 @@ export function AggregatedReadingsForm<T extends Source>({
   onSuccess,
   assets,
   source,
+  status,
 }: AggregatedReadingsFormProps<T>) {
   const { t } = useTranslation();
 
@@ -181,8 +184,13 @@ export function AggregatedReadingsForm<T extends Source>({
             </Grid>
             <Grid item xs={8}></Grid>
             <Grid item xs={4} justifyContent="flex-end" container>
-              <Button type={"submit"} variant="contained" endIcon={<Send />}>
-                {t("GENERAL.SUBMIT")}
+              <Button
+                type={"submit"}
+                variant="contained"
+                startIcon={<Search />}
+                disabled={status === "pending"}
+              >
+                {t("GENERAL.SEARCH")}
               </Button>
             </Grid>
           </Grid>

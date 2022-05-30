@@ -8,7 +8,7 @@ import { ReadingsForm } from "./ReadingsForm";
 export function ReadingsList() {
   const { value: assets } = useGetAssets();
   const { value: rootHashes, execute: getRootHashes } = useGetRootHashes();
-  const { value: readings, execute: getReadings } = useGetReadings();
+  const { value: readings, execute: getReadings, status } = useGetReadings();
   const { state: route } = useRouterContext();
 
   const source = route === "rootHashes" ? "rootHash" : "assetDID";
@@ -23,11 +23,21 @@ export function ReadingsList() {
   return (
     <>
       {route === "aggregatedRedings" ? (
-        <AggregatedReadingsForm source={source} onSuccess={getReadings} assets={input} />
+        <AggregatedReadingsForm
+          source={source}
+          onSuccess={getReadings}
+          assets={input}
+          status={status}
+        />
       ) : (
-        <ReadingsForm source={source} onSuccess={getReadings} assets={input} />
+        <ReadingsForm
+          source={source}
+          onSuccess={getReadings}
+          assets={input}
+          status={status}
+        />
       )}
-      <ReadingsChart source={source} readings={readings ?? [[]]} />
+      <ReadingsChart source={source} readings={readings ?? []} />
     </>
   );
 }

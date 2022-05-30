@@ -1,12 +1,14 @@
-import { Send } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import { Button, Card, CardContent, CardHeader, Grid } from "@mui/material";
 import { FormContainer, RadioButtonGroup, TextFieldElement } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
+import { AsyncState } from "../../hooks";
 import { aggregationFunctions, AssetMatchQueryOptions } from "../../models";
 import { getRegexValidation } from "../../utils";
 
 type MatchFormProps = {
   onSuccess: (values: AssetMatchQueryOptions) => void;
+  status: AsyncState;
 };
 
 export const defaultValues: AssetMatchQueryOptions = {
@@ -14,7 +16,7 @@ export const defaultValues: AssetMatchQueryOptions = {
   aggregationWindow: "5m",
 };
 
-export function MatchForm({ onSuccess }: MatchFormProps) {
+export function MatchForm({ onSuccess, status }: MatchFormProps) {
   const { t } = useTranslation();
 
   return (
@@ -47,10 +49,15 @@ export function MatchForm({ onSuccess }: MatchFormProps) {
                 row
               />
             </Grid>
-            <Grid item xs={8}></Grid>
+            <Grid item xs={8} />
             <Grid item xs={4} justifyContent="flex-end" container>
-              <Button type={"submit"} variant="contained" endIcon={<Send />}>
-                {t("GENERAL.SUBMIT")}
+              <Button
+                type={"submit"}
+                variant="contained"
+                startIcon={<Search />}
+                disabled={status === "pending"}
+              >
+                {t("GENERAL.SEARCH")}
               </Button>
             </Grid>
           </Grid>
