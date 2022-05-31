@@ -3,7 +3,7 @@
 \section{Architettura}
 La soluzione proposta si avvale di una architettura ibrida, che prova a conciliare le i servizi e le opportunità
 che l'utilizzo della blockchain offre con le sue limitazioni intrinseche. \\
-Invece che provare ad abbracciare a tutti i costi un modello esclusivamente distribuito, si è optato per
+Piuttosto che provare ad abbracciare a tutti i costi un modello esclusivamente distribuito, si è optato per
 mantenere un approccio più tradizionale per quanto riguarda l'immagazzinamento e la gestione dei dati. \\
 
 Si individuano quindi i seguenti agenti (\autoref{lab:did-architecture}):
@@ -11,7 +11,7 @@ Si individuano quindi i seguenti agenti (\autoref{lab:did-architecture}):
     \item un numero arbitrario di \gls{der} che fa capo ad un \gls{prosumer}
     \item un numero arbitrario di \gls{prosumer} che fa capo ad un \gls{aggregator}
     \item un \gls{aggregator}
-    \item una DApp, che rappresenta un interfaccia per per consultare i dati
+    \item una DApp, che fornisce un'interfaccia per per consultare i dati
 \end{itemize}
 
 \begin{figure}[h]
@@ -22,18 +22,19 @@ Si individuano quindi i seguenti agenti (\autoref{lab:did-architecture}):
 \end{figure}
 
 Al \gls{prosumer} si assegna un ruolo di rilievo, in quanto responsabile per la creazione delle precise-proof
-che garantiscono l'integrità e il non ripudio dei dati. \\
+che garantiscono l'integrità e il non ripudio dei dati. 
+Queste responsabilità aggiuntive attribuite al singolo utente rappresentano uno degli aspetti chiave di questo approccio. \\
 \\
 All'\gls{aggregator} spetterà il compito di verificare la correttezza e la validità dei dati acquisiti,
 sfruttando varie tecnologie crittografiche e i servizi offerti da \gls{ew}.
 Se la validazione va a buon fine, i dati vengono salvati su un database tradizionale. \\
-Contemporaneamente viene eseguito un apposito metodo sullo smart contract designato nella blockchain,
+Contemporaneamente viene eseguito un apposito metodo sullo smart contract designato sulla blockchain,
 che emetterà un log con il DID dell'\gls{aggregator} e la precise-proof associata alle letture. (\autoref{lab:diagram-flow-aggregator})\\
 
 \begin{figure}[H]
     \includegraphics[scale=0.5]{diagram-flow-aggregator.png}
     \centering
-    \caption{Diagramma di sequenza che rappresenta il flusso per la registrazione di nuove letture}
+    \caption{Diagramma di sequenza che del flusso per la registrazione di nuove letture}
     \label{lab:diagram-flow-aggregator}
 \end{figure}
 
@@ -45,7 +46,7 @@ che viene delegata alla crittografia asimmetrica usata tradizionalmente sulle bl
 \begin{figure}[H]
     \includegraphics[scale=0.5]{diagram-flow-dapp.png}
     \centering
-    \caption{Diagramma di sequenza che rappresenta il flusso per la lettura di dati dall'\gls{aggregator}}
+    \caption{Diagramma di sequenza del flusso per la lettura di dati dall'\gls{aggregator}}
     \label{lab:diagram-flow-dapp}
 \end{figure}
 
@@ -79,9 +80,11 @@ Il \gls{der} può essere simulato con l'invio periodico dei dati al \gls{prosume
 \inputminted[linenos]{bash}{../der/iot_source.sh}
 
 \subsection{Prosumer}
+\label{sec:prosumer}
+
 Il \gls{prosumer} in questo contesto si riferisce ad un'applicativo che ha il compito
 di mettere insieme le letture provenienti da più \gls{der} della \gls{lan} a cui appartiene. \\
-Il \gls{prosumer} è una applicazione web che espone una semplice \gls{api} \gls{rest} attraverso la quale ricevere le letture accumulandole. \\
+Il \gls{prosumer} è una applicazione web che espone una semplice \gls{api} \gls{rest} attraverso la quale ricevere le letture dei \gls{der}, accumulandole. \\
 Dopo aver raggiunto un numero sufficiente di letture, che in questo caso sono banalmente memorizzate in un database
 SQLite\cite{sftw:sqlite}, il \gls{prosumer} crea una precise-proof che le vincola. \\
 Il vantaggio di usare una precise-proof basata sulla radice di un albero di Merkle (cfr. \autoref{sec:merkle-tree}) è che,
@@ -89,10 +92,10 @@ qualora fosse necessario dimostrare di aver effettuato e comunicato correttament
 sarà sufficiente mostrare il singolo dato incriminato e fornire gli hash dei nodi adiacenti necessari a ricostruire l'albero,
 riducendo in modo significativo la quantità di dati potenzialmente sensibili da condividere. \\
 Il \gls{prosumer} firmerà poi con la sua chiave privata la precise-proof. \\
-Ciò fornisce all'\gls{aggregator} una garanzia sul proprio interlocutore e protegge la precise-proof, e di riflesso l'intero payload,
+Ciò fornisce all'\gls{aggregator} una garanzia sul proprio interlocutore e protegge la precise-proof, e quindi l'intero payload,
 da possibili alterazioni. \\
 Viene quindi costruito un payload (\autoref{lab:prosumer-payload}) che contiene la lista di tutti i dati e il valore della precise-proof.
-A ciò si aggiunge la lista dei valori di salt utilizzati nella creazione dell'albero e la firma digitale applicata alla precise-proof, oltre che informazioni di comodità
+A ciò si aggiunge la lista dei valori di salt \cite{wiki:salt} utilizzati nella creazione dell'albero e la firma digitale applicata alla precise-proof, e qualche informazione di comodità
 come i timestamp della prima e ultima lettura. \\
 Dopo aver mandato il proprio payload, interfacciandosi direttamente con la \gls{ewc} è possibile captare i log prodotti dallo smart contract di riferimento
 che contengono la precise-proof contenuta nel payload.
@@ -136,7 +139,7 @@ assicurarsi che il mittente sia autorizzato a compiere questa azione. \\
 Ciò viene fatto in un primo luogo verificando la firma digitale della precise-proof.
 Successivamente viene ricostruito l'albero di Merkle a partire dalle letture e dai salt e si verifica che la precise-proof corrisponda.
 Per finire, viene consultata la \gls{ewc} per controllare che il mittente sia anche il proprietario di tutti i \glsplural{der} che figurano nelle letture. \\
-Se tutti questi controlli sono andati a buon fine, le informazioni sono salvate in un database InfluxDB \cite{sftw:influxdb}, specializzato nell'immagazzinamento di dati sotto forma di serie storiche.
+Se tutti questi controlli sono andati a buon fine, le informazioni sono salvate in un database InfluxDB \cite{sftw:influxdb}, un software specializzato nell'immagazzinamento di dati sotto forma di serie storiche.
 Infine viene chiamato il metodo il metodo \textbf{store} sullo smart contract \textbf{ReadingsNotary} (\autoref{lab:readings-notary}), attualmente presente su Volta all'indirizzo \href{https://volta-explorer.energyweb.org/address/0xe574fDD8C3148f2E883612A9C6CDA7b9C12d1566/transactions}{0xe574fdd8c3148f2e883612a9c6cda7b9c12d1566}.
 
 \begin{listing}[h]
@@ -161,10 +164,11 @@ contract ReadingsNotary {
 
 L'\gls{aggregator} fornisce pubblicamente una interfaccia \gls{api} \gls{rest} che consente di accedere ai dati memorizzati al fine di consultarli.
 L'accesso è protetto da un sistema di autenticazione che si svolge in due fasi:
-\begin{itemize}
-    \item si richiede una nonce generata sul momento dal \gls{aggregator} associandola alla propria chiave pubblica
-    \item si invia la firma digitale della nonce al passaggio precedente, ottenendo un \gls{jwt} con validità di 24 ore dall'\gls{aggregator}
-\end{itemize}
+
+\begin{enumerate}
+    \item Si richiede una nonce generata sul momento dal \gls{aggregator} associandola alla propria chiave pubblica
+    \item Si invia la firma digitale della nonce al passaggio precedente, ottenendo un \gls{jwt} con validità di 24 ore dall'\gls{aggregator}
+\end{enumerate}
 
 Un utente ha accesso solo ai dati relativi ai \gls{did} che possiede.
 Fa eccezione l'utente \gls{aggregator}, che può accedere a tutti i dati memorizzati nel database.
@@ -174,15 +178,67 @@ Il \gls{dapp} è una applicazione web che consente di accedere ai dati memorizza
 Il login viene effettuato tramite Metamask (cfr. \autoref{sec:metamask}).
 Si ha quindi la possibilità di firmare la nonce per autenticarsi con il server dell'\gls{aggregator}. \\
 Una volta effettuato l'accesso, la web app verifica automaticamente i claim associati ad \gls{did} dell'utente
-che ha eseguito il login, e se verifica che è presente il ruolo di \gls{prosumer}, viene visualizzata l'interfaccia apposita.
-Altrimenti viene visualizzata una pagina con informazioni meno dettagliate. \\
-Da questa interfaccia è possibile consultare i dati memorizzati dal prosumer, visualizzati tramite un grafico.
+che ha eseguito il login, che potrebbe possedere il ruolo di \gls{aggregator}. \\
 
-% TODO: add a screenshot of the DApp
+\subsubsection{Aggregator}
+Se l'utente è un \gls{aggregator}, gli verrà mostrata un interfaccia che gli permette di visualizzare, tramite un grafico,
+la produzione o il consumo di tutti i \gls{der} registrati nel suo database (\autoref{lab:dapp-prosumer-readings}).
+Aggregando i dati provenienti da più fonti, è possibile avere una visione chiara dello stato della rete elettrica
+nella finestra temporale specificata. Ciò permette di evidenziare facilmente anomalie o situazioni di penuria o sovrabbondanza
+di energia elettrica. \\
+Questo tipo di monitoraggio potrebbe essere uno strumento in più per permettere un intervento tempestivo in situazioni che lo richiedano. \\
+Basandosi sui dati aggiornati e aggregati secondo una metrica stabilita, l'\gls{aggregator} è inoltre in grado di abbinare domanda e offerta (\autoref{lab:dapp-aggregator-match}). \\
+
+\begin{figure}[H]
+    \includegraphics[width=0.72\linewidth,keepaspectratio]{dapp-prosumer-readings.png}
+    \centering
+    \caption{Schermata che permette al \gls{prosumer} visualizzare le letture dei propri \gls{der}. L'\gls{aggregator} ha a disposizione la stessa schermata, ma può richiede informazioni su un qualsiasi \gls{der}}
+    \label{lab:dapp-prosumer-readings}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[width=0.72\linewidth,keepaspectratio]{dapp-aggregator-match.png}
+    \centering
+    \caption{L'\gls{aggregator} associa domanda e offerta in base ai dati recenti memorizzati}
+    \label{lab:dapp-aggregator-match}
+\end{figure}
+
+\subsubsection{Prosumer}
+Se l'utente è un \gls{prosumer}, è in grado di consultare i dati memorizzati dall'\gls{aggregator} e visualizzarli tramite un grafico. \\
+Ai fini della demo, l'utente sarà anche in grado di inviare una serie fittizia di letture aggregate appartenenti a dei \gls{der} che possiede. \\
+L'invio delle letture segue i passaggi indicati precedentemente (cfr. \autoref{sec:prosumer})
+
+\begin{figure}[H]
+    \includegraphics[width=0.72\linewidth,keepaspectratio]{dapp-prosumer-generate.png}
+    \centering
+    \caption{Schermata che permette al \gls{prosumer} di simulare l'invio di letture all'\gls{aggregator}}
+    \label{lab:dapp-prosumer-generate}
+\end{figure}
 
 \section{Implementazione}
 
-\subsection{\gls{bom}}
+\subsection{Materiale disponibile}
+L'implementazione di tutte le componenti descritte in questa sezione è pubblicamente consultabile all'indirizzo \href{https://github.com/TendTo/EW-DER-API}{https://github.com/TendTo/EW-DER-API}. \\
+Leggendo i file \textit{README.md}, presenti in quasi tutte le sottocartelle, è possibile farsi un'idea dei requisiti e delle configurazioni necessarie
+ad avviare quella sezione dell'architettura. \\
+
+Sulla blockchain Volta sono stati inoltre rilasciati i seguenti smart-contract:
+
+\begin{itemize}
+    \item \textbf{Multicall} (\href{https://volta-explorer.energyweb.org/address/0xEe2ADcB5BEAa7E08AF1F1a4Ee0EFfE0DfDDEdD27/contracts}{\textbf{0xEe2ADcB5BEAa7E08AF1F1a4Ee0EFfE0DfDDEdD27}}): smart contract standard usato per ottimizzare multiple chiamate a funzioni costanti, aggregandole in un'unica operazione \cite{sftw:multicall}
+    \item \textbf{Readings notary} (\href{https://volta-explorer.energyweb.org/address/0xe574fDD8C3148f2E883612A9C6CDA7b9C12d1566/contracts}{\textbf{0xe574fDD8C3148f2E883612A9C6CDA7b9C12d1566}}): smart contract usato dall'\gls{aggregator} per produrre i log delle letture
+\end{itemize}
+
+Una demo della \gls{dapp} è disponibile all'indirizzo \href{https://tendto.github.io/EW-DER-API/}{https://tendto.github.io/EW-DER-API/} \\
+Per poterla provare di persona è necessario:
+\begin{itemize}
+    \item installare \href{https://metamask.io/}{Metamask}
+    \item connettere Metamask alla blockchain Volta seguendo i passaggi indicati nella \href{https://energy-web-foundation.gitbook.io/energy-web/how-tos-and-tutorials/connect-to-energy-web-chain-main-network-with-metamash}{documentazione} fornita da \gls{ew}
+    \item assicurarsi di avere a disposizione qualche Volta Token, che è possibile ottenere dall'apposito \href{https://voltafaucet.energyweb.org/}{faucet}
+\end{itemize}
+
+
+\subsection{\glsfirst{bom}}
 Al fine di realizzare tutte le componenti di questa architettura sono state utilizzate le seguenti librerie, framework e tecnologie:
 
 \begin{itemize}
@@ -199,9 +255,9 @@ Al fine di realizzare tutte le componenti di questa architettura sono state util
 Per ottenere una simulazione fedele di più componenti che interagiscono fra loro in un sistema distribuito come quello proposto e
 per offrire la possibilità di ricreare l'intera architettura facilmente e senza requisiti complessi, è stato utilizzato il sistema di containerizzazione Docker \cite{sftw:docker}. \\
 La repository git contiene un file \textit{docker/docker-compose.yml} utilizzabile per inizializzare tutti i container necessari per l'esecuzione dell'architettura.
-Sebbene la maggior parte dei parametri di default sia adatta alla maggior parte dei casi d'uso, vi sono alcuni parametri che è necessario sovrascrivere. \\
+Sebbene la maggior parte dei parametri di default sia adatta alla maggior parte dei casi d'uso, ve ne sono alcuni che è necessario sovrascrivere. \\
 Poiché si tratta di dati sensibili, è consigliabile creare nella stessa cartella un file \textit{docker/docker-compose.override.yml} (\autoref{lab:docker-compose-override}) contenente i parametri da sovrascrivere,
-per evitare di eseguirne il commit in un repository pubblico.
+per evitare di renderli pubblici accidentalmente.
 
 \begin{listing}[H]
     \begin{minted}{yaml}
@@ -214,11 +270,22 @@ services:
 
   prosumer:
     environment: # Chiave segreta o mnemonic del prosumer
-      SK: swear fest avoid yolk cat dog tagging water bag coat wardrobe
+      SK: cable fest scissor slide pen smart picture oil water bag coat cup
 \end{minted}
     \caption{Esempio di \textit{docker/docker-compose.override.yml}}\label{lab:docker-compose-override}
 \end{listing}
 
 Per avviare l'intero stack, eseguire il comando \mintinline{bash}{$ docker-compose up} nella directory \textit{docker}. \\
 Per fermare l'esecuzione, eseguire \mintinline{bash}{$ docker-compose down}. \\
-Per rimuovere i volumi Docker rimasti, eseguire \mintinline{bash}{$ docker volume prune}.
+Per rimuovere i volumi Docker rimasti, eseguire \mintinline{bash}{$ docker volume prune}. \\
+Se si vuole avere a disposizione anche la \gls{dapp} come interfaccia grafica, questa può essere avviata in locale 
+installando le dipendenze necessarie con \mintinline{bash}{$ npm install} e eseguendo \mintinline{bash}{$ npm start}, il tutto nella cartella \textit{app}.
+Si possono specificare alcuni parametri di configurazione creando un file \textit{.env} contenente le seguenti chiavi:
+
+\begin{listing}[H]
+    \begin{minted}{bash}
+PORT=3005
+REACT_APP_API_URL=https://ew-der-api.azurewebsites.net
+\end{minted}
+    \caption{Esempio di \textit{docker/docker-compose.override.yml}}\label{lab:docker-compose-override}
+\end{listing}
