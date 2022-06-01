@@ -47,7 +47,9 @@
     "ONLY_INT": "Only integers are allowed",
     "IAM_CONNECTION": "Error connecting to IAM server",
     "AGGREGATOR_CONNECTION": "Error connecting to the Aggregator's server",
-    "SENDING_READINGS": "Error sending readings"
+    "SENDING_READINGS": "Error sending readings",
+    "NOT_OWNER": "Make sure you own the DER you are submitting the readings for",
+    "NOT_ENOUGH_READINGS": "Not enough readings were sent"
   },
   "ENS": {
     "TITLE": "Energy web Name Service (EWNS)",
@@ -157,7 +159,13 @@
     "CREATE_READINGS": "Send readings",
     "PROSUMER": "Prosumer",
     "INFO": "Info",
-    "SEARCH": "Search"
+    "SEARCH": "Search",
+    "FORM": {
+      "VALIDATION": {
+        "MIN": "Must be greater or equal to {{min}}",
+        "MAX": "Must be less or equal to {{max}}"
+      }
+    }
   },
   "REFERENCES": {
     "TITLE": "References",
@@ -232,7 +240,7 @@
         "INTERVAL": "Invalid interval. Must be a time window"
       },
       "ROOT_HASH_PRODUCED": "Precise proofs on Blockchain",
-      "AGGRETATION_FUNCTION": {
+      "AGGREGATION_FUNCTIONS": {
         "MEAN": "Mean",
         "SUM": "Sum",
         "MAX": "Max",
@@ -240,7 +248,7 @@
         "COUNT": "Count",
         "LAST": "Last"
       },
-      "AGGREGATIO_WINDOW": "Aggregation time window",
+      "AGGREGATION_WINDOW": "Aggregation time window",
       "DIFFERENCE": "Difference",
       "AGGREGATION_FUNCTION": "Aggregation function",
       "NO_ASSETS": "No DERs have been found in the aggregator's database. Make sure to have registered at least a reading.",
@@ -261,7 +269,7 @@
       "MAX_VALUE": "Max value"
     },
     "SENDING_PROGRESS": "Sending readings...",
-    "SENDING_SUCCESS": "Readings sent",
+    "SENDING_SUCCESS": "Readings sent!",
     "SENDING_ERROR": "Error sending readings"
   },
   "PROSUMER": {

@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/EW-DER-API/static/css/main.f722f2dd.css",
-    "main.js": "/EW-DER-API/static/js/main.122bf3c0.js",
+    "main.js": "/EW-DER-API/static/js/main.4d7a8d29.js",
     "static/js/512.b1430455.chunk.js": "/EW-DER-API/static/js/512.b1430455.chunk.js",
     "static/media/metamask.svg": "/EW-DER-API/static/media/metamask.05bfcf167f0f5892a4a92b03cc6c8cbc.svg",
     "static/media/ew-logo.svg": "/EW-DER-API/static/media/ew-logo.dbd2bdc5dc65067124aea65e9a662b8f.svg",
@@ -10,11 +10,11 @@
     "static/media/getFetch.cjs": "/EW-DER-API/static/media/getFetch.c780682470504fffbd04.cjs",
     "static/media/it.svg": "/EW-DER-API/static/media/it.9938f4b9588502f93b20243ed3a5b60c.svg",
     "main.f722f2dd.css.map": "/EW-DER-API/static/css/main.f722f2dd.css.map",
-    "main.122bf3c0.js.map": "/EW-DER-API/static/js/main.122bf3c0.js.map",
+    "main.4d7a8d29.js.map": "/EW-DER-API/static/js/main.4d7a8d29.js.map",
     "512.b1430455.chunk.js.map": "/EW-DER-API/static/js/512.b1430455.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f722f2dd.css",
-    "static/js/main.122bf3c0.js"
+    "static/js/main.4d7a8d29.js"
   ]
 }
