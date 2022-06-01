@@ -23,7 +23,11 @@ export function useSendReadings() {
         {
           pending: t("READINGS.SENDING_PROGRESS"),
           success: t("READINGS.SENDING_SUCCESS"),
-          error: t("ERROR.SENDING_READINGS"),
+          error: {
+            render({ data }: { data: Error }) {
+              return t(data.message);
+            },
+          },
         },
       );
     },

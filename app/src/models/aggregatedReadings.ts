@@ -55,13 +55,16 @@ export class AggregatedReadings {
       method: "POST",
       body: this.dto,
     });
-    if (res.status !== 200) {
+    if (res.status !== 201) {
       const message = (await res.json()).message;
-      switch (message) {
+      const messageText = Array.isArray(message) ? message[0] : message;
+      switch (messageText) {
         case "The user who signed the aggregated readings is not the owner of at least one asset":
           throw new Error("ERROR.NOT_OWNER");
+        case "readings must contain at least 30 elements":
+          throw new Error("ERROR.NOT_ENOUGH_READINGS");
         default:
-          throw new Error();
+          throw new Error("ERROR.SENDING_READINGS");
       }
     }
   }

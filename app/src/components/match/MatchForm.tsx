@@ -29,7 +29,7 @@ export function MatchForm({ onSuccess, status }: MatchFormProps) {
               <TextFieldElement
                 fullWidth
                 name="aggregationWindow"
-                label={t("ASSET.FORM.AGGREGATIO_WINDOW")}
+                label={t("ASSET.FORM.AGGREGATION_WINDOW")}
                 validation={{
                   pattern: getRegexValidation("INTERVAL", t),
                   required: { message: t("ASSET.FORM.VALIDATION.REQUIRED"), value: true },
@@ -44,7 +44,7 @@ export function MatchForm({ onSuccess, status }: MatchFormProps) {
                   .filter((v) => v !== "count")
                   .map((func) => ({
                     id: func,
-                    label: t(`ASSET.FORM.AGGRETATION_FUNCTION.${func.toUpperCase()}`),
+                    label: t(`ASSET.FORM.AGGREGATION_FUNCTIONS.${func.toUpperCase()}`),
                   }))}
                 row
               />

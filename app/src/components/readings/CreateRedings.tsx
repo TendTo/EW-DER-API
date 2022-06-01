@@ -1,11 +1,15 @@
 import { Send } from "@mui/icons-material";
 import { Button, Card, CardContent, CardHeader, Grid } from "@mui/material";
 import { useCallback } from "react";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { FormContainer, SelectElement, TextFieldElement } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
 import { useSendReadings } from "../../hooks/useSendReadings";
-import { ReducedReadingDTO } from "../../models";
-import { getRegexValidation } from "../../utils";
+import { Asset, ReducedReadingDTO } from "../../models";
+import { getMinMaxValidation, getRegexValidation } from "../../utils";
+
+type CreateReadingsProps = {
+  assets: Asset[];
+};
 
 type CreateReadingsFormValuesType = {
   assetDID: string;
@@ -25,7 +29,7 @@ const defaultValues: CreateReadingsFormValuesType = {
   maxValue: 1000,
 };
 
-export function CreateReadings() {
+export function CreateReadings({ assets }: CreateReadingsProps) {
   const { t } = useTranslation();
   const sendReadings = useSendReadings();
 
@@ -47,6 +51,8 @@ export function CreateReadings() {
     [sendReadings],
   );
 
+  console.log(assets);
+
   return (
     <Card variant="outlined">
       <CardHeader title={t("READINGS.FORM.FORM_TITLE")} />
@@ -54,12 +60,15 @@ export function CreateReadings() {
         <FormContainer defaultValues={defaultValues} onSuccess={onSuccessHandler}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextFieldElement
+              <SelectElement
                 fullWidth
                 name="assetDID"
                 label={t("ASSET.FORM.ASSET_DID")}
+                options={assets.map(({ singleValue }) => ({
+                  id: singleValue,
+                  title: singleValue,
+                }))}
                 validation={{
-                  pattern: getRegexValidation("DID", t),
                   required: { message: t("ASSET.FORM.VALIDATION.REQUIRED"), value: true },
                 }}
               />
@@ -81,7 +90,10 @@ export function CreateReadings() {
                 type="number"
                 name="interval"
                 label={t("READINGS.FORM.INTERVAL")}
-                validation={{ min: 1, max: 200, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 1 }, t),
+                  max: getMinMaxValidation({ max: 200 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={4}>
@@ -90,7 +102,10 @@ export function CreateReadings() {
                 type="number"
                 name="nReadings"
                 label={t("READINGS.FORM.N_READINGS")}
-                validation={{ min: 1, max: 200, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 30 }, t),
+                  max: getMinMaxValidation({ max: 200 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={4}>
@@ -99,7 +114,10 @@ export function CreateReadings() {
                 type="number"
                 name="minValue"
                 label={t("READINGS.FORM.MIN_VALUE")}
-                validation={{ min: 1, max: 10000, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 1 }, t),
+                  max: getMinMaxValidation({ max: 100000 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={4}>
@@ -108,7 +126,10 @@ export function CreateReadings() {
                 type="number"
                 name="maxValue"
                 label={t("READINGS.FORM.MAX_VALUE")}
-                validation={{ min: 1, max: 10000, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 1 }, t),
+                  max: getMinMaxValidation({ max: 100000 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={8}></Grid>

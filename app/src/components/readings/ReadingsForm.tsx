@@ -13,7 +13,7 @@ import { FormContainer, MultiSelectElement, TextFieldElement } from "react-hook-
 import { useTranslation } from "react-i18next";
 import { AsyncState } from "../../hooks";
 import { Asset, ReadingsDTOOptions, RootHash } from "../../models";
-import { getRegexValidation } from "../../utils";
+import { getMinMaxValidation, getRegexValidation } from "../../utils";
 
 export type ReadingsFormValuesType = ReadingsDTOOptions & {
   assetDID?: string[];
@@ -134,7 +134,10 @@ export function ReadingsForm<T extends Source>({
                 type="number"
                 name="limit"
                 label={t("ASSET.FORM.LIMIT")}
-                validation={{ min: 1, max: 200, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 1 }, t),
+                  max: getMinMaxValidation({ max: 200 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -143,7 +146,10 @@ export function ReadingsForm<T extends Source>({
                 type="number"
                 name="offset"
                 label={t("ASSET.FORM.OFFSET")}
-                validation={{ min: 0, max: 200, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 0 }, t),
+                  max: getMinMaxValidation({ max: 200 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={8}></Grid>

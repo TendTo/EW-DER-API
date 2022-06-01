@@ -24,7 +24,7 @@ import {
   Asset,
   RootHash,
 } from "../../models";
-import { getRegexValidation } from "../../utils";
+import { getMinMaxValidation, getRegexValidation } from "../../utils";
 
 export type AggregatedReadingsFormValuesType = AggregatedReadingsDTOOptions & {
   assetDID?: string[];
@@ -148,7 +148,10 @@ export function AggregatedReadingsForm<T extends Source>({
                 type="number"
                 name="limit"
                 label={t("ASSET.FORM.LIMIT")}
-                validation={{ min: 1, max: 200, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 1 }, t),
+                  max: getMinMaxValidation({ max: 200 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -157,7 +160,10 @@ export function AggregatedReadingsForm<T extends Source>({
                 type="number"
                 name="offset"
                 label={t("ASSET.FORM.OFFSET")}
-                validation={{ min: 0, max: 200, pattern: /^\d+$/ }}
+                validation={{
+                  min: getMinMaxValidation({ min: 0 }, t),
+                  max: getMinMaxValidation({ max: 200 }, t),
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -177,7 +183,7 @@ export function AggregatedReadingsForm<T extends Source>({
                 name="aggregationFunction"
                 options={aggregationFunctions.map((func) => ({
                   id: func,
-                  label: t(`ASSET.FORM.AGGRETATION_FUNCTION.${func.toUpperCase()}`),
+                  label: t(`ASSET.FORM.AGGREGATION_FUNCTIONS.${func.toUpperCase()}`),
                 }))}
                 row
               />

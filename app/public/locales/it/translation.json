@@ -47,7 +47,9 @@
     "ONLY_INT": "Sono consentiti solo numeri interi",
     "IAM_CONNECTION": "Si è verificato un errore nella connessione con il server IAM",
     "AGGREGATOR_CONNECTION": "Errore durante la connessione al server dell'aggregatore",
-    "SENDING_READINGS": "Si è verificato un errore nell'invio delle letture"
+    "SENDING_READINGS": "Si è verificato un errore nell'invio delle letture",
+    "NOT_OWNER": "Assicurati di possedere il DER per cui stai inviando le letture",
+    "NOT_ENOUGH_READINGS": "Non sono state inviate abbastanza letture"
   },
   "ENS": {
     "TITLE": "Energy Web Name Service (EWNS)",
@@ -157,7 +159,13 @@
     "CREATE_READINGS": "Invia letture",
     "PROSUMER": "Prosumer",
     "INFO": "Info",
-    "SEARCH": "Cerca"
+    "SEARCH": "Cerca",
+    "FORM": {
+      "VALIDATION": {
+        "MIN": "Deve essere maggiore o uguale a {{min}}",
+        "MAX": "Deve essere minore o uguale a {{max}}"
+      }
+    }
   },
   "REFERENCES": {
     "TITLE": "Bibliografia",
@@ -232,7 +240,7 @@
         "INTERVAL": "Intervallo non valido. Deve essere una finestra temporale"
       },
       "ROOT_HASH_PRODUCED": "Precise proof sulla blockchain",
-      "AGGRETATION_FUNCTION": {
+      "AGGREGATION_FUNCTIONS": {
         "COUNT": "Contare",
         "MAX": "Massimo",
         "MEAN": "Media",
@@ -240,7 +248,7 @@
         "SUM": "Somma",
         "LAST": "Ultima"
       },
-      "AGGREGATIO_WINDOW": "Finestra temporale di aggregazione",
+      "AGGREGATION_WINDOW": "Finestra temporale di aggregazione",
       "DIFFERENCE": "Differenza",
       "AGGREGATION_FUNCTION": "Funzione di aggregazione",
       "NO_ASSETS": "Non sono stati trovati DER nel database dell'aggregatore. Assicurati di aver registrato almeno una lettura.",

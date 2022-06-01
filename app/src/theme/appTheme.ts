@@ -3,6 +3,30 @@ import { deepPurple, purple } from "@mui/material/colors";
 
 export function getTheme(mode: PaletteMode): Theme {
   const theme: ThemeOptions = {
+    components: {
+      MuiFilledInput: {
+        styleOverrides: {
+          input: {
+            "&:-webkit-autofill": {
+              WebkitBoxShadow: "palette.background.paper",
+              WebkitTextFillColor: "inherit",
+              caretColor: "inherit",
+            },
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          input: {
+            "&:-webkit-autofill": {
+              WebkitBoxShadow: "theme.palette.background.paper",
+              WebkitTextFillColor: "inherit",
+              caretColor: "inherit",
+            },
+          },
+        },
+      },
+    },
     palette: {
       mode,
       ...(mode === "light"

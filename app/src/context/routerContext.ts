@@ -9,7 +9,7 @@ export type RouterContextType =
   | "match"
   | "about";
 
-const [ctx, provider, useContext] = createCtx<RouterContextType>("home");
+const [ctx, provider, useContext] = createCtx<RouterContextType>("readings");
 
 export const RouterContext = ctx;
 export const RouterContextProvider = provider;

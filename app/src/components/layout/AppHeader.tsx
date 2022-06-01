@@ -41,7 +41,7 @@ const prosumerPages: PagesType = [
 
 export function AppHeader() {
   const { t } = useTranslation();
-  const { update: setRouter } = useRouterContext();
+  const { state: route, update: setRouter } = useRouterContext();
   const theme = useTheme();
   const { login, isLogged, isAggregator, account, logout } = useLogin();
   const { ens } = useLookupAddress(account);
@@ -109,7 +109,7 @@ export function AppHeader() {
             noWrap
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-            onClick={() => setRouter("home")}
+            onClick={() => setRouter("readings")}
           >
             {title}
           </Typography>
@@ -174,7 +174,12 @@ export function AppHeader() {
                   handleCloseNavMenu();
                   setRouter(page.route);
                 }}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  borderBottom: page.route === route ? "1px solid white" : "none",
+                }}
               >
                 {t(page.label)}
               </Button>

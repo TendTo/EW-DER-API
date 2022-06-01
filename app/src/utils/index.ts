@@ -9,9 +9,17 @@ const CHART_COLORS = [
 ];
 const MAX_BRIGHTNESS = 230;
 
+type TranslationFunction = (key: string, options?: Record<string, any>) => string;
+
 type ValidationKeys = "DID" | "TIME" | "TIME_OR_NOW" | "INTERVAL";
 
-export function getRegexValidation(key: ValidationKeys, t: (key: string) => string) {
+/**
+ * Create a translate validation for a regex pattern
+ * @param key used to chose the type of validation to create
+ * @param t translation function
+ * @returns validation object
+ */
+export function getRegexValidation(key: ValidationKeys, t: TranslationFunction) {
   switch (key) {
     case "DID":
       return {
@@ -41,6 +49,38 @@ export function getRegexValidation(key: ValidationKeys, t: (key: string) => stri
         message: "",
       };
   }
+}
+
+type GetMinMaxValidationReturn = {
+  value: number;
+  message: string;
+};
+
+/**
+ * Create a translate validation for a max or min value
+ * @param param0 object containing a "min" or "max" property
+ * @param t translation function
+ * @returns validation object
+ */
+export function getMinMaxValidation(
+  { min }: { min: number },
+  t: TranslationFunction,
+): GetMinMaxValidationReturn;
+export function getMinMaxValidation(
+  { max }: { max: number },
+  t: TranslationFunction,
+): GetMinMaxValidationReturn;
+export function getMinMaxValidation(
+  { min, max }: { min?: number; max?: number },
+  t: TranslationFunction,
+) {
+  return {
+    value: min ?? max,
+    message:
+      min === undefined
+        ? t("GENERAL.FORM.VALIDATION.MAX", { max })
+        : t("GENERAL.FORM.VALIDATION.MIN", { min }),
+  };
 }
 
 /**
