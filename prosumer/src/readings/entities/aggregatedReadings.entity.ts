@@ -65,8 +65,4 @@ export class AggregatedReadings extends BaseEntity {
       signature: this.signature,
     };
   }
-
-  public toString() {
-    return `AggregatedReadings { rootHash: ${this.rootHash}, status: ${this.status}, start: ${this.start}, stop: ${this.stop} }`;
-  }
 }

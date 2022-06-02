@@ -29,6 +29,9 @@ export class Reading extends BaseEntity {
   @Column()
   timestamp: Date;
 
+  @Column({ nullable: true })
+  aggregatedReadingsId: number;
+
   @ManyToOne(
     () => AggregatedReadings,
     (aggregatedReadings) => aggregatedReadings.readings,
@@ -44,9 +47,5 @@ export class Reading extends BaseEntity {
       value: this.value,
       timestamp: this.timestamp,
     };
-  }
-
-  public toString() {
-    return `Reading { assetDID: ${this.assetDID}, value: ${this.value}, timestamp: ${this.timestamp} }`;
   }
 }

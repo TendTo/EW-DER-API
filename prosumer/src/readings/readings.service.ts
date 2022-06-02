@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 import { catchError, lastValueFrom, map } from "rxjs";
 import { Config, Status } from "src/constants";
 import { PreciseProofsService } from "src/precise-proofs/precise-proofs.service";
-import { getConnection } from "typeorm";
+import { DataSource, IsNull } from "typeorm";
 import { ReadingDTO } from "./dto";
 import { AggregatedReadings, Reading } from "./entities";
 import {
@@ -35,6 +35,7 @@ export class ReadingsService implements OnModuleInit {
     private readonly eventEmitter: EventEmitter2,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
+    private readonly dataSource: DataSource,
   ) {}
 
   public onModuleInit() {
@@ -58,7 +59,7 @@ export class ReadingsService implements OnModuleInit {
   }
 
   findOne(id: number) {
-    return Reading.findOne({ id });
+    return Reading.findOneBy({ id });
   }
 
   remove(id: number) {
@@ -66,14 +67,16 @@ export class ReadingsService implements OnModuleInit {
   }
 
   countNotSubmitted() {
-    return Reading.count({ where: { aggregatedReadings: null } });
+    return Reading.count({ where: { aggregatedReadingsId: IsNull() } });
   }
 
   async aggregateReadings() {
-    getConnection().transaction(async (manager) => {
+    this.dataSource.transaction(async (manager) => {
       const readingsToSubmit = await manager.find(Reading, {
-        where: { aggregatedReadings: null },
+        where: { aggregatedReadingsId: IsNull() },
       });
+      console.log(readingsToSubmit);
+      if (readingsToSubmit.length === 0) return;
 
       const readingDTOs = readingsToSubmit.map((reading) => reading.dto);
       const preciseProof = await this.preciseProof.generatePreciseProof(readingDTOs);
