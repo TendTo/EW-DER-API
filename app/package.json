@@ -18,7 +18,7 @@
     "chart.js": "^3.7.1",
     "i18next": "^21.7.1",
     "i18next-browser-languagedetector": "^6.1.4",
-    "i18next-http-backend": "^1.4.0",
+    "i18next-http-backend": "^1.4.1",
     "iam-client-lib": "^5.0.0",
     "precise-proofs-js": "^1.2.0",
     "react": "^17.0.2",
