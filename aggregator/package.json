@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@ethersproject/experimental": "^5.6.0",
+    "@ethersproject/experimental": "^5.6.2",
     "@influxdata/influxdb-client": "^1.26.0",
     "@nestjs/common": "^8.4.6",
     "@nestjs/config": "^1.2.0",
