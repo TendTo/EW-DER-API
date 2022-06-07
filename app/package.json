@@ -22,7 +22,7 @@
     "iam-client-lib": "^5.0.0",
     "precise-proofs-js": "^1.2.0",
     "react": "^17.0.2",
-    "react-chartjs-2": "^4.1.0",
+    "react-chartjs-2": "^4.2.0",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.30.0",
     "react-hook-form-mui": "^3.2.1",
