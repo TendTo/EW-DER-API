@@ -25,7 +25,7 @@
     "@influxdata/influxdb-client": "^1.26.0",
     "@nestjs/common": "^8.4.6",
     "@nestjs/config": "^1.2.0",
-    "@nestjs/core": "^8.0.0",
+    "@nestjs/core": "^8.4.6",
     "@nestjs/event-emitter": "^1.1.0",
     "@nestjs/jwt": "^8.0.1",
     "@nestjs/mapped-types": "*",
