@@ -23,6 +23,9 @@ services:
     image: tendto/ew-der-api:aggregator
     container_name: aggregator
     restart: on-failure
+    # Add a volume with the https certificates
+    # volumes: 
+    #   - /etc/httpscerts:/etc/httpscerts
     environment:
       INFLUXDB_HOST: http://influxdb:8086
       INFLUXDB_TOKEN: universal_api_token
@@ -35,6 +38,8 @@ services:
       SK: <secret-key or mnemonic>
       JWT_SECRET: <secret-key or mnemonic>
       PORT: "3000"
+      # KEY_PATH: /etc/httpscerts/private-key.pem
+      # CA_PATH: /etc/httpscerts/public-certificate.pem
     ports:
       - 3000:3000
     networks:

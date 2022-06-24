@@ -23,6 +23,8 @@ version: "3.9"
 services:
   influxdb:
     image: influxdb:latest
+    container_name: influxdb
+    restart: on-failure
     volumes:
       - influxdbVolume:/var/lib/influxdb2
     environment:
@@ -39,7 +41,11 @@ services:
 
   aggregator:
     image: tendto/ew-der-api:aggregator
-    container_name: aggregatorv
+    container_name: aggregator
+    restart: on-failure
+    # Add a volume with the https certificates
+    # volumes: 
+    #   - /etc/httpscerts:/etc/httpscerts
     environment:
       INFLUXDB_HOST: http://influxdb:8086
       INFLUXDB_TOKEN: universal_api_token
@@ -52,6 +58,8 @@ services:
       SK: <secret-key or mnemonic>
       JWT_SECRET: <secret-key or mnemonic>
       PORT: "3000"
+      # KEY_PATH: /etc/httpscerts/private-key.pem
+      # CA_PATH: /etc/httpscerts/public-certificate.pem
     ports:
       - 3000:3000
     networks:
@@ -63,6 +71,7 @@ services:
   prosumer:
     image: tendto/ew-der-api:prosumer
     container_name: prosumer
+    restart: on-failure
     environment:
       AGGREGATION_THRESHOLD: "30"
       AGGREGATOR_URL: http://aggregator:3000
@@ -172,6 +181,8 @@ SK: <secret-key or mnemonic> # Secret key of mnemonic of the aggregator
 JWT_SECRET: <secret for the jwt auth> # Secret key used for the jwt token signing
 DISABLE_AUTH: false # Whether to disable the JWT auth
 PORT: "3000" # Port the process will run on
+CA_PATH: /etc/httpscerts/public-certificate.pem # Path to the https certificate
+KEY_PATH: /etc/httpscerts/private-key.pem # Path to the https key 
 ```
 
 ### Prosumer

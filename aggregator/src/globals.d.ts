@@ -13,6 +13,8 @@ declare global {
       AGGREGATION_THRESHOLD?: string;
       JWT_SECRET?: string;
       DISABLE_AUTH?: string;
+      CA_PATH?: string;
+      KEY_PATH?: string;
     }
   }
 }

@@ -40,4 +40,6 @@ JWT_SECRET: <secret for the jwt auth> # Secret key used for the jwt token signin
 VOLTA_URL: https://volta-rpc.energyweb.org # Url for the rpc provider for Volta
 DISABLE_AUTH: false # Whether to disable the JWT auth
 PORT: 3001 # Port the process will run on
+CA_PATH: /etc/httpscerts/public-certificate.pem # Path to the https certificate
+KEY_PATH: /etc/httpscerts/private-key.pem # Path to the https key 
 ```
