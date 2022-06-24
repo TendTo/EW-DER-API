@@ -59,7 +59,7 @@ services:
       JWT_SECRET: <secret-key or mnemonic>
       PORT: "3000"
       # KEY_PATH: /etc/httpscerts/private-key.pem
-      # CA_PATH: /etc/httpscerts/public-certificate.pem
+      # CERT_PATH: /etc/httpscerts/public-certificate.pem
     ports:
       - 3000:3000
     networks:
@@ -182,7 +182,7 @@ SK: <secret-key or mnemonic> # Secret key of mnemonic of the aggregator
 JWT_SECRET: <secret for the jwt auth> # Secret key used for the jwt token signing
 DISABLE_AUTH: false # Whether to disable the JWT auth
 PORT: "3000" # Port the process will run on
-CA_PATH: /etc/httpscerts/public-certificate.pem # Path to the https certificate
+CERT_PATH: /etc/httpscerts/public-certificate.pem # Path to the https certificate
 KEY_PATH: /etc/httpscerts/private-key.pem # Path to the https key 
 ```
 

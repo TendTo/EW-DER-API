@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
     httpsOptions: {
-      ...(process.env.CA_PATH && { ca: fs.readFileSync(process.env.CA_PATH) }),
+      ...(process.env.CERT_PATH && { cert: fs.readFileSync(process.env.CERT_PATH) }),
       ...(process.env.KEY_PATH && { key: fs.readFileSync(process.env.KEY_PATH) }),
     },
   });

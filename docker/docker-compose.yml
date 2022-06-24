@@ -39,7 +39,7 @@ services:
       JWT_SECRET: <secret-key or mnemonic>
       PORT: "3000"
       # KEY_PATH: /etc/httpscerts/private-key.pem
-      # CA_PATH: /etc/httpscerts/public-certificate.pem
+      # CERT_PATH: /etc/httpscerts/public-certificate.pem
     ports:
       - 3000:3000
     networks:
