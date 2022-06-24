@@ -37,6 +37,8 @@ jobs:
           context: ./aggregator
           push: true
           tags: tendto/ew-der-api:aggregator
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Docker prosumer image
         uses: docker/build-push-action@v3
@@ -45,6 +47,8 @@ jobs:
           context: ./prosumer
           push: true
           tags: tendto/ew-der-api:prosumer
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Docker der image
         uses: docker/build-push-action@v3
@@ -53,3 +57,5 @@ jobs:
           context: ./der
           push: true
           tags: tendto/ew-der-api:der
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
