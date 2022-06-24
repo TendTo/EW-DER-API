@@ -1,6 +1,8 @@
 # Energy Web DER management API
 
-[![Docker CI](https://github.com/TendTo/EW-DER-API/actions/workflows/docker.yml/badge.svg?branch=master)](https://github.com/TendTo/EW-DER-API/actions/workflows/docker.yml)
+[![Docker CI](https://github.com/TendTo/EW-DER-API/actions/workflows/docker.yml/badge.svg)](https://github.com/TendTo/EW-DER-API/actions/workflows/docker.yml)
+[![GitHub page](https://github.com/TendTo/EW-DER-API/actions/workflows/github-page.yml/badge.svg)](https://github.com/TendTo/EW-DER-API/actions/workflows/github-page.yml)
+[![Latex CI](https://github.com/TendTo/EW-DER-API/actions/workflows/latex.yml/badge.svg)](https://github.com/TendTo/EW-DER-API/actions/workflows/latex.yml)
 
 This project contains the source code of the many parts that make up the DER management API.
 
