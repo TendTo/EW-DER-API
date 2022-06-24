@@ -27,6 +27,7 @@ jobs:
       - name: Docker aggregator image
         uses: docker/build-push-action@v2.5.0
         with:
+          platforms: linux/amd64,linux/arm64
           context: ./aggregator
           push: true
           tags: tendto/ew-der-api:aggregator
@@ -34,6 +35,7 @@ jobs:
       - name: Docker prosumer image
         uses: docker/build-push-action@v2.5.0
         with:
+          platforms: linux/amd64,linux/arm64
           context: ./prosumer
           push: true
           tags: tendto/ew-der-api:prosumer
@@ -41,6 +43,7 @@ jobs:
       - name: Docker der image
         uses: docker/build-push-action@v2.5.0
         with:
+          platforms: linux/amd64,linux/arm64
           context: ./der
           push: true
           tags: tendto/ew-der-api:der

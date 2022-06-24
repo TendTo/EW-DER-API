@@ -83,6 +83,7 @@ services:
       - 3001:3000
     networks:
       - default
+      - prosumer
     depends_on:
       - influxdb
       - aggregator
@@ -95,7 +96,7 @@ services:
       PROSUMER_URL: http://prosumer:3000
       ASSET_DID: did:ethr:0xD6bB29F7332208508BE1C301F4582889E605A33d
     networks:
-      - default
+      - prosumer
     depends_on:
       - prosumer
 
@@ -108,7 +109,7 @@ services:
       SCALE: "5"
       ASSET_DID: did:ethr:0xff0B184697827882560e08C7AA35531aEEc76aBF
     networks:
-      - default
+      - prosumer
     depends_on:
       - prosumer
 
@@ -121,7 +122,7 @@ services:
       ASSET_DID: did:ethr:0x96A95cCC7b50BC6c22F2896BBfbE9a9139ae9e15
       NEGATIVE_CONSUME: "true"
     networks:
-      - default
+      - prosumer
     depends_on:
       - prosumer
 
