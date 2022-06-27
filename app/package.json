@@ -16,7 +16,7 @@
     "@types/react-dom": "^17.0.2",
     "@usedapp/core": "^1.0.12",
     "chart.js": "^3.7.1",
-    "i18next": "^21.8.10",
+    "i18next": "^21.8.11",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.1",
     "iam-client-lib": "^5.0.0",
