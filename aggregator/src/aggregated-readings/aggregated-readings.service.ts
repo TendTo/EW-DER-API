@@ -30,7 +30,7 @@ export class AggregatedReadingsService implements OnModuleInit {
     this.eventEmitter.emit(onReadingsCreatedId, new OnReadingsCreated(aggregated));
   }
 
-  public async find(
+  public find(
     assetDIDs: string[],
     {
       start,
@@ -53,7 +53,7 @@ export class AggregatedReadingsService implements OnModuleInit {
     });
   }
 
-  public async findByRootHash(
+  public findByRootHash(
     rootHashes: string[],
     {
       start,

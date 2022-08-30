@@ -65,7 +65,7 @@ export class AggregatedReadingsController {
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
   @Get("assetDID/:assetDID")
-  public async getAggregatedReading(
+  public getAggregatedReading(
     @Param() { assetDID }: DIDDTO,
     @Query() filter: AggregateReadingFilterDTO,
   ) {
@@ -85,7 +85,7 @@ export class AggregatedReadingsController {
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
   @Post("assetDID")
-  public async getManyAggregatedReadingByAssetDID(
+  public getManyAggregatedReadingByAssetDID(
     @Body() { assetDIDs, ...options }: AggregateReadingsByDIDsFilterDTO,
   ) {
     return this.aggregatedReadingsService.find(assetDIDs, options);
@@ -104,7 +104,7 @@ export class AggregatedReadingsController {
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
   @Get("roothash/:rootHash")
-  public async getAggregatedReadingByRootHash(
+  public getAggregatedReadingByRootHash(
     @Param("rootHash") rootHash: string,
     @Query() filter: AggregateReadingFilterDTO,
   ) {
@@ -124,7 +124,7 @@ export class AggregatedReadingsController {
   @ApiBearerAuth("JWT")
   @UseGuards(JwtGuard)
   @Post("rootHash")
-  public async getManyAggregatedReadingByRootHash(
+  public getManyAggregatedReadingByRootHash(
     @Body() { rootHashes, ...options }: AggregateReadingsByRootHashesFilterDTO,
   ) {
     return this.aggregatedReadingsService.findByRootHash(rootHashes, options);

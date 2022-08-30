@@ -68,13 +68,10 @@ export class BlockchainService {
     return this.notary.queryFilter(filter);
   }
 
-  async isOwner(prosumer: string, readings: ReducedReadingDTO[]): Promise<boolean>;
-  async isOwner(prosumer: string, readings: string[]): Promise<boolean>;
-  async isOwner(prosumer: string, assetDID: string): Promise<boolean>;
-  async isOwner(
-    prosumer: string,
-    DIDorReadings: string | string[] | ReducedReadingDTO[],
-  ) {
+  isOwner(prosumer: string, readings: ReducedReadingDTO[]): Promise<boolean>;
+  isOwner(prosumer: string, readings: string[]): Promise<boolean>;
+  isOwner(prosumer: string, assetDID: string): Promise<boolean>;
+  isOwner(prosumer: string, DIDorReadings: string | string[] | ReducedReadingDTO[]) {
     this.logger.debug(`Check ownership of ${prosumer}`);
     if (typeof DIDorReadings === "string") {
       return this.isOwnerAssetDID(prosumer, DIDorReadings);
@@ -84,19 +81,19 @@ export class BlockchainService {
     return this.isOwnerReadings(prosumer, DIDorReadings as ReducedReadingDTO[]);
   }
 
-  private async isOwnerAssetDID(prosumer: string, assetDID: string) {
+  private isOwnerAssetDID(prosumer: string, assetDID: string) {
     const addressDID = getAddressFromDID(assetDID);
     return this.checkOwner(prosumer, addressDID);
   }
 
-  private async isOwnerAssetDIDs(prosumer: string, assetDIDs: string[]) {
+  private isOwnerAssetDIDs(prosumer: string, assetDIDs: string[]) {
     const addressDIDs = [...new Set(assetDIDs)].map((assetDID) =>
       getAddressFromDID(assetDID),
     );
     return this.checkOwner(prosumer, addressDIDs);
   }
 
-  private async isOwnerReadings(prosumer: string, readings: ReducedReadingDTO[]) {
+  private isOwnerReadings(prosumer: string, readings: ReducedReadingDTO[]) {
     const addressDIDs = [...new Set(readings.map(({ assetDID }) => assetDID))].map(
       (assetDID) => getAddressFromDID(assetDID),
     );

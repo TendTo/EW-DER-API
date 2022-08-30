@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { HttpException, Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AxiosError } from "axios";
@@ -16,10 +16,6 @@ import {
   onReadingCreatedId,
 } from "./events";
 
-type AggregatedReadingsResponse = {
-  status: number;
-  message: string;
-};
 type AggregatedReadingsErrorResponse = {
   statusCode: number;
   message: string;
@@ -70,7 +66,7 @@ export class ReadingsService implements OnModuleInit {
     return Reading.count({ where: { aggregatedReadingsId: IsNull() } });
   }
 
-  async aggregateReadings() {
+  aggregateReadings() {
     this.dataSource.transaction(async (manager) => {
       const readingsToSubmit = await manager.find(Reading, {
         where: { aggregatedReadingsId: IsNull() },
@@ -101,28 +97,27 @@ export class ReadingsService implements OnModuleInit {
     });
     if (!aggregatedReadings) return;
     aggregatedReadings.status = Status.Submitted;
-    const { status, message }: AggregatedReadingsResponse = await lastValueFrom(
-      this.httpService
-        .post(`${this.aggregatorUrl}/aggregated-readings`, aggregatedReadings.dto)
-        .pipe(
-          map((res) => ({ status: res.status, message: res.statusText })),
-          catchError(async (err: AxiosError<AggregatedReadingsErrorResponse>) => {
-            aggregatedReadings.status = Status.Rejected;
-            try {
-              return { status: err.response.status, message: err.response.data.message };
-            } catch {
-              return { status: 500, message: err.message };
-            }
-          }),
-        ),
-    );
 
-    if (status !== 201) {
-      aggregatedReadings.status = Status.Rejected;
-      this.logger.warn(`Aggregated readings rejected: ${message}`);
-    } else {
+    try {
+      await lastValueFrom(
+        this.httpService
+          .post(`${this.aggregatorUrl}/aggregated-readings`, aggregatedReadings.dto)
+          .pipe(
+            map((res) => ({ status: res.status, message: res.statusText })),
+            catchError((err: AxiosError<AggregatedReadingsErrorResponse>) => {
+              if (err.response && err.response.data)
+                throw new HttpException(err.response.data.message, err.response.status);
+              throw new HttpException(err, 500);
+            }),
+          ),
+      );
       aggregatedReadings.status = Status.Confirmed;
       this.logger.debug(`Aggregated readings submitted: ${rootHash}`);
+    } catch (err) {
+      aggregatedReadings.status = Status.Rejected;
+      if (err instanceof HttpException)
+        this.logger.warn(`Aggregated readings rejected: ${err.getResponse()}`);
+      else this.logger.warn(`Aggregated readings rejected: ${err}`);
     }
     await aggregatedReadings.save();
   }
