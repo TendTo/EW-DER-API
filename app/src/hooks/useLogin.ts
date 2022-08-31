@@ -11,12 +11,15 @@ import { useJwtLogin } from "./useJwtLogin";
 export function useLogin() {
   const { t } = useTranslation();
   const { update, state } = useContext(IAMContext);
-  const { activateBrowserWallet, account, chainId, deactivate } = useEthers();
+  const { activateBrowserWallet, account, chainId, deactivate, active } = useEthers();
   const { jwtLogin, jwtLogout } = useJwtLogin();
   const isAggregator = useIsAggregator(state);
 
   const login = useCallback(async () => {
-    activateBrowserWallet();
+    if (!active) {
+      activateBrowserWallet();
+      return;
+    }
     await toast.promise(jwtLogin, {
       pending: t("AGGREGATOR.CONNECTION_PROGRESS"),
       success: t("AGGREGATOR.CONNECTION_SUCCESS"),
@@ -43,7 +46,7 @@ export function useLogin() {
         error: t("ERROR.IAM_CONNECTION"),
       },
     );
-  }, [activateBrowserWallet, jwtLogin, update, t]);
+  }, [activateBrowserWallet, jwtLogin, update, t, active]);
 
   const logout = useCallback(() => {
     deactivate();

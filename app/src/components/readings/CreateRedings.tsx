@@ -5,13 +5,17 @@ import { FormContainer, SelectElement, TextFieldElement } from "react-hook-form-
 import { useTranslation } from "react-i18next";
 import { useSendReadings } from "../../hooks/useSendReadings";
 import { Asset, ReducedReadingDTO } from "../../models";
-import { getMinMaxValidation, getRegexValidation } from "../../utils";
+import {
+  getMinMaxValidation,
+  getRegexValidation,
+  parseCreateReadingsFormValues,
+} from "../../utils";
 
 type CreateReadingsProps = {
   assets: Asset[];
 };
 
-type CreateReadingsFormValuesType = {
+export type CreateReadingsFormValuesType = {
   assetDID: string;
   start: string;
   interval: number;
@@ -35,23 +39,21 @@ export function CreateReadings({ assets }: CreateReadingsProps) {
 
   const onSuccessHandler = useCallback(
     (values: CreateReadingsFormValuesType) => {
+      const { assetDID, interval, maxValue, minValue, nReadings, start } =
+        parseCreateReadingsFormValues(values);
       const readings: ReducedReadingDTO[] = [];
-      const startTime = new Date(values.start).getTime();
-      for (let i = 0; i < values.nReadings; i++) {
+      const startTime = new Date(start).getTime();
+      for (let i = 0; i < nReadings; i++) {
         readings.push({
-          assetDID: values.assetDID,
-          value:
-            Math.floor(Math.random() * (values.maxValue - values.minValue)) +
-            values.minValue,
-          timestamp: new Date(startTime + i * values.interval * 1000).toISOString(),
+          assetDID: assetDID,
+          value: Math.floor(Math.random() * (maxValue - minValue)) + minValue,
+          timestamp: new Date(startTime + i * interval * 1000).toISOString(),
         });
       }
       sendReadings(readings);
     },
     [sendReadings],
   );
-
-  console.log(assets);
 
   return (
     <Card variant="outlined">
@@ -87,10 +89,10 @@ export function CreateReadings({ assets }: CreateReadingsProps) {
             <Grid item xs={6}>
               <TextFieldElement
                 fullWidth
-                type="number"
                 name="interval"
                 label={t("READINGS.FORM.INTERVAL")}
                 validation={{
+                  pattern: getRegexValidation("INTEGER", t),
                   min: getMinMaxValidation({ min: 1 }, t),
                   max: getMinMaxValidation({ max: 200 }, t),
                 }}
@@ -99,10 +101,10 @@ export function CreateReadings({ assets }: CreateReadingsProps) {
             <Grid item xs={4}>
               <TextFieldElement
                 fullWidth
-                type="number"
                 name="nReadings"
                 label={t("READINGS.FORM.N_READINGS")}
                 validation={{
+                  pattern: getRegexValidation("INTEGER", t),
                   min: getMinMaxValidation({ min: 30 }, t),
                   max: getMinMaxValidation({ max: 200 }, t),
                 }}
@@ -111,10 +113,10 @@ export function CreateReadings({ assets }: CreateReadingsProps) {
             <Grid item xs={4}>
               <TextFieldElement
                 fullWidth
-                type="number"
                 name="minValue"
                 label={t("READINGS.FORM.MIN_VALUE")}
                 validation={{
+                  pattern: getRegexValidation("NUMBER", t),
                   min: getMinMaxValidation({ min: 1 }, t),
                   max: getMinMaxValidation({ max: 100000 }, t),
                 }}
@@ -123,10 +125,10 @@ export function CreateReadings({ assets }: CreateReadingsProps) {
             <Grid item xs={4}>
               <TextFieldElement
                 fullWidth
-                type="number"
                 name="maxValue"
                 label={t("READINGS.FORM.MAX_VALUE")}
                 validation={{
+                  pattern: getRegexValidation("NUMBER", t),
                   min: getMinMaxValidation({ min: 1 }, t),
                   max: getMinMaxValidation({ max: 100000 }, t),
                 }}

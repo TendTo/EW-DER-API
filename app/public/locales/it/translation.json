@@ -163,7 +163,9 @@
     "FORM": {
       "VALIDATION": {
         "MIN": "Deve essere maggiore o uguale a {{min}}",
-        "MAX": "Deve essere minore o uguale a {{max}}"
+        "MAX": "Deve essere minore o uguale a {{max}}",
+        "NUMBER": "Deve essere un numero",
+        "INTEGER": "Deve essere un numero intero"
       }
     }
   },

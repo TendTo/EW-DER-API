@@ -1,3 +1,5 @@
+import { CreateReadingsFormValuesType } from "../components";
+
 const CHART_COLORS = [
   "rgb(255, 99, 132, alpha)",
   "rgb(255, 159, 64, alpha)",
@@ -11,7 +13,7 @@ const MAX_BRIGHTNESS = 230;
 
 type TranslationFunction = (key: string, options?: Record<string, any>) => string;
 
-type ValidationKeys = "DID" | "TIME" | "TIME_OR_NOW" | "INTERVAL";
+type ValidationKeys = "DID" | "TIME" | "TIME_OR_NOW" | "INTERVAL" | "NUMBER" | "INTEGER";
 
 /**
  * Create a translate validation for a regex pattern
@@ -42,6 +44,16 @@ export function getRegexValidation(key: ValidationKeys, t: TranslationFunction) 
       return {
         value: /^(?:\d+(ns|us|ms|mo|s|h|d|w|y|m))+(?<!\d?\1\d.*)(?!.*\d\1\d?)$/,
         message: t("ASSET.FORM.VALIDATION.INTERVAL"),
+      };
+    case "NUMBER":
+      return {
+        value: /^-?\d+(\.\d+)?$/,
+        message: t("GENERAL.FORM.VALIDATION.NUMBER"),
+      };
+    case "INTEGER":
+      return {
+        value: /^-?\d+$/,
+        message: t("GENERAL.FORM.VALIDATION.INTEGER"),
       };
     default:
       return {
@@ -95,4 +107,22 @@ export function getRandomColor(idx?: number, alpha: number = 1) {
     return `rgb(${colorComponent()}, ${colorComponent()}, ${colorComponent()}, ${alpha})`;
   }
   return CHART_COLORS[idx].replace("alpha", `${alpha}`);
+}
+
+export function parseCreateReadingsFormValues({
+  assetDID,
+  interval,
+  maxValue,
+  minValue,
+  nReadings,
+  start,
+}: CreateReadingsFormValuesType): CreateReadingsFormValuesType {
+  return {
+    assetDID: assetDID.trim(),
+    interval: parseFloat(`${interval}`.trim()),
+    maxValue: parseFloat(`${maxValue}`.trim()),
+    minValue: parseFloat(`${minValue}`.trim()),
+    nReadings: parseFloat(`${nReadings}`.trim()),
+    start: start.trim(),
+  };
 }

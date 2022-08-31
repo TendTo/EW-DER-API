@@ -71,7 +71,6 @@ export class ReadingsService implements OnModuleInit {
       const readingsToSubmit = await manager.find(Reading, {
         where: { aggregatedReadingsId: IsNull() },
       });
-      console.log(readingsToSubmit);
       if (readingsToSubmit.length === 0) return;
 
       const readingDTOs = readingsToSubmit.map((reading) => reading.dto);
