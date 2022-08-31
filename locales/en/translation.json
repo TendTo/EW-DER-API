@@ -163,7 +163,9 @@
     "FORM": {
       "VALIDATION": {
         "MIN": "Must be greater or equal to {{min}}",
-        "MAX": "Must be less or equal to {{max}}"
+        "MAX": "Must be less or equal to {{max}}",
+        "NUMBER": "Must be a number",
+        "INTEGER": "Must be an integer"
       }
     }
   },
