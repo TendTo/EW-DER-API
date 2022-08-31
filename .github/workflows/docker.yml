@@ -59,3 +59,13 @@ jobs:
           tags: tendto/ew-der-api:der
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Docker app image
+        uses: docker/build-push-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./app
+          push: true
+          tags: tendto/ew-der-api:app
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
